@@ -1,12 +1,21 @@
-.main-content{
-    height: calc(100vh - 112px);
+.main-content {
+    height: calc(100vh - 75px);
 }
 
 .sticky-footer {
-   background-color: lightgrey;
-   height: 56px;
-   position: absolute;
-   bottom: 0;
-   width: calc(100% - 225px);
-   line-height: 56px;
+    background-color: lightgrey;
+    height: 25px;
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 225px);
+}
+
+@media(max-width: 767px) {
+    .main-content {
+        height: calc(100vh - 100px);
+    }
+    
+    .sticky-footer {
+        width: 100%;
+    }
 }
