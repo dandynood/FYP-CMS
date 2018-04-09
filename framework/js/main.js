@@ -10,10 +10,11 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvider,
     
     var states = [
         {name: 'login', url: '/login', component: 'login'},
-        {name: 'home', url: '/dashboard/home', component: 'home'},
+        {name: 'dashboard', url:'/dashboard', templateUrl:'template/dashboard.html', redirectTo: 'dashboard.home'},
         
-        //{name: 'home.plantation', url: '/{plantationID}', component: 'plantation'},
-        {name: 'home.admin', url: '/admin', component: 'admin'}
+        {name: 'dashboard.home', url: '/home', component: 'home'},
+        {name: 'dashboard.plantation', url: '/{plantationID}', component: 'plantation'},
+        {name: 'dashboard.admin', url: '/admin', component: 'admin'}
         
     ];
     
@@ -22,4 +23,16 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function($stateProvider,
         $stateProvider.state(state);
     });
     
+}]);
+
+
+mainApp.run(['$rootScope', '$state', function($rootScope, $state) {
+
+    "use strict";
+    $rootScope.$on('$stateChangeStart', function(evt, to, params) {
+      if (to.redirectTo) {
+        evt.preventDefault();
+        $state.go(to.redirectTo, params, {location: 'replace'});
+      }
+    });
 }]);

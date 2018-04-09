@@ -10,7 +10,7 @@ angular.module('mainApp').component('login', {
         $scope.text = "hello";
         $scope.login = function(){
             console.log("hi");
-            $state.go('home');
+            $state.go('dashboard.home');
         };
         
     }
