@@ -3,13 +3,16 @@
     $conn = new mysqli($DB_host,$DB_user,$DB_pass,$DB_name);
 
     if($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
         echo 'failed';
+        die("Connection failed: " . $conn->connect_error);
     }         
         $data = json_decode(file_get_contents("php://input")); 
         $username = urldecode($data->username);
         $password = $data->password;
-        $sql = "SELECT username,firstName,lastName FROM users WHERE userName = '$username' AND password = '$password'";
+        
+        $password = hash('sha256',$password);
+
+        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users WHERE userName = '$username' AND password = '$password'";
 
 
         $result = $conn->query($sql);

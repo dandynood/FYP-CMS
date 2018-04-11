@@ -1,7 +1,7 @@
 /*jslint white:true */
 /*global angular */
 /*jslint plusplus:true*/
-var mainApp = angular.module('mainApp', ["ui.router"]);
+var mainApp = angular.module('mainApp', ["ui.router","ngCookies"]);
 
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -53,12 +53,16 @@ mainApp.run(['$rootScope', '$state', function ($rootScope, $state, Data) {
     $rootScope.$on('$stateChangeStart', function (evt, to, params) {
         $rootScope.authenticated = false;
         Data.get('session').then(function(results){
-            if(results.uid){
+            console.log(results);
+            if(results.userID){
                 $rootScope.authenticated = true;
-                $rootScope.uid = results.uid;
+                $rootScope.userID = results.userID;
                 $rootScope.name = results.name;
                 $rootScope.phoneNum = results.email;
                 $rootScope.email = results.email;
+                $rootScope.roleType = results.roleType;
+                
+                console.log(results);
             } else {
                 var nextUrl = to.$$route.originalPath;
                 if(nextUrl !== '/login'){
