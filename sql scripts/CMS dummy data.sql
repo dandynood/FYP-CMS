@@ -15,7 +15,7 @@ VALUES
 INSERT INTO conditionlevels
 (plantationID,dateTime,airTemp,humidity,windSpeed,lightIntensity,soilTemp,soilMoisture)
 VALUES
-('MKCH',2018-04-07 20:00:00.047,28,78,11,27000,26,58),
+('MKCH','2018-04-07 20:00:00.047',28,78,11,27000,26,58),
 ('MKCH','2018-04-07 18:00:00.047',30,80,9,30000,28,43),
 ('MKCH','2018-04-07 17:00:00.047',24,60,10,24000,26,62);
 
