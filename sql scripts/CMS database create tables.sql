@@ -7,7 +7,7 @@ USE CMD;
 CREATE TABLE Users(
 userID INT NOT NULL auto_increment,
 username VARCHAR(50) UNIQUE NOT NULL,
-password VARCHAR(20) NOT NULL,
+password VARCHAR(255) NOT NULL,
 firstName VARCHAR(20) NOT NULL,
 lastName VARCHAR(20) NOT NULL,
 phoneNumber VARCHAR(50),

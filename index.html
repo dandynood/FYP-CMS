@@ -2,31 +2,35 @@
 <!--initialize AngularJS app-->
 <html lang="en" data-ng-app="mainApp">
    <head>
-       <title>Title</title>
-       <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-       <!-- Bootstrap -->
-       <link href="framework/css/bootstrap.min.css" rel="stylesheet"/>
-    </head>
-    
-    <!--Body starts here-->
-    <body>
-        
-        <data-ui-view></data-ui-view>
-        
-       <!--JS scripts-->
-       <!--jQuery - required for Bootstrap's Javascript plugins-->
-       <script src="framework/js/jquery-3.3.1.min.js"></script>
-       <!--All bootstrap plugins file-->
-       <script src="framework/js/bootstrap.min.js"></script>
-       <script src="framework/js/angular.min.js"></script>
-       <script src="framework/js/angular-route.js"></script>
-       <script src="framework/js/angular-ui-router.js"></script>
+    <title>Title</title>
+    <meta name="viewport" content="width-device-width, initial-scale=1.0" />
+    <!-- Bootstrap -->
+    <link href="framework/css/bootstrap.min.css" rel="stylesheet" />
+</head>
 
-       <!--Our CMS controllers-->
-       <script src="framework/js/main.js"></script>
-       <script src="framework/js/component/login.js"></script>
-       <script src="framework/js/component/home.js"></script>
-       <script src="framework/js/component/admin.js"></script>
-    </body>
+<!--Body starts here-->
+
+<body>
+
+    <data-ui-view></data-ui-view>
+
+    <!--JS scripts-->
+    <!--jQuery - required for Bootstrap's Javascript plugins-->
+    <script src="framework/js/jquery-3.3.1.min.js"></script>
+    <!--All bootstrap plugins file-->
+    <script src="framework/js/bootstrap.min.js"></script>
+    <script src="framework/js/angular.min.js"></script>
+    <!--<script src="framework/js/angular-route.js"></script>-->
+    <script src="framework/js/angular-ui-router.js"></script>
+    <script src="framework/js/angular-cookies.js"></script>
+
+    <!--Our CMS controllers-->
+    <script src="framework/js/main.js"></script>
+    <script src="framework/js/services/loginService.js"></script>
+    <script src="framework/js/component/login.js"></script>
+    <script src="framework/js/component/dashboard.js"></script>
+    <script src="framework/js/component/home.js"></script>
+    <script src="framework/js/component/admin.js"></script>
+</body>
     
 </html>

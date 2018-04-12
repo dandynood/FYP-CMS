@@ -5,9 +5,9 @@ angular.module('mainApp').component('home', {
     templateUrl: 'template/home.html',
 
     //Controller for login
-    controller: function ($scope) {
+    controller: function ($scope, $state, $cookies) {
         "use strict";
-        $scope.text = "hello";
+        $scope.hi = "hello";
     }
 
 });

@@ -5,19 +5,18 @@ angular.module('mainApp').component('login', {
     templateUrl: 'template/login.html',
 
     //Controller for login
-    controller: function ($scope, $state, $http, $cookies) {
+    controller: function ($scope, $state, $http, principle) {
         "use strict";
 
         this.loginInput = {};
         $scope.errorMsg = '';
-        
+
         this.login = function () {
             var str = {
                 username: encodeURIComponent(this.loginInput.username),
                 password: encodeURIComponent(this.loginInput.password)
             };
-           
-            console.log(str);
+
             $http({
                     method: 'POST',
                     url: 'php/login.php',
@@ -30,15 +29,13 @@ angular.module('mainApp').component('login', {
                     if (response.data === "failed") {
                         $scope.errorMsg = 'Either the username or password is incorrect';
                     } else {
-                        console.log(response.data);
-                        $cookies.putObject('userID',response.data.userID);
-                        $cookies.putObject('username',response.data.username);
-                        $cookies.putObject('firstName',response.data.firstName);
-                        $cookies.putObject('lastName',response.data.lastName);
-                        $cookies.putObject('phoneNumber',response.data.phoneNumber);
-                        $cookies.putObject('email',response.data.email);
-                        $cookies.putObject('roleType',response.data.roleType);
-                        $state.go('dashboard.home');
+                        principle.authenticate(response.data);
+                        
+                        if ($scope.returnToState) {
+                            $state.go($scope.returnToState.name, $scope.returnToStateParams);
+                        } else {
+                            $state.go('dashboard.home');
+                        }
                     }
                 });
         };
