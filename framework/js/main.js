@@ -1,7 +1,7 @@
 /*jslint white:true */
 /*global angular */
 /*jslint plusplus:true*/
-var mainApp = angular.module('mainApp', ["ui.router"]);
+var mainApp = angular.module('mainApp', ["ui.router", "ngCookies"]);
 
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -12,29 +12,45 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
         {
             name: 'login',
             url: '/login',
-            component: 'login'
+            component: 'login',
+            data: {
+                roles: []
+            }
         },
         {
             name: 'dashboard',
             url: '/dashboard',
-            templateUrl: 'template/dashboard.html',
-            redirectTo: 'dashboard.home'
+            component: 'dashboard',
+            redirectTo: 'dashboard.home',
+            data: {
+                roles: ['Normal', 'Admin']
+            }
         },
 
         {
             name: 'dashboard.home',
             url: '/home',
-            component: 'home'
+            component: 'home',
+            data: {
+                roles: ['Normal', 'Admin']
+            }
+
         },
         {
             name: 'dashboard.plantation',
             url: '/{plantationID}',
-            component: 'plantation'
+            component: 'plantation',
+            data: {
+                roles: ['Normal', 'Admin']
+            }
         },
         {
             name: 'dashboard.admin',
             url: '/admin',
-            component: 'admin'
+            component: 'admin',
+            data: {
+                roles: ['Admin']
+            }
         }
 
     ];
@@ -47,31 +63,36 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
 }]);
 
 
-mainApp.run(['$rootScope', '$state', function ($rootScope, $state, Data) {
+mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization', function ($rootScope, $state, $transitions, principle, authorization) {
 
     "use strict";
-    $rootScope.$on('$stateChangeStart', function (evt, to, params) {
-        $rootScope.authenticated = false;
-        Data.get('session').then(function(results){
-            if(results.uid){
-                $rootScope.authenticated = true;
-                $rootScope.uid = results.uid;
-                $rootScope.name = results.name;
-                $rootScope.phoneNum = results.email;
-                $rootScope.email = results.email;
-            } else {
-                var nextUrl = to.$$route.originalPath;
-                if(nextUrl !== '/login'){
-                    $state.go("/login");
-                }
-            }
-        });
-        
-        if (to.redirectTo) {
-            evt.preventDefault();
-            $state.go(to.redirectTo, params, {
-                location: 'replace'
-            });
+    $transitions.onStart({
+        to: 'dashboard.**'
+    }, function (trans) {
+
+        $rootScope.to = trans.to();
+        $rootScope.params = trans.params();
+
+        if (principle.isIdentityResolved()) {
+            console.log("hello");
+            authorization.authorize();
+        }
+
+        if (!principle.isAuthenticated()) {
+            return principle.getAuthentication();
         }
     });
+
+    $transitions.onStart({
+        to: 'login'
+    }, function (trans) {
+
+        $rootScope.to = trans.to();
+        $rootScope.params = trans.params();
+        
+        console.log("hello");
+        authorization.authorize();
+
+    });
+
 }]);

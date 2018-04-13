@@ -5,19 +5,18 @@ angular.module('mainApp').component('login', {
     templateUrl: 'template/login.html',
 
     //Controller for login
-    controller: function ($scope, $state, $http) {
+    controller: function ($scope, $state, $http, principle) {
         "use strict";
 
         this.loginInput = {};
-        this.errorMsg = '';
+        $scope.errorMsg = '';
 
         this.login = function () {
             var str = {
                 username: encodeURIComponent(this.loginInput.username),
                 password: encodeURIComponent(this.loginInput.password)
             };
-            
-            console.log(str);
+
             $http({
                     method: 'POST',
                     url: 'php/login.php',
@@ -28,9 +27,15 @@ angular.module('mainApp').component('login', {
                 })
                 .then(function (response) {
                     if (response.data === "failed") {
-                        this.errorMsg = 'Either the username or password is incorrect';
+                        $scope.errorMsg = 'Either the username or password is incorrect';
                     } else {
-                        $state.go('dashboard.home');
+                        principle.authenticate(response.data);
+                        
+                        if ($scope.returnToState) {
+                            $state.go($scope.returnToState.name, $scope.returnToStateParams);
+                        } else {
+                            $state.go('dashboard.home');
+                        }
                     }
                 });
         };

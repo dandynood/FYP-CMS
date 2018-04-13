@@ -7,12 +7,10 @@
         die("Connection failed: " . $conn->connect_error);
     }         
         $data = json_decode(file_get_contents("php://input")); 
-        $username = urldecode($data->username);
-        $password = $data->password;
-        
-        $password = hash('sha256',$password);
+        $userID = urldecode($data->userID);
 
-        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users WHERE userName = '$username' AND password = '$password'";
+
+        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users WHERE userID = '$userID'";
 
 
         $result = $conn->query($sql);
