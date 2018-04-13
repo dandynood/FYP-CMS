@@ -74,7 +74,7 @@ mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization
         $rootScope.params = trans.params();
 
         if (principle.isIdentityResolved()) {
-            console.log("hello");
+            //console.log("hello");
             authorization.authorize();
         }
 
@@ -90,7 +90,7 @@ mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization
         $rootScope.to = trans.to();
         $rootScope.params = trans.params();
         
-        console.log("hello");
+        //console.log("hello");
         authorization.authorize();
 
     });

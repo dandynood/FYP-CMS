@@ -55,8 +55,8 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                 },
 
                 getIdentity: function (force) {
-                    console.log("hello");
-                    console.log($cookies.getObject("user"));
+                    //console.log("hello");
+                    //console.log($cookies.getObject("user"));
                     var deferred = $q.defer(),
                         self = this,
                         str;
@@ -86,12 +86,12 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                             })
                             .then(function (response) {
                                 if (response.data === "failed") {
-                                    console.log("failed");
+                                    //console.log("failed");
                                     identity = null;
                                     autheticated = false;
                                     deferred.resolve(identity);
                                 } else {
-                                    console.log("yay");
+                                    //console.log("yay");
                                     identity = response.data;
                                     autheticated = true;
                                     deferred.resolve(identity);
@@ -108,20 +108,20 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
 }])
 
     .factory('authorization', ['$rootScope', '$state', 'principle', '$location',
-    function ($rootScope, $state, principle, $location) {
+    function ($rootScope, $state, principle) {
             "use strict";
             return {
                 authorize: function () {
                     return principle.getIdentity()
                         .then(function () {
                             var isAuthenticated = principle.isAuthenticated();
-                            console.log($rootScope.to);
+                            //console.log($rootScope.to);
 
                             if ($rootScope.to.data &&
                                 $rootScope.to.data.roles.length > 0 &&
                                 !principle.isInAnyRole($rootScope.to.data.roles)) {
                                 if (isAuthenticated) {
-                                    console.log("hello");
+                                    //console.log("hello");
                                     $state.go('dashboard.home');
                                 } else {
 
@@ -134,7 +134,7 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
 
                             if ($rootScope.to.name === "login") {
                                 if (isAuthenticated) {
-                                    console.log("hello");
+                                    //console.log("hello");
                                     $state.go('dashboard.home');
                                 }
                             }
