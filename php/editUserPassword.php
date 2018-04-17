@@ -6,13 +6,11 @@
         echo "Connection failed: ".$conn->connect_error;   
     }         
         $data = json_decode(file_get_contents("php://input")); 
-        $plantID = urldecode($data->plantationID);
-        $plantName = urldecode($data->plantName);
-        $plantDesc = urldecode($data->plantDescription);
-            
-        $sql = "INSERT INTO plantations
-        (plantationID, plantName, plantDescription) VALUES ('$plantID','$plantName','$plantDesc')";
+        $password = urldecode($data->password);
 
+        $password = hash('sha256',$password);
+        
+        $sql = "UPDATE users SET password='$password' WHERE userID='$userID'";
 
         $result = $conn->query($sql);
 

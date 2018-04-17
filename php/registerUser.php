@@ -13,7 +13,9 @@
         $email = urldecode($data->email);
         $phoneNumber = urldecode($data->phoneNumber);
         $roleType = urldecode($data->roleType);
-            
+
+        $password = hash('sha256',$password);
+
         $sql = "INSERT INTO users
         (username, password, firstName, lastName, phoneNumber, email, roleType) VALUES ('$username','$password','$firstName','$lastName','$email','$phoneNumber','$roleType')";
 
