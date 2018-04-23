@@ -4,7 +4,6 @@
 
 /*define mainApp name*/
 var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","chart.js"]);
-
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -84,7 +83,6 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getAllplantations();
                 }
             }
-
         }
 
     ];

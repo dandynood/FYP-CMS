@@ -16,12 +16,10 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
 
             //return functions for use
             return {
-
                 //true if identity is defined, else false
                 isIdentityResolved: function () {
                     return angular.isDefined(identity);
                 },
-
                 //return autheticated var
                 isAuthenticated: function () {
                     return autheticated;
@@ -52,7 +50,6 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
 
                     return false;
                 },
-
                 //given a defined iden object, assign identity
                 //assign autheticated if iden is defined
                 //if iden is defined, put the object into ngCookies or remove if not
@@ -170,7 +167,6 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                                     $state.go('login');
                                 }
                             }
-
                             //if you came from the login state
                             //check if you are authenticad and go redirect to home
                             if ($rootScope.to.name === "login") {
