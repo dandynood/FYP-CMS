@@ -1,16 +1,18 @@
 /*jslint white:true */
 /*global angular */
 /*jslint plusplus:true*/
-angular.module('mainApp').component('home', {
-    templateUrl: 'template/home.html',
+angular.module('mainApp').component('plantation', {
+    templateUrl: 'template/plantation.html',
     bindings: {
-        allConditionLevels: '<'
+        plantation: '<'
     },
 
-    //Controller for home page
+    //Controller for individual plantation
+    controllerAs: "model",
     controller: function ($scope, chartOptionsService) {
         "use strict";
-
+        var self = this;
+        
         //Get all the necessary chart configurations for home page from the chartOptionsService
         //To change the configurations please refer to chartOptionsService and locate the name
         //or you can add or remove configurations on the $scope variable directly
@@ -30,8 +32,7 @@ angular.module('mainApp').component('home', {
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
 
-        //Below methods are used to extract individual conditions for display on graphs
-        //from the allConditionLevels binding that has all the conditions for each plantation
+
         $scope.extractAirTempAndHumidity = function (conditions) {
             var data = [],
                 humidity = [],
@@ -52,12 +53,8 @@ angular.module('mainApp').component('home', {
                 time.y = conditions[i].humidity;
                 humidity.push(time);
             }
-            
-            if(airTemp.length === 0 && humidity.length === 0){
-                data = [];
-            } else {
-                data.push(airTemp, humidity);
-            }
+
+            data.push(airTemp, humidity);
             return data;
         };
 
@@ -73,11 +70,7 @@ angular.module('mainApp').component('home', {
                 light.push(time);
             }
 
-            if(light.length === 0){
-                data = [];
-            } else {
-                data.push(light);
-            }
+            data.push(light);
             return data;
 
         };
@@ -94,68 +87,35 @@ angular.module('mainApp').component('home', {
                 moisture.push(time);
             }
 
-            if(moisture.length === 0){
-                data = [];
-            } else {
-                data.push(moisture);
-            }
+            data.push(moisture);
             return data;
 
         };
-        
-        //This $onInit code is needed to access the bindings,
-        //This will also run when loading the state so that it extracts the conditions 
-        //and graph them appropriately.
-        this.$onInit = function () {
-            var i,
-                plants = this.allConditionLevels;
+
+        self.$onInit = function () {
+            $scope.plant = self.plantation;
 
             $scope.plantationConditions = [];
             $scope.lightIntensity = [];
             $scope.soilMoisture = [];
-            $scope.plantation = {};
 
-            //Extract and store in each $scope variable arrays above
-            //After getting all conditions for each unit, put them in the plantation object
-            //push object then into the plantationConditions array of objects
-            for (i = 0; i < plants.length; i++) {
-                $scope.plantation = {};
-                $scope.plantation.plantationID = plants[i].plantationID;
+            $scope.plant.airTempAndHumidity = $scope.extractAirTempAndHumidity($scope.plant.conditionLevels);
 
-                $scope.plantation.airTempandHumidity = $scope.extractAirTempAndHumidity(plants[i].conditionLevels);
+            $scope.plant.lightIntensity = $scope.extractLightIntensity($scope.plant.conditionLevels);
 
-                $scope.plantation.lightIntensity = $scope.extractLightIntensity(plants[i].conditionLevels);
+            $scope.plant.soilMoisture = $scope.extractSoilMoisture($scope.plant.conditionLevels);
 
-                $scope.plantation.soilMoisture = $scope.extractSoilMoisture(plants[i].conditionLevels);
-
-                $scope.plantationConditions.push($scope.plantation);
-            }
-
-            //These getters get the conditions
-            //from the plantationConditions previously assigned above
-            $scope.getAirTempAndHumidity = function (id) {
-                var data = $scope.plantationConditions.find(function (x) {
-                    return x.plantationID === id;
-                });
-
-                return data.airTempandHumidity;
+            $scope.getAirTempAndHumidity = function () {
+                return $scope.plant.airTempAndHumidity;
             };
 
-            $scope.getLightIntensity = function (id) {
-                var data = $scope.plantationConditions.find(function (x) {
-                    return x.plantationID === id;
-                });
-                return data.lightIntensity;
+            $scope.getLightIntensity = function () {
+                return $scope.plant.lightIntensity;
             };
 
-            $scope.getSoilMoisture = function (id) {
-                var data = $scope.plantationConditions.find(function (x) {
-                    return x.plantationID === id;
-                });
-                return data.soilMoisture;
+            $scope.getSoilMoisture = function () {
+                return $scope.plant.soilMoisture;
             };
-
-
         };
 
     }

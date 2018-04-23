@@ -8,13 +8,13 @@
         $data = json_decode(file_get_contents("php://input")); 
         $userID = urldecode($data->userID);
         $username = urldecode($data->username);
-        $password = urldecode($data->password);
         $firstName = urldecode($data->firstName);
         $lastName = urldecode($data->lastName);
         $email = urldecode($data->email);
         $phoneNumber = urldecode($data->phoneNumber);
+        $roleType = urldecode($data->roleType);
             
-        $sql = "UPDATE users SET username='$username', password='$password', firstName='$firstName', lastName='$lastName',email='$email',phoneNumer='$phoneNumber' WHERE userID='$userID'";
+        $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumer='$phoneNumber',role='$roleType' WHERE userID='$userID'";
 
 
         $result = $conn->query($sql);

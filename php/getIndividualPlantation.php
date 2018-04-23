@@ -6,9 +6,10 @@
         die("Connection failed: " . $conn->connect_error);
         echo 'failed';
     }         
-        $data = json_decode(file_get_contents("php://input")); 
+        $data = json_decode(file_get_contents("php://input"));
+        $plantationID = urldecode($data->plantationID);
 
-        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations ORDER BY plantName";
+        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations WHERE plantationID = '$plantationID'";
 
 
         $result = $conn->query($sql);
