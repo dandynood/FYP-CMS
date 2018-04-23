@@ -3,18 +3,20 @@
     $conn = new mysqli($DB_host,$DB_user,$DB_pass,$DB_name);
 
     if($conn->connect_error){
-        die("Connection failed: " . $conn->connect_error);
-        echo 'failed';
+        echo "Connection failed: ".$conn->connect_error;   
     }         
         $data = json_decode(file_get_contents("php://input")); 
+        $password = urldecode($data->password);
 
-        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations ORDER BY plantName";
-
+        $password = hash('sha256',$password);
+        
+        $sql = "UPDATE users SET password='$password' WHERE userID='$userID'";
 
         $result = $conn->query($sql);
 
-        if($result->num_rows > 0){
-            echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+        if($conn->affected_rows > 0)
+        {
+            echo 'success';
         }
         else
         {

@@ -7,9 +7,8 @@
         echo 'failed';
     }         
         $data = json_decode(file_get_contents("php://input")); 
-
-        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations ORDER BY plantName";
-
+        
+        $sql = "SELECT * FROM conditionLevels ORDER BY dateTime";
 
         $result = $conn->query($sql);
 
