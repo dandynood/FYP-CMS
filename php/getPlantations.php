@@ -8,13 +8,15 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
 
-        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations ORDER BY plantName";
+        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations";
 
 
         $result = $conn->query($sql);
 
         if($result->num_rows > 0){
-            echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
         }
         else
         {

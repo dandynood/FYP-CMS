@@ -11,7 +11,7 @@
         $plantDesc = urldecode($data->plantDescription);
             
         $sql = "INSERT INTO plantations
-        (plantationID, plantName, plantDescription) VALUES ('$plantID','$plantName','$plantDesc')";
+        (username, password, firstName) VALUES ('$plantID','$plantName','$plantDesc')";
 
 
         $result = $conn->query($sql);

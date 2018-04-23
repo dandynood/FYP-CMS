@@ -8,7 +8,7 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
         $username = urldecode($data->username);
-        $sql = "SELECT roleType FROM users WHERE username = '$username'";
+        $sql = "SELECT password,roleType FROM users WHERE username = '$username'";
 
 
         $result = $conn->query($sql);

@@ -1,55 +1,28 @@
 <!--MAIN BODY OF CONTENT-->
-<div id="page-wrapper">
+            <div id="page-wrapper">
 
-    <div class="container-fluid main-content">
+                <div class="container-fluid main-content">
 
-        <!-- Page Heading -->
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 class="page-header">
-                    Dashboard
-                    <small>Summary of conditions for today</small>
-                </h1>
-                <ol class="breadcrumb" style="font-size: 1.1em">
-                    <li class="active">
-                        <i class="fa fa-fw fa-dashboard"></i> Dashboard
-                    </li>
-                </ol>
-            </div>
-            <div class="col-xs-12" data-ng-repeat="plantLevel in $ctrl.allConditionLevels" data-ng-if="plantLevel.conditionLevels.length > 0">
-                <h1 class="page-header" style="margin-top: 20px;"><a data-ui-sref="dashboard.plantation({plantationID: plantLevel.plantationID})">{{plantLevel.plantName}} <small>({{plantLevel.plantationID}})</small></a></h1>
-                <br/>
-                <div class="row">
-                    <div class="col-xs-12" data-ng-if="getAirTempAndHumidity(plantLevel.plantationID).length > 0">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading"><i class="fa fa-lg  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;) and Humidity (%)</div>
-                            <div class="panel-body">
-                                <canvas id="tempHumidity" class="chart chart-line" chart-data="getAirTempAndHumidity(plantLevel.plantationID)" chart-series="tempHumditiyLabels" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
-                            </div>
+                    <!-- Page Heading -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h1 class="page-header">
+                                Blank Page
+                                <small>Subheading</small>
+                            </h1>
+                            <ol class="breadcrumb" style="font-size: 1.1em">
+                                <li class="active">
+                                    <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="col-xs-12">
+                            <h1>Hello world</h1>
                         </div>
                     </div>
-                    <div class="col-xs-12" data-ng-if="getLightIntensity(plantLevel.plantationID).length > 0" data-ng-class="getSoilMoisture(plantLevel.plantationID).length === 0 ? 'col-md-12':'col-md-6'">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading"><i class="fa fa-lg  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux)</div>
-                            <div class="panel-body">
-                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="getLightIntensity(plantLevel.plantationID)" chart-series="lightIntensityLabels" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12" data-ng-if="getSoilMoisture(plantLevel.plantationID).length > 0" data-ng-class="getLightIntensity(plantLevel.plantationID).length === 0 ? 'col-md-12':'col-md-6'">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading"><i class="fa fa-lg fa-tint" aria-hidden="true"></i> Soil Moisture (%)</div>
-                            <div class="panel-body">
-                                <canvas id="soilMoisture" class="chart chart-bar" chart-data="getSoilMoisture(plantLevel.plantationID)" chart-series="soilMoistureLabels" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- /.row -->
+
                 </div>
+                <!-- /.container-fluid -->
             </div>
-        </div>
-        <!-- /.row -->
-
-    </div>
-    <!-- /.container-fluid -->
-</div>
-<!-- /#page-wrapper -->
+            <!-- /#page-wrapper -->

@@ -8,13 +8,15 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
 
-        $sql = "SELECT username,firstName,lastName,phoneNumber,email,roleType FROM users";
+        $sql = "SELECT username,firstName,lastName,phoneNumber,email FROM users";
 
 
         $result = $conn->query($sql);
 
         if($result->num_rows > 0){
-            echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+            while($row = $result->fetch_assoc()){
+                echo json_encode($row);
+            }
         }
         else
         {
