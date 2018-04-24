@@ -3,8 +3,8 @@ USE CMD;
 INSERT INTO Users
 (username,password,firstName,lastName,phoneNumber,email,roleType)
 VALUES
-('sheldonjames',SHA2('cameron',265),'James','Cameron','0197885625','100075176@studets.swinburne.edu.my','Admin'),
-('johnAdams',SHA2('johnAdams',265),'John','Adams','+0823445432','','Normal');
+('sheldonjames',SHA2('cameron',256),'James','Cameron','0197885625','100075176@studets.swinburne.edu.my','Admin'),
+('johnAdams',SHA2('johnAdams',256),'John','Adams','+0823445432','','Normal');
 
 INSERT INTO Plantations
 (plantationID,plantName,plantDescription)
