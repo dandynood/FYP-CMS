@@ -8,7 +8,7 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
 
-        $sql = "SELECT username,firstName,lastName,phoneNumber,email,roleType FROM users";
+        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users";
 
 
         $result = $conn->query($sql);
