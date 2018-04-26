@@ -1,5 +1,6 @@
 <!--Template's CSS (can edit)-->
 <link href="framework/css/sb-admin.css" rel="stylesheet">
+<link href="framework/css/admin.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
 <link href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -18,7 +19,7 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li>
-                        <i class="fa fa-dashboard"></i> <a href="dashboard.home">Dashboard</a>
+                        <i class="fa fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
                     </li>
                     <li class="active">
                         <i class="fa fa-gears"></i> Administrators
@@ -27,225 +28,238 @@
             </div>
         </div>
         <!-- /.row -->
-        
-                            <div class="row">
-                                <div class="col-xs-3 col-xs-push-9"><a><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Add New Users</button></a></div>
-                    </div>
-                    <div class="container">
-                    <div class="row"> 
-                        <div class="col-xs-12">
-                            <h4>Users</h4>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table>
-                              <tr>
-                                <th>No.</th>
-                                <th>Name</th>
-                                
-                              </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Maria Anders
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                               
-                               
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                 <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Maria Anders
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                                
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                 <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Maria Anders
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                                
-                              </tr>
-                              <tr>
-                                <td>4</td>
-                                 <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Maria Anders
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                               
-                              </tr>
-                              <tr>
-                                <td>5</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Maria Anders
-                                        </div>               
-                                      <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                                
-                              </tr>
-                            </table>  
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <br/>  <br/> 
-                    <div class="container">
-                   <div class="row">                   
-                                <div class="col-xs-3 col-xs-push-9"><a><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Add New Plantations</button></a></div>
-                    </div>
-                    
-                    <div class="row"> 
-                        <div class="col-xs-12">
-                            <h4>Plantations</h4>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table>
-                              <tr>
-                                <th>No.</th>
-                                <th>Plant</th>
-                                
-                              </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Misai Kuching
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>
-                                    </div>
-                                </td>
-                               
-                               
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                 <td>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                        Red Chilli
-                                        </div>               
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-primary">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>View</button></a></div>
-                                        
-                                        <div class="col-xs-1"><a><button type="button" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Edit</button></a></div>
-                                        
-                                        <div class="col-xs-1">
-                                            <a><button type="button" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
-                                            <span class="sr-only"></span>Delete</button></a></div>  
-                                    </div>
-                                </td>
-                                
-                              </tr>
-                              <tr>
 
-                                
-                              </tr>
-                            </table>  
-                            </div
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-xs-12"><button type="button" class="btn btn-primary pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i><span class="sr-only"></span> Add New Users</button></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Users</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+
+                        </tr>
+                        <tr data-ng-repeat="user in users">
+                            <td>{{user.username}}</td>
+                            <td>{{user.firstName}} {{user.lastName}}
+                            </td>
+                            <td class="set-border">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-ng-click="getUserDetails(user.username)" data-target="#myViewUserModal">
+                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
+                                            <span class="sr-only"></span>View</button>
+                            </td>
+                            <td class="set-border">
+                                <button type="button" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
+                                        <span class="sr-only"></span>Edit</button></td>
+
+
+                            <td class="set-border">
+                                <button type="button" class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
+                                            <span class="sr-only"></span>Delete</button>
+
+                            </td>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <br/> <br/>
+        <div class="row">
+            <div class="col-xs-12"><button type="button" class="btn btn-primary pull-right"><i class="fa fa-pagelines" aria-hidden="true"></i> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="sr-only"></span> Add New Plantations</button></div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Plantations</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>ID.</th>
+                            <th>Plantation Name</th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+                        <tr data-ng-repeat="plant in plantations">
+                            <td>{{plant.plantationID}}</td>
+                            <td>{{plant.plantName}}</td>
+                            <td class="set-border">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myViewPlantModal" data-ng-click="getPlantationDetails(plant.plantationID)">
+                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ></span>  
+                                            <span class="sr-only"></span>View</button>
+                            </td>
+                            <td class="set-border">
+                                <button type="button" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
+                                        <span class="sr-only"></span>Edit</button></td>
+
+
+                            <td class="set-border">
+                                <button type="button" class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
+                                            <span class="sr-only"></span>Delete</button>
+                            </td>
+                    </table>
+                </div>
+            </div>
+        </div>
 
     </div>
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
+
+<!--Models for view users-->
+<div class="modal fade" id="myViewUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">{{individualUser.firstName}} {{individualUser.lastName}}'s details</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div id="p" class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">User ID</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5>{{individualUser.userID}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">First Name</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5>{{individualUser.firstName}}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">Last Name</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5>{{individualUser.lastName}}</h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">Phone Numbers</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5 data-ng-if="individualUser.phoneNumber.length > 0">{{individualUser.phoneNumber}}</h5>
+                                <h5 data-ng-if="individualUser.phoneNumber.length === 0">Not available</h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">Email</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5 data-ng-if="individualUser.email.length > 0">{{individualUser.email}}</h5>
+                                <h5 data-ng-if="individualUser.email.length === 0">None</h5>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <h5 id="Label">Role Type</h5>
+                            </div>
+
+                            <div class="col-xs-10">
+                                <h5>{{individualUser.roleType}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        <span class="sr-only"></span>Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Models for view plantations-->
+<div class="modal fade" id="myViewPlantModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{individualPlantation.plantName}}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="p" class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <h5 id="Label">Plantation ID</h5>
+                        </div>
+
+                        <div class="col-xs-10">
+                            <h5 style="margin-left: 10px">{{individualPlantation.plantationID}} </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <h5 id="Label">Plant Name</h5>
+                        </div>
+
+                        <div class="col-xs-10">
+                            <h5 style="margin-left: 10px">{{individualPlantation.plantName}}</h5>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <h5 id="Label">Plant Descriptions</h5>
+                        </div>
+
+                        <div class="col-xs-10">
+                            <h5 style="margin-left: 10px">{{individualPlantation.plantDescription}}</h5>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
+                                        <span class="sr-only"></span>Edit</button>
+            </div>
+        </div>
+    </div>

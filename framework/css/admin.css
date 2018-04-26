@@ -1,0 +1,9 @@
+.table th {
+    border: none;
+}
+
+.set-border {
+    border-right: none;
+    border-left:none;
+    text-align: center;
+}

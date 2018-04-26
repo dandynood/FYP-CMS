@@ -182,6 +182,14 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                 });
 
             return deferred.promise;
+        },
+
+        deleteUser: function () {
+            
+        },
+
+        deletePlantation: function () {
+
         }
 
     };
