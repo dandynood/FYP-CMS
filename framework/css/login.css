@@ -48,7 +48,7 @@ hr {
     max-height: 100%;
 }
 
-@media(max-width: 767px) {
+@media(max-width: 768px) {
     .form-center {
         margin-top: 10vh;
     }

@@ -5,7 +5,8 @@ angular.module('mainApp').component('dashboard', {
     templateUrl: 'template/dashboard.html',
     bindings: {
         plantations: '<',
-        allConditionLevels: '<'
+        allConditionLevels: '<',
+        optimumLevels: '<'
     },
 
     controllerAs: "model",
@@ -14,16 +15,32 @@ angular.module('mainApp').component('dashboard', {
         "use strict";
         var self = $scope.model;
 
-        self.logout = function () {
-            $cookies.remove("user");
-            principle.getIdentity(true);
-            $state.go('login');
+        self.$onInit = function () {
+            console.log(self.plantations);
+            console.log(self.allConditionLevels);
+            console.log(self.optimumLevels);
+            
+            $scope.user = $cookies.getObject("user");
+
+            $scope.checkAdmin = function () {
+                return $scope.user.roleType==="Admin";
+            };
+
+            $scope.logout = function () {
+                $scope.user = undefined;
+                $cookies.remove("user");
+                principle.getIdentity(true);
+                $state.go('login');
+            };
+            
+            console.log($scope.checkAdmin());
+
         };
 
-        self.checkAdmin = function () {};
-
         $scope.clock = new Date();
-        $interval(function () { $scope.clock = new Date(); }, 1000);
+        $interval(function () {
+            $scope.clock = new Date();
+        }, 1000);
     }
 
 });

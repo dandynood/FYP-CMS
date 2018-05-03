@@ -62,9 +62,18 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                         }]
                     },
                     legend: {
-                        display: true
+                        display: true,
+                        labels: {
+                            fontSize: 15,
+                            padding: 25
+                        }
                     },
-                    responsiveAnimationDuration: 1000
+                    responsiveAnimationDuration: 1000,
+                    layout: {
+                        padding: {
+                            top: -10
+                        }
+                    }
                 }
             },
             {
@@ -154,12 +163,12 @@ angular.module('mainApp').factory('chartOptionsService', function () {
         ],
 
         service = {
-            findName: function(name){
+            findName: function (name) {
                 return chartConfig.find(function (x) {
                     return x.name === name;
                 });
             },
-            
+
             getSeriesLabel: function (name) {
                 var data = [];
                 data = this.findName(name);
@@ -170,8 +179,8 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     return data;
                 }
             },
-            
-            getDatasetOverride: function(name){
+
+            getDatasetOverride: function (name) {
                 var data = [];
                 data = this.findName(name);
 
@@ -181,8 +190,8 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     return data;
                 }
             },
-            
-            getColor: function(name){
+
+            getColor: function (name) {
                 var data = [];
                 data = this.findName(name);
 
@@ -192,8 +201,8 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     return data;
                 }
             },
-            
-            getOptions: function(name){
+
+            getOptions: function (name) {
                 var data = [];
                 data = this.findName(name);
 

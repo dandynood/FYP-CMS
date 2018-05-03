@@ -16,31 +16,95 @@
                     </li>
                 </ol>
             </div>
-            <div class="col-xs-12" data-ng-repeat="plantLevel in $ctrl.allConditionLevels" data-ng-if="plantLevel.conditionLevels.length > 0">
+        </div>
+        <!-- /.row -->
+
+        <!--Table summary-->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-hover table-bordered">
+                    <tr>
+                        <th>Name</th>
+                        <th>Air Temperature (&#8451;)</th>
+                        <th>Humidity (%)</th>
+                        <th>Light Intensity (Lux)</th>
+                        <th>Soil Moisture (%)</th>
+                        <th></th>
+                    </tr>
+                    <tr data-ng-repeat="plants in plantations" data-ng-if="plants.conditionLevels.length > 0">
+                        <td><strong>{{plants.plantName}}</strong> ({{plants.plantationID}})</td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plants.airTempReport.status==='Normal', 'alert-info':plants.airTempReport.status==='Low','alert-danger':plants.airTempReport.status==='High','alert-primary':plants.airTempReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Not Available'"></i>
+                                <strong>
+                                {{plants.airTempReport.lastReading}}, {{plants.airTempReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plants.humidityReport.status==='Normal', 'alert-info':plants.humidityReport.status==='Low','alert-danger':plants.humidityReport.status==='High','alert-primary':plants.humidityReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'Not Available'"></i>
+                                <strong>{{plants.humidityReport.lastReading}}, {{plants.humidityReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plants.soilMoistureReport.status==='Normal', 'alert-info':plants.soilMoistureReport.status==='Low','alert-danger':plants.soilMoistureReport.status==='High','alert-primary':plants.soilMoistureReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Not Available'"></i> {{plants.optimumLevels.lightIntensity}}
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plants.soilMoistureReport.status==='Normal', 'alert-info':plants.soilMoistureReport.status==='Low','alert-danger':plants.soilMoistureReport.status==='High','alert-primary':plants.soilMoistureReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'Not Available'"></i>
+                                <strong>{{plants.soilMoistureReport.lastReading}}, {{plants.soilMoistureReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <button class="btn btn-primary viewBtn"><i class="fa fa-eye" aria-hidden="true"></i> View</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!--Graph summary-->
+        <div class="row">
+            <div class="col-xs-12" data-ng-repeat="plantLevel in plantations" data-ng-if="plantLevel.conditionLevels.length > 0">
                 <h1 class="page-header" style="margin-top: 20px;"><a data-ui-sref="dashboard.plantation({plantationID: plantLevel.plantationID})">{{plantLevel.plantName}} <small>({{plantLevel.plantationID}})</small></a></h1>
                 <br/>
                 <div class="row">
-                    <div class="col-xs-12" data-ng-if="getAirTempAndHumidity(plantLevel.plantationID).length > 0">
+                    <div class="col-xs-12" data-ng-if="plantLevel.airTempandHumidity.length > 0">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;) and Humidity (%)</div>
                             <div class="panel-body">
-                                <canvas id="tempHumidity" class="chart chart-line" chart-data="getAirTempAndHumidity(plantLevel.plantationID)" chart-series="tempHumditiyLabels" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
+                                <canvas id="tempHumidity" class="chart chart-line" chart-data="plantLevel.airTempandHumidity" chart-series="tempHumditiyLabels" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12" data-ng-if="getLightIntensity(plantLevel.plantationID).length > 0" data-ng-class="getSoilMoisture(plantLevel.plantationID).length === 0 ? 'col-md-12':'col-md-6'">
+                    <div class="col-xs-12" data-ng-if="plantLevel.lightIntensity.length > 0" data-ng-class="plantLevel.lightIntensity.length === 0 ? 'col-md-12':'col-md-6'">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux)</div>
                             <div class="panel-body">
-                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="getLightIntensity(plantLevel.plantationID)" chart-series="lightIntensityLabels" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
+                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="plantLevel.lightIntensity" chart-series="lightIntensityLabels" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12" data-ng-if="getSoilMoisture(plantLevel.plantationID).length > 0" data-ng-class="getLightIntensity(plantLevel.plantationID).length === 0 ? 'col-md-12':'col-md-6'">
+                    <div class="col-xs-12" data-ng-if="plantLevel.soilMoisture.length > 0" data-ng-class="plantLevel.soilMoisture.length === 0 ? 'col-md-12':'col-md-6'">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg fa-tint" aria-hidden="true"></i> Soil Moisture (%)</div>
                             <div class="panel-body">
-                                <canvas id="soilMoisture" class="chart chart-bar" chart-data="getSoilMoisture(plantLevel.plantationID)" chart-series="soilMoistureLabels" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
+                                <canvas id="soilMoisture" class="chart chart-bar" chart-data="plantLevel.soilMoisture" chart-series="soilMoistureLabels" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>

@@ -105,23 +105,23 @@
                 </ul>
             </li>
             <li>
-                <p style="color:white; display: block; position: relative; padding: 10px 15px;    padding-top: 15px;padding-bottom: 15px;line-height: 20px; margin:0">{{clock | date:'medium'}}</p>
+                <p id="timeNormal" style="">{{clock | date:'medium'}}</p>
             </li>
             <li class="dropdown">
-                <a href="/#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                <a href="/#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{user.username}}<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                     </li>
-                    <li>
+                    <!--<li>
                         <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                    </li>
+                    </li>-->
                     <li>
                         <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="#" data-ng-click="model.logout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        <a href="#" data-ng-click="logout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                     </li>
                 </ul>
             </li>
@@ -130,6 +130,9 @@
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
+                <li>
+                    <p id="timeSmall" style="">{{clock | date:'medium'}}</p>
+                </li>
                 <li data-ui-sref-active="active">
                     <a data-ui-sref="dashboard.home"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                 </li>
@@ -141,7 +144,7 @@
                         </li>
                     </ul>
                 </li>
-                <li data-ui-sref-active="active">
+                <li data-ui-sref-active="active" data-ng-if="checkAdmin()">
                     <a data-ui-sref="dashboard.admin"><i class="fa fa-fw fa-gears"></i> Administrator</a>
                 </li>
             </ul>

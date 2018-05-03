@@ -4,15 +4,16 @@
 angular.module('mainApp').component('plantation', {
     templateUrl: 'template/plantation.html',
     bindings: {
-        plantation: '<'
+        plantation: '<',
+        optimumLevels: '<'
     },
 
     //Controller for individual plantation
     controllerAs: "model",
-    controller: function ($scope, chartOptionsService) {
+    controller: function ($scope, chartOptionsService, optimumLevelsService) {
         "use strict";
         var self = this;
-        
+
         //Get all the necessary chart configurations for home page from the chartOptionsService
         //To change the configurations please refer to chartOptionsService and locate the name
         //or you can add or remove configurations on the $scope variable directly
@@ -93,29 +94,30 @@ angular.module('mainApp').component('plantation', {
         };
 
         self.$onInit = function () {
+            var last, lastPosition;
             $scope.plant = self.plantation;
-
-            $scope.plantationConditions = [];
-            $scope.lightIntensity = [];
-            $scope.soilMoisture = [];
+            $scope.plant.optimumLevels = self.optimumLevels;
 
             $scope.plant.airTempAndHumidity = $scope.extractAirTempAndHumidity($scope.plant.conditionLevels);
 
             $scope.plant.lightIntensity = $scope.extractLightIntensity($scope.plant.conditionLevels);
 
             $scope.plant.soilMoisture = $scope.extractSoilMoisture($scope.plant.conditionLevels);
+            
+            if ($scope.plant.conditionLevels.length > 0) {
+                lastPosition = $scope.plant.conditionLevels.length - 1;
+            }
 
-            $scope.getAirTempAndHumidity = function () {
-                return $scope.plant.airTempAndHumidity;
-            };
+            last = $scope.plant.conditionLevels[lastPosition];
 
-            $scope.getLightIntensity = function () {
-                return $scope.plant.lightIntensity;
-            };
+            if (last) {
+                $scope.plant.airTempReport = optimumLevelsService.compareAirTemp(last.airTemp, $scope.plant.optimumLevels.airTemp);
 
-            $scope.getSoilMoisture = function () {
-                return $scope.plant.soilMoisture;
-            };
+                $scope.plant.humidityReport = optimumLevelsService.compareHumidity(last.humidity, $scope.plant.optimumLevels.humidity);
+
+                $scope.plant.soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plant.optimumLevels.soilMoisture);
+            }
+        
         };
 
     }
