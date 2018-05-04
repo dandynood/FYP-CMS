@@ -114,6 +114,8 @@ angular.module('mainApp').component('plantation', {
                 $scope.plant.airTempReport = optimumLevelsService.compareAirTemp(last.airTemp, $scope.plant.optimumLevels.airTemp);
 
                 $scope.plant.humidityReport = optimumLevelsService.compareHumidity(last.humidity, $scope.plant.optimumLevels.humidity);
+                
+                $scope.plant.lightIntensityReport = optimumLevelsService.compareLightIntensity(last.lightIntensity, last.dateTime, $scope.plant.optimumLevels.lightIntensity);
 
                 $scope.plant.soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plant.optimumLevels.soilMoisture);
             }

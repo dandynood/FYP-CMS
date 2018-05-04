@@ -11,14 +11,14 @@ angular.module('mainApp').component('dashboard', {
 
     controllerAs: "model",
     //Controller for dashboard nav bar
-    controller: function ($scope, $state, $cookies, $stateParams, $interval, principle, plantationService) {
+    controller: function ($scope, $state, $cookies, $stateParams, $interval, principle) {
         "use strict";
         var self = $scope.model;
 
         self.$onInit = function () {
-            console.log(self.plantations);
-            console.log(self.allConditionLevels);
-            console.log(self.optimumLevels);
+            //console.log(self.plantations);
+            //console.log(self.allConditionLevels);
+            //console.log(self.optimumLevels);
             
             $scope.user = $cookies.getObject("user");
 
@@ -33,7 +33,7 @@ angular.module('mainApp').component('dashboard', {
                 $state.go('login');
             };
             
-            console.log($scope.checkAdmin());
+            //console.log($scope.checkAdmin());
 
         };
 

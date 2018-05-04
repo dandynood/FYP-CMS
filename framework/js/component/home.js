@@ -153,11 +153,13 @@ angular.module('mainApp').component('home', {
                     
                     $scope.plantations[i].humidityReport = optimumLevelsService.compareHumidity(last.humidity, $scope.plantations[i].optimumLevels.humidity);
                     
+                    $scope.plantations[i].lightIntensityReport = optimumLevelsService.compareLightIntensity(last.lightIntensity, last.dateTime, $scope.plantations[i].optimumLevels.lightIntensity);
+                    
                     $scope.plantations[i].soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plantations[i].optimumLevels.soilMoisture);
                 }
             }
 
-            console.log($scope.plantations);
+            //console.log($scope.plantations);
         };
 
     }

@@ -51,7 +51,8 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
             },
 
             getPlantationOptimumLevels: function (id) {
-                var deferred = $q.defer(), copy,
+                var deferred = $q.defer(),
+                    copy,
                     i,
                     str = {
                         plantationID: encodeURIComponent(id)
@@ -156,13 +157,57 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
 
             },
 
-            compareLightIntensity: function (lastCondition, optimum) {
+            compareLightIntensity: function (lastCondition, dateTime, optimum) {
+                //console.log(lastCondition, dateTime, optimum);
+                var time = new Date(dateTime),
+                    minMax = optimum.split("-");
+                //console.log(time.getHours());
 
+
+                if (time.getHours() >= 0 || time.getHours() <= 6 || time.getHours() >= 19 || time.getHours() <= 23) {
+                    //console.log("hello");
+                    return {
+                        status: "Normal",
+                        lastReading: lastCondition,
+                        message: "It's night time!",
+                        dayOrNight: "Night"
+                    };
+                }
+
+                if (lastCondition) {
+                    if (lastCondition < minMax[0]) {
+                        return {
+                            status: "Low",
+                            lastReading: lastCondition,
+                            message: "Lower than minimum levels: " + minMax[0] + "%",
+                            dayOrNight: "Day"
+                        };
+                    } else if (lastCondition > minMax[1]) {
+                        return {
+                            status: "High",
+                            lastReading: lastCondition,
+                            message: "Higher than the maximum levels: " + minMax[1] + "%",
+                            dayOrNight: "Day"
+                        };
+                    } else {
+                        return {
+                            status: "Normal",
+                            lastReading: lastCondition,
+                            message: "Within optimum range",
+                            dayOrNight: "Day"
+                        };
+                    }
+                } else {
+                    return {
+                        status: "Not Available",
+                        message: "Unfortunately no new data has been recieved"
+                    };
+                }
             },
 
             compareSoilMoisture: function (lastCondition, optimum) {
                 var minMax = optimum.split("-");
-                console.log(lastCondition);
+                //console.log(lastCondition);
                 if (lastCondition) {
                     if (lastCondition < minMax[0]) {
                         return {
