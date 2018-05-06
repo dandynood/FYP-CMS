@@ -7,10 +7,10 @@ VALUES
 ('johnAdams',SHA2('johnAdams',265),'John','Adams','+0823445432','','Normal');
 
 INSERT INTO Plantations
-(plantationID,plantName,plantDescription)
+(plantationID,plantName,plantDescription,numOfPlants)
 VALUES
-('MKCH','Misai Kuching','Flower plant near the alloza pond, used for herbal tea'),
-('CHILI','Red Chili','Plant next to the papayas, used for making tonics for chickens');
+('MKCH','Misai Kuching','Flower plant near the alloza pond, used for herbal tea','12 bushes'),
+('CHILI','Red Chili','Plant next to the papayas, used for making tonics for chickens','10 trees');
 
 INSERT INTO conditionlevels
 (plantationID,dateTime,airTemp,humidity,windSpeed,lightIntensity,soilTemp,soilMoisture)

@@ -68,6 +68,13 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             padding: 25
                         }
                     },
+                    plugins: {
+                        deferred: {
+                            xOffset: 150, // defer until 150px of the canvas width are inside the viewport
+                            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+                            delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
+                        }
+                    },
                     responsiveAnimationDuration: 1000,
                     layout: {
                         padding: {
@@ -119,6 +126,13 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             }
                         }]
                     },
+                    plugins: {
+                        deferred: {
+                            xOffset: 150, // defer until 150px of the canvas width are inside the viewport
+                            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+                            delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
+                        }
+                    },
                     responsiveAnimationDuration: 1000
                 }
             },
@@ -127,7 +141,10 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                 seriesLabel: ['Soil Moisture (%)'],
                 datasetOverride: [{
                     yAxisID: 'soil-moisture-axis',
-                    borderWidth: 2
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBorderWidth: 2,
+                    pointBorderColor: '#FFFFFF'
                 }],
                 color: ['#4C4CA6'],
                 options: {
@@ -157,7 +174,60 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             }
                         }]
                     },
+                    plugins: {
+                        deferred: {
+                            xOffset: 150, // defer until 150px of the canvas width are inside the viewport
+                            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+                            delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
+                        }
+                    },
                     responsiveAnimationDuration: 1000
+                }
+            },
+            {
+                name: 'optimumLevels',
+                seriesLabel: ['Min', 'Optimum', 'Last Recorded'],
+                labels: ["Optimum Range", "Last Recording"],
+                options: {
+                    scales: {
+                        xAxes: [{
+                            stacked: false,
+                            ticks: {
+                                min: 0
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: ''
+                            }
+
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    },
+                    legend: {
+                        display: true,
+                        labels: {
+                            fontSize: 15,
+                            padding: 25
+                        }
+                    },
+                    responsiveAnimationDuration: 1000,
+                    layout: {
+                        padding: {
+                            top: -10
+                        }
+                    },
+                    tooltips: {
+                        enabled: true,
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                var tooltip = data.datasets[tooltipItem.datasetIndex],
+                                    value = tooltip.data[tooltipItem.index];
+                                return value === 0 ? null : tooltip.label === 'Optimum' ? tooltip.label + ': <' + value : tooltip.label + ': ' + value;
+                            }
+                        }
+                    }
                 }
             }
         ],
@@ -209,6 +279,15 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                 if (data) {
                     return data.options;
                 } else {
+                    return data;
+                }
+            },
+
+            getOptimumSettings: function (name) {
+                var data = [];
+                data = this.findName(name);
+
+                if (data) {
                     return data;
                 }
             }

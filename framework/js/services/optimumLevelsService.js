@@ -1,7 +1,7 @@
 /*jslint white:true */
 /*global angular */
 /*jslint plusplus:true*/
-angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
+angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, chartOptionsService) {
     "use strict";
     var allOptimumLevels,
 
@@ -93,7 +93,10 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
             },
 
             compareAirTemp: function (lastCondition, optimum) {
-                var minMax = optimum.split("-");
+                var minMax = optimum.split("-"),
+                chartSettings = angular.copy(chartOptionsService.getOptimumSettings('optimumLevels'));
+                
+                chartSettings.options.scales.xAxes[0].scaleLabel.labelString = 'Air Temperature (C)';
 
                 if (lastCondition) {
 
@@ -101,24 +104,36 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
                         return {
                             status: "Low",
                             lastReading: lastCondition,
-                            message: "Lower than minimum levels: " + minMax[0] + "%"
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#31708f'],
+                            chartSettings: chartSettings,
+                            message: "Lower than minimum levels: " + minMax[0] + " C"
                         };
                     } else if (lastCondition > minMax[1]) {
                         return {
                             status: "High",
                             lastReading: lastCondition,
-                            message: "Higher than the maximum levels: " + minMax[1] + "%"
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#a94442'],
+                            chartSettings: chartSettings,
+                            message: "Higher than the maximum levels: " + minMax[1] + " C"
                         };
                     } else {
                         return {
                             status: "Normal",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColorss: ['#0201EF', '#3c763d','#3c763d'],
+                            chartSettings: chartSettings,
                             message: "Within optimum range"
                         };
                     }
                 } else {
                     return {
                         status: "Not Available",
+                        chartData: [[minMax[0],0],[minMax[1],0]],
+                        chartColors: ['#0201EF', '#3c763d'],
+                        chartSettings: chartSettings,
                         message: "Unfortunately no new data has been recieved"
                     };
                 }
@@ -126,31 +141,46 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
             },
 
             compareHumidity: function (lastCondition, optimum) {
-                var minMax = optimum.split("-");
+                var minMax = optimum.split("-"),
+                    chartSettings = angular.copy(chartOptionsService.getOptimumSettings('optimumLevels'));
+                
+                chartSettings.options.scales.xAxes[0].scaleLabel.labelString = 'Humidity (%)';
 
                 if (lastCondition) {
                     if (lastCondition < minMax[0]) {
                         return {
                             status: "Low",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#31708f'],
+                            chartSettings: chartSettings,
                             message: "Lower than minimum levels: " + minMax[0] + "%"
                         };
                     } else if (lastCondition > minMax[1]) {
                         return {
                             status: "High",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#a94442'],
+                            chartSettings: chartSettings,
                             message: "Higher than the maximum levels: " + minMax[1] + "%"
                         };
                     } else {
                         return {
                             status: "Normal",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#3c763d'],
+                            chartSettings: chartSettings,
                             message: "Within optimum range"
                         };
                     }
                 } else {
                     return {
                         status: "Not Available",
+                        chartData: [[minMax[0],0],[minMax[1],0]],
+                        chartColors: ['#0201EF', '#3c763d'],
+                        chartSettings: chartSettings,
                         message: "Unfortunately no new data has been recieved"
                     };
                 }
@@ -160,39 +190,55 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
             compareLightIntensity: function (lastCondition, dateTime, optimum) {
                 //console.log(lastCondition, dateTime, optimum);
                 var time = new Date(dateTime),
-                    minMax = optimum.split("-");
-                //console.log(time.getHours());
+                    minMax = optimum.split("-"),
+                    chartSettings = angular.copy(chartOptionsService.getOptimumSettings('optimumLevels'));
+                
+                chartSettings.options.scales.xAxes[0].scaleLabel.labelString = 'Light Intensity (Lux)';
 
 
+                //This first determines if the time of the reading is night time
+                //12am to 6am is not considered, so is 7pm to 11pm
                 if (time.getHours() >= 0 || time.getHours() <= 6 || time.getHours() >= 19 || time.getHours() <= 23) {
-                    //console.log("hello");
                     return {
                         status: "Normal",
                         lastReading: lastCondition,
+                        chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                        chartColors: ['#0201EF', '#3c763d','#3c763d'],
+                        chartSettings: chartSettings,
                         message: "It's night time!",
                         dayOrNight: "Night"
                     };
                 }
 
+                //if it's day time, 7am to 6am, then get comparison report
                 if (lastCondition) {
                     if (lastCondition < minMax[0]) {
                         return {
                             status: "Low",
                             lastReading: lastCondition,
-                            message: "Lower than minimum levels: " + minMax[0] + "%",
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#31708f'],
+                            chartSettings: chartSettings,
+                            message: "Lower than minimum levels: " + minMax[0] + " Lux",
                             dayOrNight: "Day"
                         };
                     } else if (lastCondition > minMax[1]) {
                         return {
                             status: "High",
                             lastReading: lastCondition,
-                            message: "Higher than the maximum levels: " + minMax[1] + "%",
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#a94442'],
+                            chartSettings: chartSettings,
+                            message: "Higher than the maximum levels: " + minMax[1] + " Lux",
                             dayOrNight: "Day"
                         };
                     } else {
                         return {
                             status: "Normal",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#3c763d'],
+                            chartSettings: chartSettings,
                             message: "Within optimum range",
                             dayOrNight: "Day"
                         };
@@ -200,37 +246,54 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q) {
                 } else {
                     return {
                         status: "Not Available",
+                        chartData: [[minMax[0],0],[minMax[1],0]],
+                        chartColors: ['#0201EF', '#3c763d'],
+                        chartSettings: chartSettings,
                         message: "Unfortunately no new data has been recieved"
                     };
                 }
             },
 
             compareSoilMoisture: function (lastCondition, optimum) {
-                var minMax = optimum.split("-");
-                //console.log(lastCondition);
+                var minMax = optimum.split("-"),
+                chartSettings = angular.copy(chartOptionsService.getOptimumSettings('optimumLevels'));
+                
+                chartSettings.options.scales.xAxes[0].scaleLabel.labelString = 'Soil Moisture (%)';
+                
                 if (lastCondition) {
                     if (lastCondition < minMax[0]) {
                         return {
                             status: "Low",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#31708f'],
+                            chartSettings: chartSettings,
                             message: "Lower than minimum levels: " + minMax[0] + "%"
                         };
                     } else if (lastCondition > minMax[1]) {
                         return {
                             status: "High",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartSettings: chartSettings,
                             message: "Higher than the maximum levels: " + minMax[1] + "%"
                         };
                     } else {
                         return {
                             status: "Normal",
                             lastReading: lastCondition,
+                            chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
+                            chartColors: ['#0201EF', '#3c763d','#3c763d'],
+                            chartSettings: chartSettings,
                             message: "Within optimum range"
                         };
                     }
                 } else {
                     return {
                         status: "Not Available",
+                        chartData: [[minMax[0],0],[minMax[1],0]],
+                        chartColors: ['#0201EF', '#3c763d'],
+                        chartSettings: chartSettings,
                         message: "Unfortunately no new data has been recieved"
                     };
                 }

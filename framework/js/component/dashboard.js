@@ -11,7 +11,7 @@ angular.module('mainApp').component('dashboard', {
 
     controllerAs: "model",
     //Controller for dashboard nav bar
-    controller: function ($scope, $state, $cookies, $stateParams, $interval, principle) {
+    controller: function ($scope, $state, $cookies, $stateParams, $interval, principle, $sessionStorage) {
         "use strict";
         var self = $scope.model;
 
@@ -20,7 +20,7 @@ angular.module('mainApp').component('dashboard', {
             //console.log(self.allConditionLevels);
             //console.log(self.optimumLevels);
             
-            $scope.user = $cookies.getObject("user");
+            $scope.user = $sessionStorage.user;
 
             $scope.checkAdmin = function () {
                 return $scope.user.roleType==="Admin";
@@ -28,7 +28,8 @@ angular.module('mainApp').component('dashboard', {
 
             $scope.logout = function () {
                 $scope.user = undefined;
-                $cookies.remove("user");
+                //$cookies.remove("user");
+                delete $sessionStorage.user;
                 principle.getIdentity(true);
                 $state.go('login');
             };

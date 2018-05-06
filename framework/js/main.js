@@ -3,7 +3,7 @@
 /*jslint plusplus:true*/
 
 /*define mainApp name*/
-var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","chart.js"]);
+var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","ngStorage","chart.js"]);
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";

@@ -139,7 +139,10 @@ angular.module('mainApp').component('home', {
                     }
                 }
             }
-
+            
+            //Then we get the last reading from the last position in the conditionLevels array
+            //Then the 2nd if statement will use optimumLevelsService to compare and get
+            //reports on if they meet the optimum range
             for (i = 0; i < $scope.plantations.length; i++) {
                 
                 if ($scope.plantations[i].conditionLevels.length > 0) {
@@ -159,7 +162,16 @@ angular.module('mainApp').component('home', {
                 }
             }
 
-            //console.log($scope.plantations);
+            $scope.getPlant = function(id){
+                var i;
+                for(i=0;i<$scope.plantations.length;i++){
+                    if($scope.plantations[i].plantationID === id){
+                        $scope.plant = $scope.plantations[i];
+                        break;
+                    }
+                }
+                return 0;
+            };
         };
 
     }

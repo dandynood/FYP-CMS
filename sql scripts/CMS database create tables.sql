@@ -23,7 +23,8 @@ PRIMARY KEY (userID)
 CREATE TABLE Plantations(
 plantationID varchar(10) NOT NULL,
 plantName VARCHAR(255) NOT NULL,
-plantDescription VARCHAR(255) NOT NULL,
+plantDescription VARCHAR(255),
+numOfPlants VARCHAR(255),
 PRIMARY KEY (plantationID)
 );
 
