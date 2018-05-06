@@ -6,11 +6,9 @@
         die("Connection failed: " . $conn->connect_error);
         echo 'failed';
     }         
-        $data = json_decode(file_get_contents("php://input"));
-        $plantationID = urldecode($data->plantationID);
+        $data = json_decode(file_get_contents("php://input")); 
 
-        $sql = "SELECT * FROM plantations WHERE plantationID = '$plantationID'";
-
+        $sql = "SELECT * FROM optimumLevels";
 
         $result = $conn->query($sql);
 

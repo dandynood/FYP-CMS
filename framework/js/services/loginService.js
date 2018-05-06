@@ -5,8 +5,8 @@
 /*use the same mainApp name from main.js*/
 /*this factory is resposible for checking the current logged in user, if they exist
 or they are autheticated or not*/
-angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$state',
-    function ($q, $http, $cookies, $state) {
+angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$state', '$sessionStorage',
+    function ($q, $http, $cookies, $state, $sessionStorage) {
             "use strict";
 
             //identity holds user object from cookie
@@ -58,9 +58,11 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                     autheticated = iden !== undefined && iden !== null;
 
                     if (iden) {
-                        $cookies.putObject("user", iden);
+                        //$cookies.putObject("user", iden);
+                        $sessionStorage.user = iden;
                     } else {
-                        $cookies.remove("user");
+                        //$cookies.remove("user");
+                        delete $sessionStorage.user;
                     }
                 },
 
@@ -89,13 +91,13 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                         return deferred.promise;
                     }
 
-                    //if the cookie is defined but no identity
-                    //use $http to update the cookie, lookup via userID with getIdentity.php
+                    //if the sessionstorage.user is defined but no identity
+                    //use $http to update the sessionstorage.user, lookup via userID with getIdentity.php
                     //on success assigned identity object and authenticated with true
                     //after all resolve and return promise
-                    if ($cookies.getObject("user")) {
+                    if ($sessionStorage.user) {
                         str = {
-                            userID: encodeURIComponent($cookies.getObject("user").userID)
+                            userID: encodeURIComponent($sessionStorage.user.userID)
                         };
 
                         $http({
@@ -119,7 +121,7 @@ angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$sta
                                     deferred.resolve(identity);
                                 }
                             });
-                        //else no cookie, and no identity, resolve null identity and return promise.
+                        //else no sessionstorage.user, and no identity, resolve null identity and return promise.
                     } else {
                         self.authenticate(identity);
                         deferred.resolve(identity);

@@ -3,7 +3,7 @@
 /*jslint plusplus:true*/
 
 /*define mainApp name*/
-var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","chart.js"]);
+var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","ngStorage","chart.js"]);
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -33,11 +33,17 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 roles: ['Normal', 'Admin']
             },
             resolve: {
+                //This binding is primarily used to query all the conditions and optimum levels
+                //and also to stay present through the whole dashboard's and children
+                //to be used when necessary
                 plantations: function (plantationService) {
                     return plantationService.getAllplantations();
                 },
                 allConditionLevels: function (plantations, plantationService) {
                     return plantationService.getAllLevels(plantations);
+                },
+                optimumLevels: function (plantations, optimumLevelsService){
+                    return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
         },
@@ -52,6 +58,9 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             resolve:{
                 allConditionLevels: function (allConditionLevels) {
                     return allConditionLevels;
+                },
+                optimumLevels: function (optimumLevels){
+                    return optimumLevels;
                 }
             }
         },
@@ -63,8 +72,14 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 roles: ['Normal', 'Admin']
             },
             resolve: {
+                //gets the plantation from the allLevels variable in the
+                //plantationService, get by ID, this contains the conditionLevels
                 plantation: function (plantationService, $stateParams) {
                     return plantationService.getPlantation($stateParams.plantationID);
+                },
+                //gets the optimum level of the plantation
+                optimumLevels: function (optimumLevelsService, $stateParams){
+                    return optimumLevelsService.getPlantationOptimumLevels($stateParams.plantationID);
                 }
             }
         },
@@ -79,8 +94,9 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 users: function (adminService) {
                     return adminService.getAllUsers();
                 },
-                plantations: function (plantationService) {
-                    return plantationService.getAllplantations();
+                //gets both plantation and the optimum levels for edit
+                plantations: function (plantations, optimumLevelsService) {
+                    return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
         }
