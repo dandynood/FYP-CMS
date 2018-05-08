@@ -9,10 +9,11 @@
                 <h1 class="page-header">
                     Dashboard
                     <small>Summary of conditions for today</small>
+                    <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-click="exportAllDataToExcel()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel</button>
                 </h1>
                 <ol class="breadcrumb" style="font-size: 1.1em">
                     <li class="active">
-                        <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                        <i class="fa fa-fw fa-dashboard"></i> Dashboard for today: <strong>{{today | date:'mediumDate'}}</strong>
                     </li>
                 </ol>
             </div>
@@ -23,10 +24,10 @@
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="form-group">
-                    <label for="sel1">Plantation:</label>
+                    <label for="selectPlant">Choose plantation:</label>
                     <select class="form-control" id="selectPlant" data-ng-model="selectedPlant">
                     <option value="" selected="selected">All</option>
-                    <option data-ng-repeat="plants in plantations" value="plants.plantationID">{{plants.plantName}} ({{plants.plantationID}})</option>
+                    <option data-ng-repeat="plants in plantations" value="{{plants.plantationID}}">{{plants.plantName}} ({{plants.plantationID}})</option>
                   </select>
                 </div>
             </div>
@@ -83,7 +84,7 @@
                             </div>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <button class="btn btn-primary viewBtn" data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plants.plantationID)"><i class="fa fa-eye" aria-hidden="true"></i> View</button>
+                            <button class="btn btn-primary viewBtn" data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plants.plantationID)"><i class="fa fa-lg fa-eye" aria-hidden="true"></i> View</button>
                         </td>
                     </tr>
                 </table>
@@ -93,10 +94,10 @@
 
         <!--Graph summary-->
         <div class="row">
-            <div class="col-xs-12" data-ng-repeat="plantLevel in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plantLevel.conditionLevels.length > 0">
-                <h1 class="page-header" style="margin-top: 20px;"><a data-ui-sref="dashboard.plantation({plantationID: plantLevel.plantationID})">{{plantLevel.plantName}} <small>({{plantLevel.plantationID}})</small></a></h1>
+            <div class="col-xs-12" data-ng-repeat="plantLevel in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}">
+                <h1 class="page-header" style="margin-top: 20px;"><a data-ui-sref="dashboard.plantation({plantationID: plantLevel.plantationID})">{{plantLevel.plantName}} <small>({{plantLevel.plantationID}})</small></a> <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plantLevel.conditionLevels.length > 0" data-ng-click="exportPlantDataToExcel(plantLevel)"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export to Excel</button></h1>
                 <br/>
-                <div class="row">
+                <div class="row" data-ng-if="plantLevel.conditionLevels.length > 0">
                     <div class="col-xs-12" data-ng-if="plantLevel.airTempandHumidity.length > 0">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;) and Humidity (%)</div>
@@ -187,7 +188,7 @@
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
                                 <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
-                                <strong>{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}} 
+                                <strong>{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}}
                                 <i class="fa fa-lg fa-sun-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Day'"></i>
                                 <i class="fa fa-lg fa-moon-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Night'"></i></p>
                         </div>

@@ -9,6 +9,7 @@
                 <h1 class="page-header">
                     {{plant.plantName}}
                     <small>({{plant.plantationID}})</small>
+                    <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plant.conditionLevels.length > 0" data-ng-click="exportAllDataToExcel()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel</button>
                 </h1>
                 <ol class="breadcrumb" style="font-size: 1.1em">
                     <li>
@@ -24,6 +25,15 @@
 
         <!--Table summary-->
         <div class="row">
+            <div class="col-xs-12 col-md-4 form-group">
+                <label for="date">Date:</label>
+                <div class="input-group">
+                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="sayHello(selectedDate)" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" data-ng-click="openDatePicker()"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
             <div class="col-xs-12 table-responsive">
                 <h3>Last recordings vs. optimum levels</h3>
                 <table class="table table-hover table-bordered">
@@ -181,7 +191,7 @@
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
                                 <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
-                                <strong>{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}} 
+                                <strong>{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}}
                                 <i class="fa fa-lg fa-sun-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Day'"></i>
                                 <i class="fa fa-lg fa-moon-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Night'"></i></p>
                         </div>

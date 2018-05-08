@@ -1,5 +1,7 @@
 /*jslint white:true */
 /*global angular */
+/*global moment */
+/*global alasql */
 /*jslint plusplus:true*/
 angular.module('mainApp').component('plantation', {
     templateUrl: 'template/plantation.html',
@@ -122,6 +124,105 @@ angular.module('mainApp').component('plantation', {
 
                 $scope.plant.soilMoistureReport = optimumLevelsService.compareSoilMoisture(last.soilMoisture, $scope.plant.optimumLevels.soilMoisture);
             }
+
+            $scope.today = function () {
+                $scope.selectedDate = new Date();
+            };
+            $scope.today();
+
+            $scope.datePicker = {
+                opened: false,
+                format: 'dd-MMMM-yyyy',
+                dateOptions: {
+                    formatYear: 'yyyy',
+                    startingDay: 1
+                }
+            };
+
+            $scope.openDatePicker = function () {
+                $scope.datePicker.opened = true;
+            };
+
+            $scope.sayHello = function (date) {
+                console.log("hello", date);
+            };
+            
+            $scope.exportDataToExcelStyle = {
+                sheetid: 'Conditions ' + moment($scope.today).format("DD, MMMM YYYY HH:mm"),
+                headers: true,
+                caption: {
+                    title: 'Daily Crop Conditions - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+                },
+                style: 'background:#FFFFFF',
+                column: {
+                    style: function () {
+                        return 'border: 1px green solid';
+                    }
+                },
+                columns: [
+                    {
+                        columnid: 'PlantationID',
+                        width: 200
+                    },
+                    {
+                        columnid: 'PlantName',
+                        width: 200
+                    },
+                    {
+                        columnid: 'DateTime',
+                        width: 300
+                    },
+                    {
+                        columnid: 'AirTemp (C)',
+                        width: 200
+                    },
+                    {
+                        columnid: 'Humidity (%)',
+                        width: 200
+                    },
+                    {
+                        columnid: 'Light Intensity (Lux)',
+                        width: 200
+                    },
+                    {
+                        columnid: 'Soil Moisture (%)',
+                        width: 200
+                    }
+                ],
+
+                row: {
+                    style: function () {
+                        return 'border: green solid; width: 1px';
+                    }
+                }
+
+            };
+
+            
+            $scope.exportAllDataToExcel = function () {
+                var i, allDataToExport = [],
+                    object = {},
+                    plant = angular.copy($scope.plant),
+                    name = plant.plantationID + ' Summary ' + moment($scope.selectedDate).format("DD-MMMM-YYYY") +'.xlsx';
+                
+                if (plant.conditionLevels.length > 0) {
+                        for (i = 0; i < plant.conditionLevels.length; i++) {
+                            object = {};
+                            object = {
+                                plantationID: plant.plantationID,
+                                plantName: plant.plantName,
+                                dateTime: plant.conditionLevels[i].dateTime,
+                                airTemp: plant.conditionLevels[i].airTemp,
+                                humidity: plant.conditionLevels[i].humidity,
+                                lightIntensity: plant.conditionLevels[i].lightIntensity,
+                                soilMoisture: plant.conditionLevels[i].soilMoisture
+                            };
+                            allDataToExport.push(object);
+                        }
+                    }
+
+                alasql('SELECT * INTO XLSX(?,?) FROM ?', [name,$scope.exportDataToExcelStyle, allDataToExport]);
+            };
 
         };
 
