@@ -45,7 +45,7 @@
                     <tr data-ng-repeat="plants in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plants.conditionLevels.length > 0">
                         <td><strong>{{plants.plantName}}</strong> ({{plants.plantationID}})</td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plants.airTempReport.status==='Normal', 'alert-info':plants.airTempReport.status==='Low','alert-danger':plants.airTempReport.status==='High','alert-primary':plants.airTempReport.status==='Not Available' }">
+                            <div class="alert" data-ng-class="{'alert-success': plants.airTempReport.status==='Normal', 'alert-info':plants.airTempReport.status==='Low','alert-danger':plants.airTempReport.status==='High','alert-warning':plants.airTempReport.status==='Not Available' }">
                                 <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.airTempReport.status === 'Normal'"></i>
@@ -55,7 +55,7 @@
                             </div>
                         </td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plants.humidityReport.status==='Normal', 'alert-info':plants.humidityReport.status==='Low','alert-danger':plants.humidityReport.status==='High','alert-primary':plants.humidityReport.status==='Not Available' }">
+                            <div class="alert" data-ng-class="{'alert-success': plants.humidityReport.status==='Normal', 'alert-info':plants.humidityReport.status==='Low','alert-danger':plants.humidityReport.status==='High','alert-warning':plants.humidityReport.status==='Not Available' }">
                                 <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.humidityReport.status === 'Normal'"></i>
@@ -64,7 +64,7 @@
                             </div>
                         </td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plants.lightIntensityReport.status==='Normal', 'alert-info':plants.lightIntensityReport.status==='Low','alert-danger':plants.lightIntensityReport.status==='High','alert-primary':plants.lightIntensityReport.status==='Not Available' }">
+                            <div class="alert" data-ng-class="{'alert-success': plants.lightIntensityReport.status==='Normal', 'alert-info':plants.lightIntensityReport.status==='Low','alert-danger':plants.lightIntensityReport.status==='High','alert-warning':plants.lightIntensityReport.status==='Not Available' }">
                                 <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.lightIntensityReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.lightIntensityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.lightIntensityReport.status === 'Normal'"></i>
@@ -75,7 +75,7 @@
                             </div>
                         </td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plants.soilMoistureReport.status==='Normal', 'alert-info':plants.soilMoistureReport.status==='Low','alert-danger':plants.soilMoistureReport.status==='High','alert-primary':plants.soilMoistureReport.status==='Not Available' }">
+                            <div class="alert" data-ng-class="{'alert-success': plants.soilMoistureReport.status==='Normal', 'alert-info':plants.soilMoistureReport.status==='Low','alert-danger':plants.soilMoistureReport.status==='High','alert-warning':plants.soilMoistureReport.status==='Not Available' }">
                                 <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plants.soilMoistureReport.status === 'Normal'"></i>
@@ -152,7 +152,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h4><i class="fa fa-fw  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;)</h4>
-                        <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-primary':plant.airTempReport.status==='Not Available' }">
+                        <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
                             <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
@@ -168,7 +168,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Humidity (%)</h4>
-                        <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-primary':plant.humidityReport.status==='Not Available' }">
+                        <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
                             <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
@@ -183,7 +183,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h4><i class="fa fa-fw  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux) </h4>
-                        <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-primary':plant.lightIntensityReport.status==='Not Available' }">
+                        <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
                             <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
@@ -199,7 +199,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Soil Moisture (%)</h4>
-                        <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-primary':plant.soilMoistureReport.status==='Not Available' }">
+                        <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
                             <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
                                 <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
                                 <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>

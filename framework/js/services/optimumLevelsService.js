@@ -1,5 +1,6 @@
 /*jslint white:true */
 /*global angular */
+/*global moment */
 /*jslint plusplus:true*/
 angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, chartOptionsService) {
     "use strict";
@@ -123,7 +124,7 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
                             status: "Normal",
                             lastReading: lastCondition,
                             chartData: [[minMax[0],0],[minMax[1],0],[0,lastCondition]],
-                            chartColorss: ['#0201EF', '#3c763d','#3c763d'],
+                            chartColors: ['#0201EF', '#3c763d','#3c763d'],
                             chartSettings: chartSettings,
                             message: "Within optimum range"
                         };
@@ -189,16 +190,15 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
 
             compareLightIntensity: function (lastCondition, dateTime, optimum) {
                 //console.log(lastCondition, dateTime, optimum);
-                var time = new Date(dateTime),
+                var hour = moment(dateTime).hour(),
                     minMax = optimum.split("-"),
                     chartSettings = angular.copy(chartOptionsService.getOptimumSettings('optimumLevels'));
                 
                 chartSettings.options.scales.xAxes[0].scaleLabel.labelString = 'Light Intensity (Lux)';
-
-
+                
                 //This first determines if the time of the reading is night time
                 //12am to 6am is not considered, so is 7pm to 11pm
-                if (time.getHours() >= 0 || time.getHours() <= 6 || time.getHours() >= 19 || time.getHours() <= 23) {
+                if (dateTime && (hour >= 0 || hour <= 6 || hour >= 19 || hour <= 23)) {
                     return {
                         status: "Normal",
                         lastReading: lastCondition,

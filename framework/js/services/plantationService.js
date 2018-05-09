@@ -82,15 +82,14 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
         },
 
         //gets all condition levels for each plantation by date after picking from the datepicker
-        getAllLevelsByDate: function (plants, date) {
-            var deferred = $q.defer(),
-                plantsArray = angular.copy(plants),
-                i, j, arrayLevels = [],
+        getAllLevelsByDate: function (plant, date) {
+            var i, arrayLevels = [],
                 str = {
+                    plantationID: encodeURIComponent(plant.plantationID),
                     date: encodeURIComponent(date)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
                     url: 'php/getAllConditionLevels.php',
                     data: str,
@@ -101,36 +100,23 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
                 .then(function (response) {
                     if (response.data === "failed") {
                         //var errMsg = "failed";
-                        for (i = 0; i < plantsArray.length; i++) {
-                            plantsArray[i].conditionLevels = [];
-                        }
-
-                        allLevels = angular.copy(plantsArray);
-
-                        deferred.resolve(plantsArray);
-
+                        plant.conditionLevels = [];
+                        //console.log(response.data);
+                        return plant;
                     } else {
                         arrayLevels = angular.copy(response.data);
-
-                        for (i = 0; i < plantsArray.length; i++) {
-                            plantsArray[i].conditionLevels = [];
-                            for (j = 0; j < arrayLevels.length; j++) {
-                                if (arrayLevels[j].plantationID === plantsArray[i].plantationID) {
-                                    delete arrayLevels[j].plantationID;
-                                    plantsArray[i].conditionLevels.push(arrayLevels[j]);
-                                }
+                        plant.conditionLevels = [];
+                        for (i = 0; i < arrayLevels.length; i++) {
+                            if (arrayLevels[i].plantationID === plant.plantationID) {
+                                delete arrayLevels[i].plantationID;
+                                plant.conditionLevels.push(arrayLevels[i]);
                             }
                         }
-
-                        allLevels = angular.copy(plantsArray);
-
-                        deferred.resolve(plantsArray);
                     }
+                    return plant;
                 });
-
-            return deferred.promise;
         },
-        
+
         getAllLevels: function (plants, date) {
             var deferred = $q.defer(),
                 plantsArray = angular.copy(plants),
