@@ -35,6 +35,10 @@ angular.module('mainApp').component('plantation', {
         $scope.tempAndHumidityOptions = chartOptionsService.getOptions('tempHumidity');
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
+        
+        $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'hour';
+        $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'hour';
+        $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'hour';
 
 
         $scope.extractAirTempAndHumidity = function (conditions) {
@@ -104,7 +108,7 @@ angular.module('mainApp').component('plantation', {
                 humidity = 0,
                 lightIntensity = 0,
                 soilMoisture = 0,
-                count = 1;
+                count = 0;
 
             if (conditions.length === 0) {
                 return {
@@ -243,7 +247,7 @@ angular.module('mainApp').component('plantation', {
             };
 
             $scope.exportDataToExcelStyle = {
-                sheetid: 'Conditions ' + moment($scope.selectedDate).format("DD, MMMM YYYY HH:mm"),
+                sheetid: 'Conditions ' + moment($scope.selectedDate).format("DD, MMMM YYYY"),
                 headers: true,
                 caption: {
                     title: 'Daily Crop Conditions - created on: ' + moment($scope.selectedDate).format("DD, MMMM YYYY HH:mm")
@@ -256,40 +260,41 @@ angular.module('mainApp').component('plantation', {
                 },
                 columns: [
                     {
-                        columnid: 'PlantationID',
-                        width: 200
+                        columnid: 'plantationID',
+                        title: 'Plantation ID',
+                        width: 100
                     },
                     {
-                        columnid: 'PlantName',
-                        width: 200
+                        columnid: 'plantName',
+                        title: 'Plant name',
+                        width: 100
                     },
                     {
-                        columnid: 'DateTime',
-                        width: 300
+                        columnid: 'dateTime',
+                        title: 'DateTime',
+                        width: 150
                     },
                     {
-                        columnid: 'AirTemp (C)',
-                        width: 200
+                        columnid: 'airTemp',
+                        title: 'Air Temp (C)',
+                        width: 100
                     },
                     {
-                        columnid: 'Humidity (%)',
-                        width: 200
+                        columnid: 'humidity',
+                        title: 'Humidity (%)',
+                        width: 100
                     },
                     {
-                        columnid: 'Light Intensity (Lux)',
-                        width: 200
+                        columnid: 'lightIntensity',
+                        title: 'Light Intensity (Lux)',
+                        width: 150
                     },
                     {
-                        columnid: 'Soil Moisture (%)',
-                        width: 200
+                        columnid: 'soilMoisture',
+                        title: 'Soil Moisture (%)',
+                        width: 150
                     }
-                ],
-
-                row: {
-                    style: function () {
-                        return 'border: green solid; width: 1px';
-                    }
-                }
+                ]
 
             };
 
@@ -298,7 +303,7 @@ angular.module('mainApp').component('plantation', {
                 var i, allDataToExport = [],
                     object = {},
                     plant = angular.copy($scope.plant),
-                    name = plant.plantationID + ' Summary ' + moment($scope.selectedDate).format("DD-MMMM-YYYY") + '.xlsx';
+                    name = plant.plantationID + ' Summary ' + moment($scope.selectedDate).format("DD-MMMM-YYYY") + '.xls';
 
                 if (plant.conditionLevels.length > 0) {
                     for (i = 0; i < plant.conditionLevels.length; i++) {
@@ -316,7 +321,7 @@ angular.module('mainApp').component('plantation', {
                     }
                 }
 
-                alasql('SELECT * INTO XLSX(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
+                alasql('SELECT * INTO XLS(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
             };
 
         };

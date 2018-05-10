@@ -1,5 +1,6 @@
 /*jslint white:true */
 /*global angular */
+/*global moment */
 /*jslint plusplus:true*/
 angular.module('mainApp').factory('plantationService', function ($http, $q) {
     "use strict";
@@ -164,6 +165,98 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
                 });
 
             return deferred.promise;
+        },
+
+        getMonthlySummary: function (plants) {
+            var deferred = $q.defer(),
+                plantsArray = angular.copy(plants),
+                i, j, arrayLevels = [],
+                date = new Date(),
+                str = {
+                    month: encodeURIComponent(moment(date).month() + 1),
+                    year: encodeURIComponent(moment(date).year())
+                };
+            
+            console.log(str);
+
+            $http({
+                    method: 'POST',
+                    url: 'php/getPlantConditionsByMonth.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    if (response.data === "failed") {
+                        //var errMsg = "failed";
+                        for (i = 0; i < plantsArray.length; i++) {
+                            plantsArray[i].monthlySummary = [];
+                        }
+                        deferred.resolve(plantsArray);
+
+                    } else {
+                        arrayLevels = angular.copy(response.data);
+
+                        for (i = 0; i < plantsArray.length; i++) {
+                            plantsArray[i].monthlySummary = [];
+                            for (j = 0; j < arrayLevels.length; j++) {
+                                if (arrayLevels[j].plantationID === plantsArray[i].plantationID) {
+                                    delete arrayLevels[j].plantationID;
+                                    plantsArray[i].monthlySummary.push(arrayLevels[j]);
+                                }
+                            }
+                        }
+
+                        deferred.resolve(plantsArray);
+                    }
+                });
+
+            return deferred.promise;
+        },
+
+        //gets monthly summary after picking the month from the datepicker in dashboard.monthlySummary
+        getMonthlySummaryByDate: function (plants, date) {
+            var plantsArray = angular.copy(plants),
+                i, j, arrayLevels = [],
+                str = {
+                    month: encodeURIComponent(moment(date).month() + 1),
+                    year: encodeURIComponent(moment(date).year())
+                };
+            
+            console.log(str);
+
+            return $http({
+                    method: 'POST',
+                    url: 'php/getPlantConditionsByMonth.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    if (response.data === "failed") {
+                        //var errMsg = "failed";
+                        for (i = 0; i < plantsArray.length; i++) {
+                            plantsArray[i].monthlySummary = [];
+                        }
+
+                    } else {
+                        arrayLevels = angular.copy(response.data);
+
+                        for (i = 0; i < plantsArray.length; i++) {
+                            plantsArray[i].monthlySummary = [];
+                            for (j = 0; j < arrayLevels.length; j++) {
+                                if (arrayLevels[j].plantationID === plantsArray[i].plantationID) {
+                                    delete arrayLevels[j].plantationID;
+                                    plantsArray[i].monthlySummary.push(arrayLevels[j]);
+                                }
+                            }
+                        }
+                    }
+
+                    return plantsArray;
+                });
         }
 
     };

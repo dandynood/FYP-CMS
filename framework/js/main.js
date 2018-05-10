@@ -99,6 +99,22 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
+        },
+        {
+            name: 'dashboard.monthlySummary',
+            url: '/monthly_summary',
+            component: 'monthlySummary',
+            data: {
+                roles: ['Normal', 'Admin']
+            },
+            resolve: {
+                monthlySummaryConditions: function (plantations, plantationService) {
+                    return plantationService.getMonthlySummary(plantations);
+                },
+                optimumLevels: function (optimumLevels){
+                    return optimumLevels;
+                }
+            }
         }
 
     ];
