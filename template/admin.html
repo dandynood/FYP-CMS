@@ -17,12 +17,12 @@
                     Administrator Settings
                     <small>Manage registered users and plantations</small>
                 </h1>
-                <ol class="breadcrumb">
+                <ol class="breadcrumb" style="font-size: 1.1em">
                     <li>
-                        <i class="fa fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
+                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
                     </li>
                     <li class="active">
-                        <i class="fa fa-gears"></i> Administrators
+                        <i class="fa fa-fw fa-gears"></i> Administrators
                     </li>
                 </ol>
             </div>
@@ -55,18 +55,18 @@
                             <td>{{user.firstName}} {{user.lastName}}
                             </td>
                             <td class="set-border">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-ng-click="getUserDetails(user.username)" data-target="#myViewUserModal">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-ng-click="getUserDetails(user.username)" data-target="#myViewUserModal" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>  
                                             <span class="sr-only"></span>View</button>
                             </td>
                             <td class="set-border">
-                                <button type="button" class="btn btn-warning">
+                                <button type="button" class="btn btn-warning" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
                                         <span class="sr-only"></span>Edit</button></td>
 
 
                             <td class="set-border">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
                                             <span class="sr-only"></span>Delete</button>
 
@@ -102,18 +102,18 @@
                             <td>{{plant.plantationID}}</td>
                             <td>{{plant.plantName}}</td>
                             <td class="set-border">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myViewPlantModal" data-ng-click="getPlantationDetails(plant.plantationID)">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myViewPlantModal" data-ng-click="getPlantationDetails(plant.plantationID)" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true" ></span>  
                                             <span class="sr-only"></span>View</button>
                             </td>
                             <td class="set-border">
-                                <button type="button" class="btn btn-warning">
+                                <button type="button" class="btn btn-warning" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>  
                                         <span class="sr-only"></span>Edit</button></td>
 
 
                             <td class="set-border">
-                                <button type="button" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger" style="border-radius: 15px;">
                                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>  
                                             <span class="sr-only"></span>Delete</button>
                             </td>

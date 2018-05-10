@@ -1,3 +1,4 @@
+DROP DATABASE CMD;
 CREATE DATABASE CMD;
 USE CMD;
 
@@ -36,9 +37,7 @@ plantationID varchar(10) NOT NULL,
 dateTime TIMESTAMP NOT NULL,
 airTemp FLOAT,
 humidity FLOAT,
-windSpeed FLOAT,
 lightIntensity FLOAT,
-soilTemp FLOAT,
 soilMoisture FLOAT,
 PRIMARY KEY (plantationID, dateTime),
 FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)
@@ -51,9 +50,7 @@ CREATE TABLE OptimumLevels(
 plantationID varchar(10) NOT NULL,
 airTemp varchar(20),
 humidity varchar(20),
-windSpeed varchar(20),
 lightIntensity varchar(20),
-soilTemp varchar(20),
 soilMoisture varchar(20),
 PRIMARY KEY (plantationID),
 FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)

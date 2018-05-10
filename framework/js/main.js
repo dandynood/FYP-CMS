@@ -3,7 +3,7 @@
 /*jslint plusplus:true*/
 
 /*define mainApp name*/
-var mainApp = angular.module('mainApp', ["ui.router", "ngCookies","ngStorage","chart.js"]);
+var mainApp = angular.module('mainApp', ["ui.router","ngStorage","chart.js","ngAnimate","ngTouch","ui.bootstrap"]);
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -40,7 +40,7 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getAllplantations();
                 },
                 allConditionLevels: function (plantations, plantationService) {
-                    return plantationService.getAllLevels(plantations);
+                    return plantationService.getAllLevels(plantations,'2018-04-07');
                 },
                 optimumLevels: function (plantations, optimumLevelsService){
                     return optimumLevelsService.getAllOptimumLevels(plantations);

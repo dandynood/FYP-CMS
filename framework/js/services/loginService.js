@@ -5,8 +5,8 @@
 /*use the same mainApp name from main.js*/
 /*this factory is resposible for checking the current logged in user, if they exist
 or they are autheticated or not*/
-angular.module('mainApp').factory('principle', ['$q', '$http', '$cookies', '$state', '$sessionStorage',
-    function ($q, $http, $cookies, $state, $sessionStorage) {
+angular.module('mainApp').factory('principle', ['$q', '$http', '$state', '$sessionStorage',
+    function ($q, $http, $state, $sessionStorage) {
             "use strict";
 
             //identity holds user object from cookie

@@ -7,9 +7,10 @@
         echo 'failed';
     }         
         $data = json_decode(file_get_contents("php://input"));
+        $plantationID = urldecode($data->plantationID);
         $date = urldecode($data->date);
         
-        $sql = "SELECT * FROM conditionLevels WHERE datetime BETWEEN '$date' AND '$date 23:59:59' ORDER BY dateTime";
+        $sql = "SELECT * FROM conditionLevels WHERE plantationID = '$plantationID' AND datetime BETWEEN '$date' AND '$date 23:59:59' ORDER BY dateTime";
 
         $result = $conn->query($sql);
 

@@ -43,6 +43,13 @@
     #timeSmall {
         display: block
     }
+
+    .export-btn {
+        float: none !important;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
 }
 
 .side-nav {
@@ -62,4 +69,13 @@
 
 .viewBtn {
     border-radius: 15px;
+}
+
+.uib-datepicker-current {
+    border-bottom-right-radius: 3px !important;
+    border-top-right-radius: 3px !important;
+}
+
+.uib-clear {
+    display: none;
 }

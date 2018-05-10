@@ -80,25 +80,70 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
 
             return deferred.promise;
         },
-        
-        //gets all condition levels for each plantation after loading the plantation binding in main\
-        //when loading the dashboard parent state
-        getAllLevels: function (plants) {
-            var deferred = $q.defer(),
-                plantsArray = angular.copy(plants),
-                i, j, arrayLevels = [];
 
-            $http({
+        //gets all condition levels for each plantation by date after picking from the datepicker
+        getAllLevelsByDate: function (plant, date) {
+            var i, arrayLevels = [],
+                str = {
+                    plantationID: encodeURIComponent(plant.plantationID),
+                    date: encodeURIComponent(date)
+                };
+
+            return $http({
                     method: 'POST',
                     url: 'php/getAllConditionLevels.php',
+                    data: str,
                     header: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 })
                 .then(function (response) {
                     if (response.data === "failed") {
-                        var errMsg = "failed";
-                        arrayLevels.push(errMsg);
+                        //var errMsg = "failed";
+                        plant.conditionLevels = [];
+                        //console.log(response.data);
+                        return plant;
+                    } else {
+                        arrayLevels = angular.copy(response.data);
+                        plant.conditionLevels = [];
+                        for (i = 0; i < arrayLevels.length; i++) {
+                            if (arrayLevels[i].plantationID === plant.plantationID) {
+                                delete arrayLevels[i].plantationID;
+                                plant.conditionLevels.push(arrayLevels[i]);
+                            }
+                        }
+                    }
+                    return plant;
+                });
+        },
+
+        getAllLevels: function (plants, date) {
+            var deferred = $q.defer(),
+                plantsArray = angular.copy(plants),
+                i, j, arrayLevels = [],
+                str = {
+                    date: encodeURIComponent(date)
+                };
+
+            $http({
+                    method: 'POST',
+                    url: 'php/getAllConditionLevels.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    if (response.data === "failed") {
+                        //var errMsg = "failed";
+                        for (i = 0; i < plantsArray.length; i++) {
+                            plantsArray[i].conditionLevels = [];
+                        }
+
+                        allLevels = angular.copy(plantsArray);
+
+                        deferred.resolve(plantsArray);
+
                     } else {
                         arrayLevels = angular.copy(response.data);
 

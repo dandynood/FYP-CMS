@@ -11,13 +11,13 @@ angular.module('mainApp').component('dashboard', {
 
     controllerAs: "model",
     //Controller for dashboard nav bar
-    controller: function ($scope, $state, $cookies, $stateParams, $interval, principle, $sessionStorage) {
+    controller: function ($scope, $state, $stateParams, $interval, principle, $sessionStorage) {
         "use strict";
         var self = $scope.model;
 
         self.$onInit = function () {
             //console.log(self.plantations);
-            //console.log(self.allConditionLevels);
+            console.log(self.allConditionLevels);
             //console.log(self.optimumLevels);
             
             $scope.user = $sessionStorage.user;
@@ -28,7 +28,6 @@ angular.module('mainApp').component('dashboard', {
 
             $scope.logout = function () {
                 $scope.user = undefined;
-                //$cookies.remove("user");
                 delete $sessionStorage.user;
                 principle.getIdentity(true);
                 $state.go('login');
