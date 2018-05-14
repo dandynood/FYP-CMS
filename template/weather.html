@@ -1,0 +1,45 @@
+<!--Template's CSS (can edit)-->
+<link href="framework/css/sb-admin.css" rel="stylesheet">
+<link href="framework/css/weather.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="framework/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<script id="weatherwidget-io-js" src="https://weatherwidget.io/js/widget.min.js"></script>
+
+<!--MAIN BODY OF CONTENT-->
+<div id="page-wrapper">
+
+    <div class="container-fluid main-content">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="page-header" data-ng-click="hello()">
+                    Weather Forecast
+                    <small>View Current and Forecast Weather</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                        <i class="fa fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-cloud"></i> Weather Forecast
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+        <br>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="weather">
+                    <a class="weatherwidget-io" href="https://forecast7.com/en/1d17110d57/serian/" data-label_1="SERIAN" data-label_2="WEATHER" data-theme="weather_one"></a>
+                </div>
+            </div>
+        </div>
+                <br><br><br><br><br><br><br>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
