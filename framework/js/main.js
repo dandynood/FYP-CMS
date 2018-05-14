@@ -100,12 +100,11 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 }
             }
         },
-
         {
             name: 'dashboard.weather',
             url: '/weather',
             component: 'weather',
-            //cache: false,
+
             data: {
                 roles: ['Normal', 'Admin']
             }
@@ -122,7 +121,7 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
 
 
 //This runs everytime you load a route or start a state/page.
-mainApp.run(['$rootScope', '$state', '$transitions','principle', 'authorization', function ($rootScope, $state, $transitions, principle, authorization) {
+mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization', function ($rootScope, $state, $transitions, principle, authorization) {
 
     "use strict";
 
