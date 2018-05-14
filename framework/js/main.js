@@ -100,12 +100,20 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 }
             }
         },
+<<<<<<< HEAD
 
         {
             name: 'dashboard.weather',
             url: '/weather',
             component: 'weather',
             //cache: false,
+=======
+	
+	{
+            name: 'dashboard.weather',
+            url: '/weather',
+            component: 'weather',
+>>>>>>> 08a68f40ac4705844214620cc16f40a64a8a7c2d
             data: {
                 roles: ['Normal', 'Admin']
             }
