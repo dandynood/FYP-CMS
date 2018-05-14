@@ -3,7 +3,7 @@
 /*jslint plusplus:true*/
 
 /*define mainApp name*/
-var mainApp = angular.module('mainApp', ["ui.router","ngStorage","chart.js","ngAnimate","ngTouch","ui.bootstrap"]);
+var mainApp = angular.module('mainApp', ["ui.router", "ngStorage", "chart.js", "ngAnimate", "ngTouch", "ui.bootstrap"]);
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -40,9 +40,9 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getAllplantations();
                 },
                 allConditionLevels: function (plantations, plantationService) {
-                    return plantationService.getAllLevels(plantations,'2018-04-07');
+                    return plantationService.getAllLevels(plantations, '2018-04-07');
                 },
-                optimumLevels: function (plantations, optimumLevelsService){
+                optimumLevels: function (plantations, optimumLevelsService) {
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
@@ -55,11 +55,11 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             data: {
                 roles: ['Normal', 'Admin']
             },
-            resolve:{
+            resolve: {
                 allConditionLevels: function (allConditionLevels) {
                     return allConditionLevels;
                 },
-                optimumLevels: function (optimumLevels){
+                optimumLevels: function (optimumLevels) {
                     return optimumLevels;
                 }
             }
@@ -78,7 +78,7 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getPlantation($stateParams.plantationID);
                 },
                 //gets the optimum level of the plantation
-                optimumLevels: function (optimumLevelsService, $stateParams){
+                optimumLevels: function (optimumLevelsService, $stateParams) {
                     return optimumLevelsService.getPlantationOptimumLevels($stateParams.plantationID);
                 }
             }
@@ -99,8 +99,17 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
-        }
+        },
 
+        {
+            name: 'dashboard.weather',
+            url: '/weather',
+            component: 'weather',
+            //cache: false,
+            data: {
+                roles: ['Normal', 'Admin']
+            }
+        }
     ];
 
     // Loop over the state definitions and register them
@@ -113,7 +122,7 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
 
 
 //This runs everytime you load a route or start a state/page.
-mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization', function ($rootScope, $state, $transitions, principle, authorization) {
+mainApp.run(['$rootScope', '$state', '$transitions','principle', 'authorization', function ($rootScope, $state, $transitions, principle, authorization) {
 
     "use strict";
 
@@ -127,7 +136,7 @@ mainApp.run(['$rootScope', '$state', '$transitions', 'principle', 'authorization
         //trans will return the to state (destination), and url parameters.
         $rootScope.to = trans.to();
         $rootScope.params = trans.params();
-        
+
         authorization.authorize();
     });
 
