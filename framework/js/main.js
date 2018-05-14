@@ -99,8 +99,16 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 }
             }
+        },
+	
+	{
+            name: 'dashboard.weather',
+            url: '/weather',
+            component: 'weather',
+            data: {
+                roles: ['Normal', 'Admin']
+            }
         }
-
     ];
 
     // Loop over the state definitions and register them
