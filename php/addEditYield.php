@@ -7,12 +7,11 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
         $plantID = urldecode($data->plantationID);
-        $plantName = urldecode($data->plantName);
-        $plantDesc = urldecode($data->plantDescription);
-        $numOfPlants = urldecode($data->numOfPlants);
-            
-        $sql = "INSERT INTO plantations
-        (plantationID, plantName, plantDescription, numOfPlants) VALUES ('$plantID','$plantName','$plantDesc','$numOfPlants')";
+        $date = urldecode($data->date);
+        $yieldValue = urldecode($data->yieldValue);
+
+        $sql = "REPLACE INTO PlantationYields (plantationID, monthYear, yield) 
+        VALUES ('$plantID','$date','$yieldValue')";
 
 
         $result = $conn->query($sql);

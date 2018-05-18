@@ -35,7 +35,7 @@ angular.module('mainApp').component('plantation', {
         $scope.tempAndHumidityOptions = chartOptionsService.getOptions('tempHumidity');
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
-        
+
         $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'hour';
         $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'hour';
         $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'hour';
@@ -99,7 +99,7 @@ angular.module('mainApp').component('plantation', {
             return data;
 
         };
-        
+
         //This function is called when you look at past data
         //It averages out the whole data of that date and compares it with the optimum ranges as a summary
         $scope.getAverageConditions = function (conditions) {
@@ -108,7 +108,12 @@ angular.module('mainApp').component('plantation', {
                 humidity = 0,
                 lightIntensity = 0,
                 soilMoisture = 0,
-                count = 0;
+                reduceCountAT = 0,
+                reduceCountH = 0,
+                reduceCountLI = 0,
+                reduceCountSM = 0,
+                count = 0,
+                countLightIntensity = 0;
 
             if (conditions.length === 0) {
                 return {
@@ -119,27 +124,52 @@ angular.module('mainApp').component('plantation', {
                     soilMoisture: null
                 };
             }
-
+            
             for (i = 0; i < conditions.length; i++) {
-                airTemp = airTemp + parseInt(conditions[i].airTemp, 10);
-                humidity = humidity + parseInt(conditions[i].humidity, 10);
-                lightIntensity = lightIntensity + parseInt(conditions[i].lightIntensity, 10);
-                soilMoisture = soilMoisture + parseInt(conditions[i].soilMoisture, 10);
+                if (conditions[i].airTemp !== null) {
+                    airTemp = airTemp + (+conditions[i].airTemp);
+                } else {
+                    reduceCountAT++;
+                }
+                if (conditions[i].humidity !== null) {
+                    humidity = humidity + (+conditions[i].humidity);
+                } else {
+                    reduceCountH++;
+                }
+                if (conditions[i].lightIntensity !== null) {
+                    //Get only values for lightIntensity within 7am and 6pm only for average
+                    //Also the countLightIntensity is only used to average out lightIntensity (counts the light readings in the day range)
+                    if (conditions[i].dateTime && (moment(conditions[i].dateTime).hour() >= 7 || moment(conditions[i].dateTime).hour() <= 18)) {
+                        countLightIntensity++;
+                        lightIntensity = lightIntensity + (+conditions[i].lightIntensity);
+                    }
+                    
+                } else {
+                    reduceCountLI++;
+                }
+                if (conditions[i].soilMoisture !== null) {
+                    soilMoisture = soilMoisture + (+conditions[i].soilMoisture);
+                } else {
+                    reduceCountSM++;
+                }
+                
                 count++;
             }
 
-            airTemp = airTemp / count;
-            humidity = humidity / count;
-            lightIntensity = lightIntensity / 11;
-            soilMoisture = soilMoisture / count;
-
+            airTemp = (count!==reduceCountAT? airTemp / (count - reduceCountAT): null);
+            humidity = (count!==reduceCountH? humidity / (count - reduceCountH): null);
+            lightIntensity = (count!==reduceCountLI ? lightIntensity / (countLightIntensity - reduceCountLI): null);
+            soilMoisture = (count!==reduceCountSM ? soilMoisture / (count - reduceCountSM): null);
+            
             averageCondtions = {
                 dateTime: null,
-                airTemp: parseFloat(airTemp).toFixed(1),
-                humidity: parseFloat(humidity).toFixed(1),
-                lightIntensity: parseFloat(lightIntensity).toFixed(1),
-                soilMoisture: parseFloat(soilMoisture).toFixed(1)
+                airTemp: (airTemp!==null? airTemp.toFixed(1):airTemp),
+                humidity: (humidity!==null? humidity.toFixed(1):humidity),
+                lightIntensity: (lightIntensity!==null? lightIntensity.toFixed(1):lightIntensity),
+                soilMoisture: (soilMoisture!==null? soilMoisture.toFixed(1):soilMoisture)
             };
+
+            console.log(averageCondtions);
 
             return averageCondtions;
         };
@@ -148,19 +178,31 @@ angular.module('mainApp').component('plantation', {
         //No for loops are required
         self.$onInit = function () {
             $scope.plant = angular.copy(self.plantation);
+            //since there is only plantation selected, we just simply put the optimum levels like so
             $scope.plant.optimumLevels = angular.copy(self.optimumLevels);
 
+            //extract the conditions and place them in seperate attributes for each parameter for ease of access and use
+            //used also for the chart drawings
             $scope.plant.airTempAndHumidity = $scope.extractAirTempAndHumidity($scope.plant.conditionLevels);
             $scope.plant.lightIntensity = $scope.extractLightIntensity($scope.plant.conditionLevels);
             $scope.plant.soilMoisture = $scope.extractSoilMoisture($scope.plant.conditionLevels);
 
+            //Initializes the optimum level comparison reports, where we get the last recording of the condition levels
+            //Compares that recording with the optimum range to get comparison reports for table and graph in the modal when View is clicked
+            //is called when loading this page or when the date is selected by again for today in the datepicker
             $scope.getLastComparisonReports = function () {
                 var last, lastPosition;
                 if ($scope.plant.conditionLevels.length > 0) {
                     lastPosition = $scope.plant.conditionLevels.length - 1;
                     last = $scope.plant.conditionLevels[lastPosition];
                 } else {
-                    last = {dateTime: null, airTemp: null, humidity: null, lightIntensity: null, soilMoisture: null};
+                    last = {
+                        dateTime: null,
+                        airTemp: null,
+                        humidity: null,
+                        lightIntensity: null,
+                        soilMoisture: null
+                    };
                 }
 
                 if (last) {
@@ -175,6 +217,8 @@ angular.module('mainApp').component('plantation', {
             };
 
             $scope.getLastComparisonReports();
+            
+            console.log($scope.plant.soilMoisture);
 
             //This gets the date for today
             //SelectedDate will change, $scope.today is for reference of today
@@ -198,6 +242,9 @@ angular.module('mainApp').component('plantation', {
             //For text change for the headers above the summary table
             $scope.comparisonType = "Normal";
 
+            //This queries the data from the selected date in the date picker
+            //Notice how we average the past recordings for the day since they are past
+            //For present we look only at the last recording to get the latest updates of today
             $scope.getDateConditions = function (date) {
                 var today = moment($scope.today).format("YYYY-MM-DD"),
                     plantation,
@@ -227,7 +274,7 @@ angular.module('mainApp').component('plantation', {
                     promise = plantationService.getAllLevelsByDate(plantation, date);
 
                     promise.then(function (data) {
-                        
+
                         $scope.plant = angular.copy(data);
                         $scope.plant.optimumLevels = angular.copy(self.optimumLevels);
 
@@ -246,6 +293,7 @@ angular.module('mainApp').component('plantation', {
                 }
             };
 
+            //The excel worksheet styling that is used when exporting data to excel in the alasql
             $scope.exportDataToExcelStyle = {
                 sheetid: 'Conditions ' + moment($scope.selectedDate).format("DD, MMMM YYYY"),
                 headers: true,
@@ -298,7 +346,8 @@ angular.module('mainApp').component('plantation', {
 
             };
 
-
+            
+            //Exports all the data for the whole selected day of this plantation
             $scope.exportAllDataToExcel = function () {
                 var i, allDataToExport = [],
                     object = {},

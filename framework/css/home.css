@@ -31,6 +31,25 @@
     margin: 0
 }
 
+@media(max-width: 1100px) {
+    .export-btn {
+        float: none !important;
+        padding: 5px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .export-dropdown {
+        float: none !important;
+    }
+}
+
+@media(max-width: 768px) {
+    .export-btn {
+        float: none !important;
+    }
+}
+
 @media(max-width: 767px) {
     .sticky-footer {
         width: 100%;
@@ -43,13 +62,10 @@
     #timeSmall {
         display: block
     }
+}
 
-    .export-btn {
-        float: none !important;
-        padding: 5px 10px;
-        font-size: 12px;
-        line-height: 1.5;
-    }
+.pull-right>.dropdown-menu{
+    right:inherit !important;
 }
 
 .side-nav {
@@ -78,4 +94,8 @@
 
 .uib-clear {
     display: none;
+}
+
+.fill-empty{
+    height: 45vh;
 }

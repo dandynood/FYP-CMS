@@ -33,9 +33,9 @@ angular.module('mainApp').component('monthlySummary', {
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
 
-        $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'week';
-        $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'week';
-        $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'week';
+        $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'day';
+        $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'day';
+        $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'day';
 
         //Below methods are used to extract individual conditions for display on graphs
         //from the monthlySummaryConditions binding that has all the conditions for each plantation
@@ -118,6 +118,10 @@ angular.module('mainApp').component('monthlySummary', {
                 humidity = 0,
                 lightIntensity = 0,
                 soilMoisture = 0,
+                reduceCountAT = 0,
+                reduceCountH = 0,
+                reduceCountLI = 0,
+                reduceCountSM = 0,
                 count = 0;
 
             if (conditions.length === 0) {
@@ -131,24 +135,41 @@ angular.module('mainApp').component('monthlySummary', {
             }
 
             for (i = 0; i < conditions.length; i++) {
-                airTemp = airTemp + parseFloat(conditions[i].avgAirTemp);
-                humidity = humidity + parseFloat(conditions[i].avgHumidity);
-                lightIntensity = lightIntensity + parseFloat(conditions[i].avgLightIntensity);
-                soilMoisture = soilMoisture + parseFloat(conditions[i].avgSoilMoisture);
+                if (conditions[i].avgAirTemp !== null) {
+                    airTemp = airTemp + (+conditions[i].avgAirTemp);
+                } else {
+                    reduceCountAT++;
+                }
+                if (conditions[i].avgHumidity !== null) {
+                    humidity = humidity + (+conditions[i].avgHumidity);
+                } else {
+                    reduceCountH++;
+                }
+                if (conditions[i].avgLightIntensity !== null) {
+                    lightIntensity = lightIntensity + (+conditions[i].avgLightIntensity);
+                } else {
+                    reduceCountLI++;
+                }
+                if (conditions[i].avgSoilMoisture !== null) {
+                    soilMoisture = soilMoisture + (+conditions[i].avgSoilMoisture);
+                } else {
+                    reduceCountSM++;
+                }
+
                 count++;
             }
 
-            airTemp = airTemp / count;
-            humidity = humidity / count;
-            lightIntensity = lightIntensity / count;
-            soilMoisture = soilMoisture / count;
+            airTemp = (count !== reduceCountAT ? airTemp / (count - reduceCountAT) : null);
+            humidity = (count !== reduceCountH ? humidity / (count - reduceCountH) : null);
+            lightIntensity = (count !== reduceCountLI ? lightIntensity / (count - reduceCountLI) : null);
+            soilMoisture = (count !== reduceCountSM ? soilMoisture / (count - reduceCountSM) : null);
 
             averageCondtions = {
                 dateTime: null,
-                airTemp: parseFloat(airTemp).toFixed(1),
-                humidity: parseFloat(humidity).toFixed(1),
-                lightIntensity: parseFloat(lightIntensity).toFixed(1),
-                soilMoisture: parseFloat(soilMoisture).toFixed(1)
+                airTemp: (airTemp !== null ? airTemp.toFixed(1) : airTemp),
+                humidity: (humidity !== null ? humidity.toFixed(1) : humidity),
+                lightIntensity: (lightIntensity !== null ? lightIntensity.toFixed(1) : lightIntensity),
+                soilMoisture: (soilMoisture !== null ? soilMoisture.toFixed(1) : soilMoisture)
             };
 
             return averageCondtions;
@@ -161,6 +182,10 @@ angular.module('mainApp').component('monthlySummary', {
 
             $scope.plantations = angular.copy(plants);
 
+            //initialization of the $scope.plantation to be used in the page
+            //extracts all the conditions and places them into seperate attributes for easier access 
+            //also for use in the chart drawings
+            //This also extracts the optimum levels to place in the correct plantation object in the $scope.plantation array
             $scope.initializeOrganization = function () {
                 //Here we copy the conditions into $scope
                 //Then we simply add new attributes in each plantation object in the array
@@ -188,6 +213,9 @@ angular.module('mainApp').component('monthlySummary', {
 
             $scope.initializeOrganization();
 
+            //initializes all the optimum level comparison reports for each parameter
+            //this function is called initially when loaded and also after the datepicker has picked a month
+            //uses the optimumLevelsService functions to compare the average values with the optimum range
             $scope.getMonthlySummary = function () {
                 var avgMonthlyCondtions;
                 for (i = 0; i < $scope.plantations.length; i++) {
@@ -198,20 +226,19 @@ angular.module('mainApp').component('monthlySummary', {
                     $scope.plantations[i].humidityReport = optimumLevelsService.compareHumidity(avgMonthlyCondtions.humidity, $scope.plantations[i].optimumLevels.humidity);
                     $scope.plantations[i].lightIntensityReport = optimumLevelsService.compareLightIntensity(avgMonthlyCondtions.lightIntensity, avgMonthlyCondtions.dateTime, $scope.plantations[i].optimumLevels.lightIntensity);
                     $scope.plantations[i].soilMoistureReport = optimumLevelsService.compareSoilMoisture(avgMonthlyCondtions.soilMoisture, $scope.plantations[i].optimumLevels.soilMoisture);
-                    
+
                     $scope.plantations[i].airTempReport.chartSettings.seriesLabel[2] = 'Monthly Average';
                     $scope.plantations[i].airTempReport.chartSettings.labels[1] = 'Monthly Average';
-                    
+
                     $scope.plantations[i].humidityReport.chartSettings.seriesLabel[2] = 'Monthly Average';
                     $scope.plantations[i].humidityReport.chartSettings.labels[1] = 'Monthly Average';
-                
+
                     $scope.plantations[i].lightIntensityReport.chartSettings.seriesLabel[2] = 'Monthly Average';
                     $scope.plantations[i].lightIntensityReport.chartSettings.labels[1] = 'Monthly Average';
-                    
+
                     $scope.plantations[i].soilMoistureReport.chartSettings.seriesLabel[2] = 'Monthly Average';
                     $scope.plantations[i].soilMoistureReport.chartSettings.labels[1] = 'Monthly Average';
-                
-                
+
                 }
             };
 
@@ -236,6 +263,7 @@ angular.module('mainApp').component('monthlySummary', {
             $scope.selectedDate = new Date();
             $scope.today = new Date();
 
+            //Options/settings for the datepicker
             $scope.datePicker = {
                 opened: false,
                 format: 'MMM yyyy',
@@ -244,7 +272,8 @@ angular.module('mainApp').component('monthlySummary', {
                     formatYear: 'yyyy'
                 }
             };
-
+            
+            //function to open the datepicker when the button next to it is clicked
             $scope.openDatePicker = function () {
                 $scope.datePicker.opened = true;
             };
@@ -252,12 +281,12 @@ angular.module('mainApp').component('monthlySummary', {
             //For text change for the headers above the summary table
             $scope.comparisonType = "Normal";
 
+            //After clicking a month on the datepicker it will query the data from that month
+            //uses the plnatationService.getMonthlySummaryByDate function
             $scope.getMonthConditions = function (date) {
                 var today = moment($scope.today).format("YYYY-MM"),
                     plantation,
                     promise;
-
-                console.log($scope.plantations);
 
                 date = moment(date).format("YYYY-MM");
 
@@ -268,22 +297,22 @@ angular.module('mainApp').component('monthlySummary', {
                 }
 
                 plantation = angular.copy(self.monthlySummaryConditions);
-                promise = plantationService.getMonthlySummaryByDate(plantation, date);
+                promise = plantationService.getMonthlySummaryByDate(plantation, date, "summary");
 
                 promise.then(function (data) {
                     $scope.plantations = angular.copy(data);
                     $scope.initializeOrganization();
                     $scope.getMonthlySummary();
-
                     console.log($scope.plantations);
                 });
             };
 
+            //The excel worksheet styling that is used when exporting data to excel in the alasql
             $scope.exportDataToExcelStyle = {
                 sheetid: 'Avg per day in ' + moment($scope.selectedDate).format("MMMM YYYY"),
                 headers: true,
                 caption: {
-                    title: 'Monthly Summary - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+                    title: moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in days) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
                 },
                 column: {
                     style: function () {
@@ -330,10 +359,28 @@ angular.module('mainApp').component('monthlySummary', {
 
             };
 
+            //For the exportAllDataToExcelMonth function which exports averages group by month 
+            $scope.exportDataToExcelStyleMonth = {
+                sheetid: 'Avg per month in ' + moment($scope.selectedDate).format("MMMM YYYY"),
+                headers: true,
+                caption: {
+                    title: moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in month) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+                },
+                column: {
+                    style: function () {
+                        return 'border: 1px green solid';
+                    }
+                },
+                columns: $scope.exportDataToExcelStyle.columns
+
+            };
+
+            //Export all average data in the monthly summary grouped by days
             $scope.exportAllDataToExcel = function () {
                 var i, j, allDataToExport = [],
                     object = {},
                     plants = angular.copy($scope.plantations);
+                
                 for (i = 0; i < plants.length; i++) {
                     if (plants[i].monthlySummary.length > 0) {
                         for (j = 0; j < plants[i].monthlySummary.length; j++) {
@@ -352,9 +399,34 @@ angular.module('mainApp').component('monthlySummary', {
                     }
                 }
 
-                alasql('SELECT * INTO XLS("Monthly Summary.xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
+                alasql('SELECT * INTO XLS("Monthly Summary (in days).xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
             };
 
+
+            //Export the data from the month's average vs optimum levels table
+            $scope.exportAllDataToExcelMonth = function () {
+                var i, allDataToExport = [],
+                    object = {};
+                plants = angular.copy($scope.plantations);
+
+                for (i = 0; i < plants.length; i++) {
+                    object = {};
+                        object = {
+                            plantationID: plants[i].plantationID,
+                            plantName: plants[i].plantName,
+                            date: moment($scope.selectedDate).format("MMMM YYYY"),
+                            airTemp: plants[i].airTempReport.lastReading,
+                            humidity: plants[i].humidityReport.lastReading,
+                            lightIntensity: plants[i].lightIntensityReport.lastReading,
+                            soilMoisture: plants[i].soilMoistureReport.lastReading
+                        };
+                        allDataToExport.push(object);
+                }
+
+                alasql('SELECT * INTO XLS("Monthly Summary (in month).xls",?) FROM ?', [$scope.exportDataToExcelStyleMonth, allDataToExport]);
+            };
+
+            //Export the individual plantation's average data grouped by days
             $scope.exportPlantDataToExcel = function (plant) {
                 var i, allDataToExport = [],
                     name = plant.plantationID + ' Monthly Summary.xls',

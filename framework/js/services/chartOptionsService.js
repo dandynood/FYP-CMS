@@ -57,7 +57,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             time: {
                                 displayFormats: {
                                     hour: 'hA',
-                                    week: 'll'
+                                    day: 'MMM DD'
                                 }
                             }
                         }]
@@ -123,7 +123,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             time: {
                                 displayFormats: {
                                     hour: 'hA',
-                                    week: 'll'
+                                    day: 'MMM DD'
                                 }
                             }
                         }]
@@ -172,7 +172,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                             time: {
                                 displayFormats: {
                                     hour: 'hA',
-                                    week: 'll'
+                                    day: 'MMM DD'
                                 }
                             }
                         }]

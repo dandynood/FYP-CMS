@@ -44,6 +44,10 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 },
                 optimumLevels: function (plantations, optimumLevelsService){
                     return optimumLevelsService.getAllOptimumLevels(plantations);
+                },
+                test: function(plantationService){
+                    return "something";
+                    //return plantationService.test();
                 }
             }
         },
@@ -109,7 +113,25 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             },
             resolve: {
                 monthlySummaryConditions: function (plantations, plantationService) {
-                    return plantationService.getMonthlySummary(plantations);
+                    var date = new Date(), type = "summary";
+                    return plantationService.getMonthlySummaryByDate(plantations,date,type);
+                },
+                optimumLevels: function (optimumLevels){
+                    return optimumLevels;
+                }
+            }
+        },
+        {
+            name: 'dashboard.yields',
+            url: '/yields',
+            component: 'yields',
+            data: {
+                roles: ['Normal', 'Admin']
+            },
+            resolve: {
+                monthlySummaryYields: function (plantations, plantationService) {
+                    var date = new Date(), type = "yield";
+                    return plantationService.getMonthlySummaryByDate(plantations,date,type);
                 },
                 optimumLevels: function (optimumLevels){
                     return optimumLevels;

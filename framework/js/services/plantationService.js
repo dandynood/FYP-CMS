@@ -176,8 +176,6 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
                     month: encodeURIComponent(moment(date).month() + 1),
                     year: encodeURIComponent(moment(date).year())
                 };
-            
-            console.log(str);
 
             $http({
                     method: 'POST',
@@ -203,6 +201,7 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
                             for (j = 0; j < arrayLevels.length; j++) {
                                 if (arrayLevels[j].plantationID === plantsArray[i].plantationID) {
                                     delete arrayLevels[j].plantationID;
+                                    arrayLevels[j].avgLightIntensity = null;
                                     plantsArray[i].monthlySummary.push(arrayLevels[j]);
                                 }
                             }
@@ -216,15 +215,14 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
         },
 
         //gets monthly summary after picking the month from the datepicker in dashboard.monthlySummary
-        getMonthlySummaryByDate: function (plants, date) {
+        getMonthlySummaryByDate: function (plants, date, type) {
             var plantsArray = angular.copy(plants),
                 i, j, arrayLevels = [],
                 str = {
                     month: encodeURIComponent(moment(date).month() + 1),
-                    year: encodeURIComponent(moment(date).year())
+                    year: encodeURIComponent(moment(date).year()),
+                    type: encodeURIComponent(type)
                 };
-            
-            console.log(str);
 
             return $http({
                     method: 'POST',
@@ -257,6 +255,56 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
 
                     return plantsArray;
                 });
+        },
+
+        addEditYield: function (id, monthYear, yieldValue) {
+            var date = moment(new Date(monthYear));
+            var str = {
+                plantationID: encodeURIComponent(id),
+                date: encodeURIComponent(date.format('YYYY-MM-DD')),
+                yieldValue: encodeURIComponent(yieldValue)
+            };
+
+            console.log(str);
+
+            return $http({
+                    method: 'POST',
+                    url: 'php/addEditYield.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    if (response.data === "failed") {
+                        return {
+                            type: "failed",
+                            msg: "Failed to save the yield value to the database"
+                        };
+                    } else {
+                        return {
+                            type: "success",
+                            msg: "Successfully saved the yield value for "+monthYear+":"
+                        };
+                    }
+                });
+        },
+
+        test: function () {
+            var options = {
+                method: 'POST',
+                url: 'php/gatewayAPI.php',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            };
+            return $http(options)
+                .then(function successCallback(response) {
+                    console.log(response.data);
+                }, function errorCallback(response) {
+                    console.log("error", response.data);
+                });
+
         }
 
     };
