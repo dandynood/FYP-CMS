@@ -1,5 +1,6 @@
 /*jslint white:true */
 /*global angular */
+/*global moment */
 /*jslint plusplus:true*/
 angular.module('mainApp').component('login', {
     templateUrl: 'template/login.html',
@@ -39,7 +40,19 @@ angular.module('mainApp').component('login', {
                     }
                 });
         };
-
+        
+        $scope.changeBackgroundImgOnTime = function(){
+            var date = new Date(), hour = moment(date).hour();
+            //if it's night time, between midnight to 6am, and 7pm to 11pm
+            //change to the night background, login-background-2
+            if((hour >= 0 && hour <= 6) || (hour >= 19 && hour <= 23)){
+                return "night";
+            } else {
+                //else put the default login-background
+                return "day";
+            }
+        };
+        
     }
 
 });

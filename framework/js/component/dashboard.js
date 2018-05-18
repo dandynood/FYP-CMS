@@ -6,7 +6,8 @@ angular.module('mainApp').component('dashboard', {
     bindings: {
         plantations: '<',
         allConditionLevels: '<',
-        optimumLevels: '<'
+        optimumLevels: '<',
+        test: '<'
     },
 
     controllerAs: "model",
@@ -19,6 +20,7 @@ angular.module('mainApp').component('dashboard', {
             //console.log(self.plantations);
             console.log(self.allConditionLevels);
             //console.log(self.optimumLevels);
+            //console.log(self.test);
             
             $scope.user = $sessionStorage.user;
 

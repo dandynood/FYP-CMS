@@ -26,7 +26,19 @@ plantationID varchar(10) NOT NULL,
 plantName VARCHAR(255) NOT NULL,
 plantDescription VARCHAR(255),
 numOfPlants VARCHAR(255),
+nodeNumber VARCHAR(10),
 PRIMARY KEY (plantationID)
+);
+
+-- -----------------------------------------------------
+-- Table PlantationYields
+-- -----------------------------------------------------
+CREATE TABLE PlantationYields(
+plantationID varchar(10) NOT NULL,
+monthYear DATE NOT NULL,
+yield varchar(50) NOT NULL,
+PRIMARY KEY (plantationID),
+FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)
 );
 
 -- -----------------------------------------------------

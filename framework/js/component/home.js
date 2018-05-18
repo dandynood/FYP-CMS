@@ -32,6 +32,10 @@ angular.module('mainApp').component('home', {
         $scope.tempAndHumidityOptions = chartOptionsService.getOptions('tempHumidity');
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
+        
+        $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'hour';
+        $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'hour';
+        $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'hour';
 
         //Below methods are used to extract individual conditions for display on graphs
         //from the allConditionLevels binding that has all the conditions for each plantation
@@ -145,24 +149,28 @@ angular.module('mainApp').component('home', {
             //Then we get the last reading from the last position in the conditionLevels array
             //Then the 2nd if statement will use optimumLevelsService to compare and get
             //reports on if they meet the optimum range
-            for (i = 0; i < $scope.plantations.length; i++) {
+            $scope.getLastComparisonReports = function () {
+                for (i = 0; i < $scope.plantations.length; i++) {
 
-                if ($scope.plantations[i].conditionLevels.length > 0) {
-                    lastPosition = $scope.plantations[i].conditionLevels.length - 1;
+                    if ($scope.plantations[i].conditionLevels.length > 0) {
+                        lastPosition = $scope.plantations[i].conditionLevels.length - 1;
+                    }
+
+                    last = $scope.plantations[i].conditionLevels[lastPosition];
+
+                    if (last) {
+                        $scope.plantations[i].airTempReport = optimumLevelsService.compareAirTemp(last.airTemp, $scope.plantations[i].optimumLevels.airTemp);
+
+                        $scope.plantations[i].humidityReport = optimumLevelsService.compareHumidity(last.humidity, $scope.plantations[i].optimumLevels.humidity);
+
+                        $scope.plantations[i].lightIntensityReport = optimumLevelsService.compareLightIntensity(last.lightIntensity, last.dateTime, $scope.plantations[i].optimumLevels.lightIntensity);
+
+                        $scope.plantations[i].soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plantations[i].optimumLevels.soilMoisture);
+                    }
                 }
+            };
 
-                last = $scope.plantations[i].conditionLevels[lastPosition];
-
-                if (last) {
-                    $scope.plantations[i].airTempReport = optimumLevelsService.compareAirTemp(last.airTemp, $scope.plantations[i].optimumLevels.airTemp);
-
-                    $scope.plantations[i].humidityReport = optimumLevelsService.compareHumidity(last.humidity, $scope.plantations[i].optimumLevels.humidity);
-
-                    $scope.plantations[i].lightIntensityReport = optimumLevelsService.compareLightIntensity(last.lightIntensity, last.dateTime, $scope.plantations[i].optimumLevels.lightIntensity);
-
-                    $scope.plantations[i].soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plantations[i].optimumLevels.soilMoisture);
-                }
-            }
+            $scope.getLastComparisonReports();
 
             $scope.getPlant = function (id) {
                 var i;
@@ -174,16 +182,16 @@ angular.module('mainApp').component('home', {
                 }
                 return 0;
             };
-
+            
+            //This is used in the $scope.exportDataToExcelStyle to show the date of excel creation
             $scope.today = new Date();
-
+            
             $scope.exportDataToExcelStyle = {
-                sheetid: 'Conditions ' + moment($scope.today).format("DD, MMMM YYYY HH:mm"),
+                sheetid: 'Conditions ' + moment($scope.today).format("DD, MMMM YYYY"),
                 headers: true,
                 caption: {
                     title: 'Daily Crop Conditions - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
                 },
-                style: 'background:#FFFFFF',
                 column: {
                     style: function () {
                         return 'border: 1px green solid';
@@ -191,40 +199,41 @@ angular.module('mainApp').component('home', {
                 },
                 columns: [
                     {
-                        columnid: 'PlantationID',
-                        width: 200
+                        columnid: 'plantationID',
+                        title: 'Plantation ID',
+                        width: 100
                     },
                     {
-                        columnid: 'PlantName',
-                        width: 200
+                        columnid: 'plantName',
+                        title: 'Plant name',
+                        width: 100
                     },
                     {
-                        columnid: 'DateTime',
-                        width: 300
+                        columnid: 'dateTime',
+                        title: 'DateTime',
+                        width: 150
                     },
                     {
-                        columnid: 'AirTemp (C)',
-                        width: 200
+                        columnid: 'airTemp',
+                        title: 'Air Temp (C)',
+                        width: 100
                     },
                     {
-                        columnid: 'Humidity (%)',
-                        width: 200
+                        columnid: 'humidity',
+                        title: 'Humidity (%)',
+                        width: 100
                     },
                     {
-                        columnid: 'Light Intensity (Lux)',
-                        width: 200
+                        columnid: 'lightIntensity',
+                        title: 'Light Intensity (Lux)',
+                        width: 150
                     },
                     {
-                        columnid: 'Soil Moisture (%)',
-                        width: 200
+                        columnid: 'soilMoisture',
+                        title: 'Soil Moisture (%)',
+                        width: 150
                     }
-                ],
-
-                row: {
-                    style: function () {
-                        return 'border: green solid; width: 1px';
-                    }
-                }
+                ]
 
             };
 
@@ -249,33 +258,35 @@ angular.module('mainApp').component('home', {
                         }
                     }
                 }
-
-                alasql('SELECT * INTO XLSX("Daily Summary.xlsx",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
+                
+                console.log(allDataToExport);
+                alasql('SELECT * INTO XLS("Daily Summary.xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
             };
 
             $scope.exportPlantDataToExcel = function (plant) {
-                var i, allDataToExport = [], name = plant.plantationID + ' Daily Summary.xlsx',
+                var i, allDataToExport = [],
+                    name = plant.plantationID + ' Daily Summary.xlsx',
                     object = {};
-                
-                    if (plant.conditionLevels.length > 0) {
-                        for (i = 0; i < plant.conditionLevels.length; i++) {
-                            object = {};
-                            object = {
-                                plantationID: plant.plantationID,
-                                plantName: plant.plantName,
-                                dateTime: plant.conditionLevels[i].dateTime,
-                                airTemp: plant.conditionLevels[i].airTemp,
-                                humidity: plant.conditionLevels[i].humidity,
-                                lightIntensity: plant.conditionLevels[i].lightIntensity,
-                                soilMoisture: plant.conditionLevels[i].soilMoisture
-                            };
-                            allDataToExport.push(object);
-                        }
+
+                if (plant.conditionLevels.length > 0) {
+                    for (i = 0; i < plant.conditionLevels.length; i++) {
+                        object = {};
+                        object = {
+                            plantationID: plant.plantationID,
+                            plantName: plant.plantName,
+                            dateTime: plant.conditionLevels[i].dateTime,
+                            airTemp: plant.conditionLevels[i].airTemp,
+                            humidity: plant.conditionLevels[i].humidity,
+                            lightIntensity: plant.conditionLevels[i].lightIntensity,
+                            soilMoisture: plant.conditionLevels[i].soilMoisture
+                        };
+                        allDataToExport.push(object);
                     }
-                
-                
-                
-                alasql('SELECT * INTO XLSX(?,?) FROM ?', [name,$scope.exportDataToExcelStyle, allDataToExport]);
+                }
+
+
+
+                alasql('SELECT * INTO XLS(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
             };
 
         };

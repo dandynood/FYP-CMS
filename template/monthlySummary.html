@@ -7,16 +7,24 @@
         <div class="row">
             <div class="col-xs-12">
                 <h1 class="page-header">
-                    {{plant.plantName}}
-                    <small>({{plant.plantationID}})</small>
-                    <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plant.conditionLevels.length > 0" data-ng-click="exportAllDataToExcel()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel</button>
+                    Monthly Summary
+                    <small>Average conditions in the month</small>
+                    <div class="dropdown export-dropdown pull-right">
+                        <button class="btn btn-success export-btn" style="border-radius: 15px;" data-toggle="dropdown"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel <span class="caret"></span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            <li data-ng-click="exportAllDataToExcel()"><a href="javascript:">Export averages of days</a></li>
+                            <li data-ng-click="exportAllDataToExcelMonth()"><a href="javascript:">Export averages of month</a></li>
+                        </ul>
+                    </div>
                 </h1>
+            </div>
+            <div class="col-xs-12">
                 <ol class="breadcrumb" style="font-size: 1.1em">
                     <li>
                         <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
                     </li>
                     <li class="active">
-                        <i class="fa fa-fw fa-pagelines"></i> {{plant.plantName}}
+                        <i class="fa fa-fw fa-book"></i> Monthly Summary
                     </li>
                 </ol>
             </div>
@@ -25,29 +33,37 @@
 
         <!--Table summary-->
         <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="selectPlant">Choose plantation:</label>
+                    <select class="form-control" id="selectPlant" data-ng-model="selectedPlant">
+                    <option value="" selected="selected">All</option>
+                    <option data-ng-repeat="plant in plantations" value="{{plant.plantationID}}">{{plant.plantName}} ({{plant.plantationID}})</option>
+                  </select>
+                </div>
+            </div>
             <div class="col-xs-12 col-md-4 form-group">
                 <label for="date">Date:</label>
                 <div class="input-group">
-                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="getDateConditions(selectedDate)" />
+                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="getMonthConditions(selectedDate)" current-text="{{today | date:'MMM yyyy'}}" />
                     <span class="input-group-btn">
                     <button type="button" class="btn btn-primary" data-ng-click="openDatePicker()"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i></button>
                     </span>
                 </div>
             </div>
             <div class="col-xs-12 table-responsive">
-                <h3><span data-ng-if="comparisonType==='Normal'">Last recordings</span><span data-ng-if="comparisonType==='Past'">Past average recordings</span> vs. optimum levels</h3>
+                <h3><span data-ng-if="comparisonType==='Normal'">Month's average</span><span data-ng-if="comparisonType==='Past'">Past month's average</span> vs. optimum levels</h3>
                 <table class="table table-hover table-bordered">
                     <tr>
-                        <th>About this plantation</th>
+                        <th>Name</th>
                         <th>Air Temperature (&#8451;)</th>
                         <th>Humidity (%)</th>
                         <th>Light Intensity (Lux)</th>
                         <th>Soil Moisture (%)</th>
                         <th></th>
                     </tr>
-                    <tr>
-                        <td class="col-xs-4"><strong>ID:</strong> {{plant.plantationID}}<strong><br />Description:</strong> {{plant.plantDescription}}<br />
-                        </td>
+                    <tr data-ng-repeat="plant in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plant.monthlySummary.length > 0">
+                        <td><strong>{{plant.plantName}}</strong> ({{plant.plantationID}})</td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
                             <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
                                 <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
@@ -76,8 +92,6 @@
                                 <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
                                 <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
                                 <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong>
-                                <i class="fa fa-lg fa-sun-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Day'"></i>
-                                <i class="fa fa-lg fa-moon-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Night'"></i>
                             </div>
                         </td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
@@ -91,7 +105,7 @@
                             </div>
                         </td>
                         <td style="text-align: center; vertical-align: middle;">
-                            <button class="btn btn-primary viewBtn" data-toggle="modal" data-target="#optimumReportDetails"><i class="fa fa-lg fa-eye" aria-hidden="true"></i> View</button>
+                            <button class="btn btn-primary viewBtn" data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plant.plantationID)"><i class="fa fa-lg fa-eye" aria-hidden="true"></i> View</button>
                         </td>
                     </tr>
                 </table>
@@ -101,38 +115,31 @@
 
         <!--Graph summary-->
         <div class="row">
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12">
+            <div class="col-xs-12" data-ng-repeat="plantLevel in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}">
+                <h1 class="page-header" style="margin-top: 20px;"><a data-ui-sref="dashboard.plantation({plantationID: plantLevel.plantationID})">{{plantLevel.plantName}} <small>({{plantLevel.plantationID}})</small></a> <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plantLevel.monthlySummary.length > 0" data-ng-click="exportPlantDataToExcel(plantLevel)"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export to Excel (avg in days)</button></h1>
+                <br/>
+                <div class="row" data-ng-if="plantLevel.monthlySummary.length > 0">
+                    <div class="col-xs-12" data-ng-if="plantLevel.airTempandHumidity.length > 0">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;) and Humidity (%)</div>
                             <div class="panel-body">
-                                <div class="alert alert-warning" data-ng-if="plant.airTempAndHumidity[0].length == 0 && plant.airTempAndHumidity[1].length == 0">
-                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
-                                </div>
-                                <canvas id="tempHumidity" class="chart chart-line" chart-data="plant.airTempAndHumidity" chart-series="tempHumditiySeries" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
+                                <canvas id="tempHumidity" class="chart chart-line" chart-data="plantLevel.airTempandHumidity" chart-series="tempHumditiyLabels" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12">
+                    <div class="col-xs-12" data-ng-if="plantLevel.lightIntensity.length > 0" data-ng-class="plantLevel.lightIntensity.length === 0 ? 'col-md-12':'col-md-6'">
                         <div class="panel panel-primary">
-                            <div class="panel-heading"><i class="fa fa-lg  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux) </div>
+                            <div class="panel-heading"><i class="fa fa-lg  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux)</div>
                             <div class="panel-body">
-                                <div class="alert alert-warning" data-ng-if="plant.lightIntensity[0].length == 0">
-                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
-                                </div>
-                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="plant.lightIntensity" chart-series="lightIntensitySeries" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
+                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="plantLevel.lightIntensity" chart-series="lightIntensityLabels" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12">
+                    <div class="col-xs-12" data-ng-if="plantLevel.soilMoisture.length > 0" data-ng-class="plantLevel.soilMoisture.length === 0 ? 'col-md-12':'col-md-6'">
                         <div class="panel panel-primary">
                             <div class="panel-heading"><i class="fa fa-lg fa-tint" aria-hidden="true"></i> Soil Moisture (%)</div>
                             <div class="panel-body">
-                                <div class="alert alert-warning" data-ng-if="plant.soilMoisture[0].length == 0">
-                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
-                                </div>
-                                <canvas id="soilMoisture" class="chart chart-line" chart-data="plant.soilMoisture" chart-series="soilMoistureSeries" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
+                                <canvas id="soilMoisture" class="chart chart-line" chart-data="plantLevel.soilMoisture" chart-series="soilMoistureLabels" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
                             </div>
                         </div>
                     </div>
@@ -146,7 +153,7 @@
 </div>
 <!-- /#page-wrapper -->
 
-<!-- Modal for Last Recordings's summary table when View btn is clicked -->
+<!-- Modal for monthly average's summary table when View btn is clicked -->
 <div class="modal fade" id="optimumReportDetails" tabindex="-1" role="dialog" aria-labelledby="optimumReportDetails">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -234,3 +241,4 @@
         </div>
     </div>
 </div>
+
