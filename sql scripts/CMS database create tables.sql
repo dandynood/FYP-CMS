@@ -38,7 +38,7 @@ plantationID varchar(10) NOT NULL,
 monthYear DATE NOT NULL,
 yield varchar(50) NOT NULL,
 PRIMARY KEY (plantationID),
-FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)
+FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -52,7 +52,7 @@ humidity FLOAT,
 lightIntensity FLOAT,
 soilMoisture FLOAT,
 PRIMARY KEY (plantationID, dateTime),
-FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)
+FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -65,5 +65,5 @@ humidity varchar(20),
 lightIntensity varchar(20),
 soilMoisture varchar(20),
 PRIMARY KEY (plantationID),
-FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID)
+FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID) ON UPDATE CASCADE ON DELETE CASCADE
 );

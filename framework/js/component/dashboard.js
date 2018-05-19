@@ -18,7 +18,7 @@ angular.module('mainApp').component('dashboard', {
 
         self.$onInit = function () {
             //console.log(self.plantations);
-            console.log(self.allConditionLevels);
+            //console.log(self.allConditionLevels);
             //console.log(self.optimumLevels);
             //console.log(self.test);
             

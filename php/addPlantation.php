@@ -6,24 +6,48 @@
         echo "Connection failed: ".$conn->connect_error;   
     }         
         $data = json_decode(file_get_contents("php://input")); 
-        $plantID = urldecode($data->plantationID);
+        $plantID = urldecode($data->plantID);
+        $nodeID = urldecode($data->nodeID);
         $plantName = urldecode($data->plantName);
         $plantDesc = urldecode($data->plantDescription);
         $numOfPlants = urldecode($data->numOfPlants);
+
+        $airTemp = urldecode($data->airTemp);
+        $humidity = urldecode($data->humidity);
+        $lightIntensity = urldecode($data->lightIntensity);
+        $soilMoisture = urldecode($data->soilMoisture);
+
+        $adminPass = urldecode($data->adminPass);
+        $adminID = urldecode($data->adminID);
             
-        $sql = "INSERT INTO plantations
-        (plantationID, plantName, plantDescription, numOfPlants) VALUES ('$plantID','$plantName','$plantDesc','$numOfPlants')";
+        $adminPass = hash('sha256',$adminPass);
 
+        $auth = "SELECT userID FROM users WHERE userID = '$adminID' AND password = '$adminPass'";
 
-        $result = $conn->query($sql);
+        $getAuth = $conn->query($auth);
+        
+        if($getAuth->num_rows == 1){
 
-        if($conn->affected_rows > 0)
-        {
-            echo 'success';
-        }
-        else
-        {
-            echo 'failed';
+            $sql = "INSERT INTO plantations
+            (plantationID, nodeNumber, plantName, plantDescription, numOfPlants) VALUES ('$plantID','$nodeID','$plantName','$plantDesc','$numOfPlants')";
+            
+            $sqlO = "INSERT INTO optimumLevels
+            (plantationID, airTemp, humidity, lightIntensity, soilMoisture) VALUES ('$plantID','$airTemp','$humidity','$lightIntensity','$soilMoisture')";
+
+            $result = $conn->query($sql);
+            $resultO = $conn->query($sqlO);
+
+            if($conn->affected_rows > 0)
+            {
+                echo 'success';
+            }
+            else
+            {
+                echo json_encode($data);
+            }
+            
+        } else {
+            echo 'unauthorized';
         }
 
     $conn->close();

@@ -169,7 +169,7 @@ angular.module('mainApp').component('plantation', {
                 soilMoisture: (soilMoisture!==null? soilMoisture.toFixed(1):soilMoisture)
             };
 
-            console.log(averageCondtions);
+            //console.log(averageCondtions);
 
             return averageCondtions;
         };
@@ -218,7 +218,7 @@ angular.module('mainApp').component('plantation', {
 
             $scope.getLastComparisonReports();
             
-            console.log($scope.plant.soilMoisture);
+            //console.log($scope.plant.soilMoisture);
 
             //This gets the date for today
             //SelectedDate will change, $scope.today is for reference of today

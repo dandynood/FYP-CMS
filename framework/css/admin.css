@@ -7,3 +7,15 @@
     border-left:none;
     text-align: center;
 }
+
+.fill-empty-admin{
+    height: 20vh;
+}
+
+.Label {
+    font-weight: bold;
+}
+
+.right-icon-addon {
+   position:relative;
+}

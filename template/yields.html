@@ -11,7 +11,6 @@
         })
 
     </script>
-
     <div class="container-fluid main-content">
 
         <!-- Page Heading -->
@@ -56,75 +55,77 @@
                     </span>
                 </div>
             </div>
-            <div class="col-xs-12 table-responsive">
+            <div class="col-xs-12">
                 <h3><span data-ng-if="comparisonType==='Normal'">Month's average</span><span data-ng-if="comparisonType==='Past'">Past month's average</span> vs. optimum levels</h3>
-                <table class="table table-hover table-bordered">
-                    <tr>
-                        <th>Name</th>
-                        <th>Air Temperature (&#8451;)</th>
-                        <th>Humidity (%)</th>
-                        <th>Light Intensity (Lux)</th>
-                        <th>Soil Moisture (%)</th>
-                        <th>Yield</th>
-                        <th></th>
-                    </tr>
-                    <tr data-ng-repeat="plant in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plant.monthlySummary.length > 0">
-                        <td><strong>{{plant.plantName}}</strong> ({{plant.plantationID}})</td>
-                        <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
-                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
-                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
-                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
-                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
-                                <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
-                                <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong>
-                            </div>
-                        </td>
-                        <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
-                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
-                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
-                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
-                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
-                                <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
-                                <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong>
-                            </div>
-                        </td>
-                        <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
-                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
-                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
-                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
-                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
-                                <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
-                                <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong>
-                            </div>
-                        </td>
-                        <td class="conditionsColumn" style="vertical-align: middle;">
-                            <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
-                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
-                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
-                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
-                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
-                                <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
-                                <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong>
-                            </div>
-                        </td>
-                        <td class="conditionsColumn" style="vertical-align: middle;">
-                            <strong data-ng-if="plant.monthlySummary[0].yieldValue === null">No yield value saved yet</strong>
-                            <strong data-ng-if="plant.monthlySummary[0].yieldValue !== null">{{plant.monthlySummary[0].yieldValue}}</strong>
-                        </td>
-                        <td style="text-align: center; vertical-align: middle;">
-                            <div class="dropdown">
-                                <button class="btn btn-primary viewBtn" data-toggle="dropdown">Action <span class="caret"></span></button>
-                                <ul class="dropdown-menu" aria-labelledby="dLabel" style="right: 0; left: auto;">
-                                    <li data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plant.plantationID)"><a href="javascript:">View Details</a></li>
-                                    <li data-toggle="modal" data-target="#addEditYield" data-ng-click="getYieldForEdit(plant.plantationID)"><a href="javascript:">Add/Edit yield</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <th>Air Temperature (&#8451;)</th>
+                            <th>Humidity (%)</th>
+                            <th>Light Intensity (Lux)</th>
+                            <th>Soil Moisture (%)</th>
+                            <th>Yield</th>
+                            <th></th>
+                        </tr>
+                        <tr data-ng-repeat="plant in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plant.monthlySummary.length > 0">
+                            <td><strong>{{plant.plantName}}</strong> ({{plant.plantationID}})</td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
+                                    <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
+                                    <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
+                                    <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
+                                    <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <strong data-ng-if="plant.monthlySummary[0].yieldValue === null">No yield value saved yet</strong>
+                                <strong data-ng-if="plant.monthlySummary[0].yieldValue !== null">{{plant.monthlySummary[0].yieldValue}}</strong>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary viewBtn" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                    <ul class="dropdown-menu" aria-labelledby="dLabel" style="right: 0; left: auto;">
+                                        <li data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plant.plantationID)"><a href="javascript:">View Details</a></li>
+                                        <li data-toggle="modal" data-target="#addEditYield" data-ng-click="getYieldForEdit(plant.plantationID)"><a href="javascript:">Add/Edit yield</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- /.row -->

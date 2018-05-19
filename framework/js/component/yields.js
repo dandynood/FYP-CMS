@@ -19,7 +19,7 @@ angular.module('mainApp').component('yields', {
                 plants = this.monthlySummaryYields,
                 optimumLevels = this.optimumLevels;
             $scope.plantations = angular.copy(plants);
-            console.log($scope.plantations);
+            //console.log($scope.plantations);
 
             $scope.initializeOrganization = function () {
                 for (i = 0; i < $scope.plantations.length; i++) {
@@ -176,7 +176,7 @@ angular.module('mainApp').component('yields', {
                     $scope.plantations = angular.copy(data);
                     $scope.initializeOrganization();
                     $scope.getMonthlySummary();
-                    console.log($scope.plantations);
+                    //console.log($scope.plantations);
                 });
             };
 
@@ -229,7 +229,7 @@ angular.module('mainApp').component('yields', {
                         width: 150
                     },
                     {
-                        columnid: 'Yield',
+                        columnid: 'yieldValue',
                         title: 'Yield',
                         width: 100
                     }
@@ -239,12 +239,19 @@ angular.module('mainApp').component('yields', {
 
             //Export the data from the month's average vs optimum levels table
             $scope.exportAllDataToExcelMonth = function () {
-                var i, allDataToExport = [],
+                var i, allDataToExport = [], yieldValue,
                     object = {};
                 plants = angular.copy($scope.plantations);
 
                 for (i = 0; i < plants.length; i++) {
                     object = {};
+
+                    if(plants[i].monthlySummary.length !== 0){
+                        yieldValue = plants[i].monthlySummary[0].yieldValue;
+                    } else {
+                        yieldValue = undefined;
+                    } 
+                    
                     object = {
                         plantationID: plants[i].plantationID,
                         plantName: plants[i].plantName,
@@ -252,15 +259,16 @@ angular.module('mainApp').component('yields', {
                         airTemp: plants[i].airTempReport.lastReading,
                         humidity: plants[i].humidityReport.lastReading,
                         lightIntensity: plants[i].lightIntensityReport.lastReading,
-                        soilMoisture: plants[i].soilMoistureReport.lastReading
+                        soilMoisture: plants[i].soilMoistureReport.lastReading,
+                        yieldValue: yieldValue
                     };
                     allDataToExport.push(object);
                 }
 
-                alasql('SELECT * INTO XLS("Monthly Summary (in month).xls",?) FROM ?', [$scope.exportDataToExcelStyleMonth, allDataToExport]);
+                alasql('SELECT * INTO XLS("Monthly Yields (in month).xls",?) FROM ?', [$scope.exportDataToExcelStyleMonth, allDataToExport]);
             };
 
-            console.log($scope.plantations);
+            //console.log($scope.plantations);
         };
     }
 });

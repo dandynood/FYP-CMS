@@ -72,7 +72,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     plugins: {
                         deferred: {
                             xOffset: 150, // defer until 150px of the canvas width are inside the viewport
-                            yOffset: '35%', // defer until 50% of the canvas height are inside the viewport
+                            yOffset: '40%', // defer until 40% of the canvas height are inside the viewport
                             delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
                         }
                     },
@@ -131,7 +131,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     plugins: {
                         deferred: {
                             xOffset: 150, // defer until 150px of the canvas width are inside the viewport
-                            yOffset: '35%', // defer until 50% of the canvas height are inside the viewport
+                            yOffset: '40%', // defer until 40% of the canvas height are inside the viewport
                             delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
                         }
                     },
@@ -180,7 +180,7 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                     plugins: {
                         deferred: {
                             xOffset: 150, // defer until 150px of the canvas width are inside the viewport
-                            yOffset: '35%', // defer until 50% of the canvas height are inside the viewport
+                            yOffset: '40%', // defer until 40% of the canvas height are inside the viewport
                             delay: 250 // delay of 250 ms after the canvas is considered inside the viewport
                         }
                     },

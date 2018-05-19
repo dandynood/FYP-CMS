@@ -275,7 +275,7 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
                     } else if (+lastCondition > minMax[1]) {
                         return {
                             status: "High",
-                            lastReading: lastCondition,
+                            lastReadinsg: lastCondition,
                             chartData: [[minMax[0], 0], [minMax[1], 0], [0, lastCondition]],
                             chartSettings: chartSettings,
                             message: "Higher than the maximum levels: " + minMax[1] + "%"

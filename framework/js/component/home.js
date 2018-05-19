@@ -265,7 +265,7 @@ angular.module('mainApp').component('home', {
 
             $scope.exportPlantDataToExcel = function (plant) {
                 var i, allDataToExport = [],
-                    name = plant.plantationID + ' Daily Summary.xlsx',
+                    name = plant.plantationID + ' Daily Summary.xls',
                     object = {};
 
                 if (plant.conditionLevels.length > 0) {
