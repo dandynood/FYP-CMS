@@ -12,11 +12,7 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
                     plants = angular.copy(plantations),
                     i, j, arrayLevels = [];
 
-                if (angular.isDefined(allOptimumLevels)) {
-                    deferred.resolve(allOptimumLevels);
-                } else {
-
-                    $http({
+                    $http({ 
                             method: 'POST',
                             url: 'php/getAllOptimumLevels.php',
                             header: {
@@ -43,10 +39,9 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
 
                                 allOptimumLevels = plants;
 
-                                deferred.resolve(plants);
+                                deferred.resolve(allOptimumLevels);
                             }
                         });
-                }
 
                 return deferred.promise;
             },
@@ -275,7 +270,7 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
                     } else if (+lastCondition > minMax[1]) {
                         return {
                             status: "High",
-                            lastReading: lastCondition,
+                            lastReadinsg: lastCondition,
                             chartData: [[minMax[0], 0], [minMax[1], 0], [0, lastCondition]],
                             chartSettings: chartSettings,
                             message: "Higher than the maximum levels: " + minMax[1] + "%"

@@ -7,20 +7,31 @@
         
     }         
         $data = json_decode(file_get_contents("php://input"));
-        $plantID = urldecode($data->plantationID);
+        $plantID = urldecode($data->plantID);
+        $adminPass = urldecode($data->adminPass);
+        $adminID = urldecode($data->adminID);
             
-        $sql = "DELETE FROM plantations WHERE plantationID='$plantID'";
+        $adminPass = hash('sha256',$adminPass);
+        $auth = "SELECT userID FROM users WHERE userID = '$adminID' AND password = '$adminPass'";
 
+        $getAuth = $conn->query($auth);
 
-        $result = $conn->query($sql);
+        if($getAuth->num_rows == 1){
 
-        if($conn->affected_rows > 0)
-        {
-            echo 'success';
-        }
-        else
-        {
-            echo 'failed';
+            $sql = "DELETE FROM plantations WHERE plantationID='$plantID'";
+            $result = $conn->query($sql);
+
+            if($conn->affected_rows > 0)
+            {
+                echo 'success';
+            }
+            else
+            {
+                echo 'failed';
+            }
+
+        } else {
+            echo 'unauthorized';
         }
 
     $conn->close();

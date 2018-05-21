@@ -15,6 +15,11 @@ VALUES
 INSERT INTO conditionlevels
 (plantationID,dateTime,airTemp,humidity,lightIntensity,soilMoisture)
 VALUES
+-- Test Data from sensors
+('MKCH','2018-05-04 9:59:27','27','74','4','30'),
+('MKCH','2018-05-04 13:56:36','25','21','54612','22'),
+('MKCH','2018-05-04 14:16:47','41','50','54612','23'),
+
 -- 2018 May dummy data
 -- May 9
 ('MKCH','2018-05-09 14:00:00.047',28,64,49000,54),

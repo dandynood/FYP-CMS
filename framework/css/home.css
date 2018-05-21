@@ -48,6 +48,14 @@
     .export-btn {
         float: none !important;
     }
+    
+    .table-responsive {
+        overflow: auto !important;
+    }
+    
+    .table-responsive .dropdown-menu {
+        position: relative !important;
+    }
 }
 
 @media(max-width: 767px) {

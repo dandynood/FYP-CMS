@@ -8,7 +8,7 @@
     }         
         $data = json_decode(file_get_contents("php://input")); 
 
-        $sql = "SELECT plantationID,plantName,plantDescription FROM plantations ORDER BY plantName";
+        $sql = "SELECT * FROM plantations ORDER BY plantName";
 
 
         $result = $conn->query($sql);

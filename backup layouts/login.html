@@ -1,34 +1,25 @@
-<!DOCTYPE html>
-<!--initialize AngularJS app-->
-<html lang="en" data-ng-app="hellogalaxy">
-   <head>
-       <title>Title</title>
-       <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
-       <!-- Bootstrap -->
-       <link href="framework/css/bootstrap.min.css" rel="stylesheet"/>
-       <!--Main CSS-->
-       <link href="framework/css/login.css" rel="stylesheet"/>
-    </head>
-    
-    <!--Body starts here-->
-    <body>
-        <div class="background">
-        <div class="background-tint">
+<!--Main CSS-->
+<link href="framework/css/login.css" rel="stylesheet" />
+<div class="background" data-ng-class="{'backgroundImg1': changeBackgroundImgOnTime()==='day', 'backgroundImg2': changeBackgroundImgOnTime()==='night' }">
+    <div class="background-tint">
         <div class="container">
             <div class="row form-row-override">
                 <div class="col-xs-12 col-md-6 col-sm-6 col-center form-center form-styling">
                     <form>
                         <fieldset>
-                        <legend><img src="images/satoyama-logo.PNG" class="logo"/><br/>Crop Management System</legend>
-                        <div class="form-group">
-                            <input type="text" class="form-control input-lg" id="username" placeholder="Username"/>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control input-lg" id="password" placeholder="Password"/>
-                        </div>
-                        <hr />
+                            <legend><img src="images/satoyama-logo.PNG" class="logo" alt="Satoyama"/><br/>Crop Management System</legend>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" id="username" placeholder="Username" data-ng-model="$ctrl.loginInput.username" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control input-lg" id="password" placeholder="Password" data-ng-model="$ctrl.loginInput.password" />
+                            </div>
+                            <div class="alert alert-danger" role="alert" data-ng-show="errorMsg!=''" style="margin-top:-15px;">
+                                <span class="glyphicon glyphicon-remove"></span> <strong>{{errorMsg}}</strong>
+                            </div>
+                            <hr />
                         </fieldset>
-                        <button type="submit" class="btn btn-block btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Login</button>
+                        <button type="submit" class="btn btn-block btn-lg btn-primary" data-ng-click="$ctrl.login()"><span class="glyphicon glyphicon-log-in"></span> Login</button>
                     </form>
                 </div>
             </div>
@@ -37,21 +28,6 @@
                     <p style="color: white;">Satoyama Farm SDN BHD. &#169 2018</p>
                 </div>
             </div>
-        </div> 
         </div>
-        </div>
-        <!--JS scripts-->
-       <!--jQuery - required for Bootstrap's Javascript plugins-->
-       <script src="framework/js/jquery-3.3.1.min.js"></script>
-       <!--All bootstrap plugins file-->
-       <script src="framework/js/bootstrap.min.js"></script>
-       <script src="framework/js/angular.min.js"></script>
-       <script src="framework/js/angular-route.js"></script>
-       <script src="framework/js/angular-ui-router.js"></script>
-
-       <!--Our CMS controllers-->
-       <script src="framework/js/helloworld.js"></script>
-       <script src="framework/js/component/.js"></script>
-    </body>
-    
-</html>
+    </div>
+</div>

@@ -13,19 +13,48 @@
         $email = urldecode($data->email);
         $phoneNumber = urldecode($data->phoneNumber);
         $roleType = urldecode($data->roleType);
+        $adminPass = urldecode($data->adminPass);
+        $adminID = urldecode($data->adminID);
+
+        $adminPass = hash('sha256',$adminPass);
+        $auth = "SELECT userID FROM users WHERE userID = '$adminID' AND password = '$adminPass'";
+
+        $getAuth = $conn->query($auth);
+
+        if($getAuth->num_rows == 1){
             
-        $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumer='$phoneNumber',role='$roleType' WHERE userID='$userID'";
+            $check = "SELECT userID FROM users WHERE userID = '$userID'";    
+            $checkResult = $conn->query($check);
+            
+            if($checkResult->num_rows == 1){
+                
+                $checkUserName = "SELECT username FROM users WHERE username='$username'";
+                $checkUserNameResult = $conn->query($checkUserName);
+                if($checkUserNameResult->num_rows == 0){
 
+                    $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumber='$phoneNumber',roleType='$roleType' WHERE userID='$userID'";
 
-        $result = $conn->query($sql);
+                    $result = $conn->query($sql);
 
-        if($conn->affected_rows > 0)
-        {
-            echo 'success';
-        }
-        else
-        {
-            echo 'failed';
+                    if($conn->affected_rows >= 0)
+                    {
+                        echo 'success';
+                    }
+                    else
+                    {
+                        echo 'failed';
+                    }
+                    
+                } else {
+                    echo 'non-unique';
+                }
+                
+            } else {
+                echo 'failed';
+            }
+
+        } else {
+            echo 'unauthorized';
         }
 
     $conn->close();

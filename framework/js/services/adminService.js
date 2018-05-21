@@ -27,20 +27,21 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
             return deferred.promise;
         },
 
-        editUser: function (userId, details) {
-            var deferred = $q.defer(),
-                msg,
+        editUserDetails: function (details, adminID, adminPass) {
+            var msg,
                 str = {
-                    userID: encodeURIComponent(userId),
+                    userID: encodeURIComponent(details.userID),
                     username: encodeURIComponent(details.username),
                     firstName: encodeURIComponent(details.firstName),
                     lastName: encodeURIComponent(details.lastName),
                     email: encodeURIComponent(details.email),
                     phoneNumber: encodeURIComponent(details.phoneNumber),
-                    roleType: encodeURIComponent(details.roleType)
+                    roleType: encodeURIComponent(details.roleType),
+                    adminID: encodeURIComponent(adminID),
+                    adminPass: encodeURIComponent(adminPass)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
                     url: 'php/editUser.php',
                     data: str,
@@ -49,57 +50,70 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
+                    console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
-                        deferred.resolve(msg);
-                    } else {
+                    } else if (response.data === "success") {
                         msg = "success";
-                        deferred.resolve(msg);
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
+                    return msg;
                 });
 
-            return deferred.promise;
         },
 
-        editUserPassword: function (userId, password) {
-            var deferred = $q.defer(),
-                msg,
+        //Change the user password
+        changeUserPassword: function (userId, adminID, adminPass, newPass) {
+            var msg,
                 str = {
                     userID: encodeURIComponent(userId),
-                    password: encodeURIComponent(password)
+                    adminID: encodeURIComponent(adminID),
+                    adminPass: encodeURIComponent(adminPass),
+                    newPass: encodeURIComponent(newPass)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
-                    url: 'php/editUserPassword.php',
+                    url: 'php/changeUserPassword.php',
                     data: str,
                     header: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
                 })
                 .then(function (response) {
+                    console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
-                        deferred.resolve(msg);
-                    } else {
+                    } else if (response.data === "success") {
                         msg = "success";
-                        deferred.resolve(msg);
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
                     }
+                    return msg;
                 });
-
-            return deferred.promise;
         },
 
-        editPlantation: function (plantationID, details) {
-            var deferred = $q.defer(),
-                msg,
+        editPlantationDetails: function (details, adminID, adminPass, originalPlantID) {
+            var msg,
                 str = {
-                    plantID: encodeURIComponent(plantationID),
+                    plantID: encodeURIComponent(details.plantationID),
+                    originalPlantID: encodeURIComponent(originalPlantID),
+                    nodeID: encodeURIComponent(details.nodeNumber),
                     plantName: encodeURIComponent(details.plantName),
-                    plantDescription: encodeURIComponent(details.plantDescription)
+                    plantDescription: encodeURIComponent(details.plantDescription),
+                    numOfPlants: encodeURIComponent(details.numOfPlants),
+                    airTemp: encodeURIComponent(details.airTemp),
+                    humidity: encodeURIComponent(details.humidity),
+                    lightIntensity: encodeURIComponent(details.lightIntensity),
+                    soilMoisture: encodeURIComponent(details.soilMoisture),
+                    adminPass: encodeURIComponent(adminPass),
+                    adminID: encodeURIComponent(adminID)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
                     url: 'php/editPlantation.php',
                     data: str,
@@ -108,21 +122,22 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
+                    console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
-                        deferred.resolve(msg);
-                    } else {
+                    } else if (response.data === "success") {
                         msg = "success";
-                        deferred.resolve(msg);
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
+                    return msg;
                 });
-
-            return deferred.promise;
         },
 
-        registerUser: function (newUser) {
-            var deferred = $q.defer(),
-                msg,
+        registerUser: function (newUser, adminID) {
+            var msg,
                 str = {
                     username: encodeURIComponent(newUser.username),
                     password: encodeURIComponent(newUser.password),
@@ -130,10 +145,12 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     lastName: encodeURIComponent(newUser.lastName),
                     email: encodeURIComponent(newUser.email),
                     phoneNumber: encodeURIComponent(newUser.phoneNumber),
-                    roleType: encodeURIComponent(newUser.roleType)
+                    roleType: encodeURIComponent(newUser.roleType),
+                    adminPass: encodeURIComponent(newUser.adminPass),
+                    adminID: encodeURIComponent(adminID)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
                     url: 'php/registerUser.php',
                     data: str,
@@ -142,28 +159,38 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
+                    //console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
-                        deferred.resolve(msg);
-                    } else {
+                    } else if (response.data === "success") {
                         msg = "success";
-                        deferred.resolve(msg);
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
+                    return msg;
                 });
 
-            return deferred.promise;
         },
 
-        addNewPlantation: function (newPlantation) {
-            var deferred = $q.defer(),
-                msg,
+        addNewPlantation: function (newPlantation, adminID) {
+            var msg,
                 str = {
                     plantID: encodeURIComponent(newPlantation.plantationID),
+                    nodeID: encodeURIComponent(newPlantation.nodeID),
                     plantName: encodeURIComponent(newPlantation.plantName),
-                    plantDescription: encodeURIComponent(newPlantation.plantDescription)
+                    plantDescription: encodeURIComponent(newPlantation.plantDescription),
+                    numOfPlants: encodeURIComponent(newPlantation.numOfPlants),
+                    airTemp: encodeURIComponent(newPlantation.airTemp),
+                    humidity: encodeURIComponent(newPlantation.humidity),
+                    lightIntensity: encodeURIComponent(newPlantation.lightIntensity),
+                    soilMoisture: encodeURIComponent(newPlantation.soilMoisture),
+                    adminPass: encodeURIComponent(newPlantation.adminPass),
+                    adminID: encodeURIComponent(adminID)
                 };
 
-            $http({
+            return $http({
                     method: 'POST',
                     url: 'php/addPlantation.php',
                     data: str,
@@ -172,24 +199,77 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
+                    console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
-                        deferred.resolve(msg);
-                    } else {
+                    } else if (response.data === "success") {
                         msg = "success";
-                        deferred.resolve(msg);
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
+                    return msg;
+                });
+        },
+
+        deleteUser: function (userId, adminID, adminPassword) {
+            var msg,
+                str = {
+                    userID: encodeURIComponent(userId),
+                    adminID: encodeURIComponent(adminID),
+                    adminPass: encodeURIComponent(adminPassword)
+                };
+
+            return $http({
+                    method: 'POST',
+                    url: 'php/deleteUser.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    //console.log(response.data);
+                    if (response.data === "failed") {
+                        msg = "failed";
+                    } else if (response.data === "success") {
+                        msg = "success";
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    }
+                    return msg;
                 });
 
-            return deferred.promise;
         },
 
-        deleteUser: function () {
-            
-        },
+        deletePlantation: function (plantID, adminID, adminPass) {
+            var msg,
+                str = {
+                    plantID: encodeURIComponent(plantID),
+                    adminID: encodeURIComponent(adminID),
+                    adminPass: encodeURIComponent(adminPass)
+                };
 
-        deletePlantation: function () {
-
+            return $http({
+                    method: 'POST',
+                    url: 'php/deletePlantation.php',
+                    data: str,
+                    header: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                .then(function (response) {
+                    //console.log(response.data);
+                    if (response.data === "failed") {
+                        msg = "failed";
+                    } else if (response.data === "success") {
+                        msg = "success";
+                    } else if (response.data === "unauthorized") {
+                        msg = "unauthorized";
+                    }
+                    return msg;
+                });
         }
 
     };

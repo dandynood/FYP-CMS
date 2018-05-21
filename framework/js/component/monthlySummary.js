@@ -309,10 +309,10 @@ angular.module('mainApp').component('monthlySummary', {
 
             //The excel worksheet styling that is used when exporting data to excel in the alasql
             $scope.exportDataToExcelStyle = {
-                sheetid: 'Avg per day in ' + moment($scope.selectedDate).format("MMMM YYYY"),
+                sheetid: '',
                 headers: true,
                 caption: {
-                    title: moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in days) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+                    title: ""
                 },
                 column: {
                     style: function () {
@@ -364,7 +364,7 @@ angular.module('mainApp').component('monthlySummary', {
                 sheetid: 'Avg per month in ' + moment($scope.selectedDate).format("MMMM YYYY"),
                 headers: true,
                 caption: {
-                    title: moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in month) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+                    title: ""
                 },
                 column: {
                     style: function () {
@@ -398,6 +398,10 @@ angular.module('mainApp').component('monthlySummary', {
                         }
                     }
                 }
+                
+                $scope.exportDataToExcelStyle.caption.title = moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in days) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm");
+                
+                $scope.exportDataToExcelStyle.sheetid = "Avg per day in " + moment($scope.selectedDate).format("MMMM YYYY");
 
                 alasql('SELECT * INTO XLS("Monthly Summary (in days).xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
             };
@@ -422,6 +426,10 @@ angular.module('mainApp').component('monthlySummary', {
                         };
                         allDataToExport.push(object);
                 }
+                
+                $scope.exportDataToExcelStyleMonth.caption.title = moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in month) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm");
+                
+                $scope.exportDataToExcelStyleMonth.sheetid = "Avg per month in " + moment($scope.selectedDate).format("MMMM YYYY");
 
                 alasql('SELECT * INTO XLS("Monthly Summary (in month).xls",?) FROM ?', [$scope.exportDataToExcelStyleMonth, allDataToExport]);
             };
@@ -447,6 +455,10 @@ angular.module('mainApp').component('monthlySummary', {
                         allDataToExport.push(object);
                     }
                 }
+                
+                $scope.exportDataToExcelStyle.caption.title = moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Summary (in days) - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm");
+                
+                $scope.exportDataToExcelStyle.sheetid = "Avg per day in " + moment($scope.selectedDate).format("MMMM YYYY");
 
                 alasql('SELECT * INTO XLS(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
             };

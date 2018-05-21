@@ -169,7 +169,7 @@ angular.module('mainApp').component('plantation', {
                 soilMoisture: (soilMoisture!==null? soilMoisture.toFixed(1):soilMoisture)
             };
 
-            console.log(averageCondtions);
+            //console.log(averageCondtions);
 
             return averageCondtions;
         };
@@ -218,7 +218,7 @@ angular.module('mainApp').component('plantation', {
 
             $scope.getLastComparisonReports();
             
-            console.log($scope.plant.soilMoisture);
+            //console.log($scope.plant.soilMoisture);
 
             //This gets the date for today
             //SelectedDate will change, $scope.today is for reference of today
@@ -298,9 +298,8 @@ angular.module('mainApp').component('plantation', {
                 sheetid: 'Conditions ' + moment($scope.selectedDate).format("DD, MMMM YYYY"),
                 headers: true,
                 caption: {
-                    title: 'Daily Crop Conditions - created on: ' + moment($scope.selectedDate).format("DD, MMMM YYYY HH:mm")
+                    title: ''
                 },
-                style: 'background:#FFFFFF',
                 column: {
                     style: function () {
                         return 'border: 1px green solid';
@@ -369,6 +368,10 @@ angular.module('mainApp').component('plantation', {
                         allDataToExport.push(object);
                     }
                 }
+                
+                $scope.exportDataToExcelStyle.caption.title = "Daily Crop Conditions - created on: " + moment($scope.selectedDate).format("DD MMMM YYYY HH:mm");
+                
+                $scope.exportDataToExcelStyle.sheetid = 'Conditions ' + moment($scope.selectedDate).format("DD MMMM YYYY");
 
                 alasql('SELECT * INTO XLS(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
             };

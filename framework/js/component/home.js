@@ -7,7 +7,8 @@ angular.module('mainApp').component('home', {
     templateUrl: 'template/home.html',
     bindings: {
         allConditionLevels: '<',
-        optimumLevels: '<'
+        optimumLevels: '<',
+        test: '<'
     },
 
     //Controller for home page
@@ -117,8 +118,11 @@ angular.module('mainApp').component('home', {
             var i, j, lastPosition, last,
                 plants = this.allConditionLevels,
                 optimumLevels = this.optimumLevels;
+                $scope.test = this.test;
 
-            $scope.plantations = angular.copy(plants);
+            $scope.plantations = plants;
+            
+            //console.log($scope.test);
 
             //Here we copy the conditions into $scope
             //Then we simply add new attributes in each plantation object in the array
@@ -259,13 +263,12 @@ angular.module('mainApp').component('home', {
                     }
                 }
                 
-                console.log(allDataToExport);
                 alasql('SELECT * INTO XLS("Daily Summary.xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
             };
 
             $scope.exportPlantDataToExcel = function (plant) {
                 var i, allDataToExport = [],
-                    name = plant.plantationID + ' Daily Summary.xlsx',
+                    name = plant.plantationID + ' Daily Summary.xls',
                     object = {};
 
                 if (plant.conditionLevels.length > 0) {
@@ -283,8 +286,6 @@ angular.module('mainApp').component('home', {
                         allDataToExport.push(object);
                     }
                 }
-
-
 
                 alasql('SELECT * INTO XLS(?,?) FROM ?', [name, $scope.exportDataToExcelStyle, allDataToExport]);
             };

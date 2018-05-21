@@ -8,19 +8,30 @@
     }         
         $data = json_decode(file_get_contents("php://input"));
         $userID = urldecode($data->userID);
-            
-        $sql = "DELETE FROM users WHERE userID='$userID'";
+        $adminPass = urldecode($data->adminPass);
+        $adminID = urldecode($data->adminID);
 
+        $adminPass = hash('sha256',$adminPass);
+        $auth = "SELECT userID FROM users WHERE userID = '$adminID' AND password = '$adminPass'";
 
-        $result = $conn->query($sql);
+        $getAuth = $conn->query($auth);
 
-        if($conn->affected_rows > 0)
-        {
-            echo 'success';
-        }
-        else
-        {
-            echo 'failed';
+        if($getAuth->num_rows == 1){
+
+            $sql = "DELETE FROM users WHERE userID='$userID'";
+            $result = $conn->query($sql);
+
+            if($conn->affected_rows > 0)
+            {
+                echo 'success';
+            }
+            else
+            {
+                echo 'failed';
+            }
+
+        } else {
+            echo 'unauthorized';
         }
 
     $conn->close();

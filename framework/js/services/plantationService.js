@@ -13,10 +13,6 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
         getAllplantations: function () {
             var deferred = $q.defer();
 
-            if (angular.isDefined(plantations)) {
-                deferred.resolve(plantations);
-            } else {
-
                 $http({
                         method: 'POST',
                         url: 'php/getPlantations.php',
@@ -30,10 +26,9 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
                             deferred.resolve(errMsg);
                         } else {
                             plantations = angular.copy(response.data);
-                            deferred.resolve(response.data);
+                            deferred.resolve(plantations);
                         }
                     });
-            }
 
             return deferred.promise;
         },
@@ -119,13 +114,16 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
         },
 
         getAllLevels: function (plants, date) {
-            var deferred = $q.defer(),
+            var deferred = $q.defer(), today = new Date(),
                 plantsArray = angular.copy(plants),
                 i, j, arrayLevels = [],
                 str = {
                     date: encodeURIComponent(date)
                 };
-
+            if (date === 'today'){
+                str.date = encodeURIComponent(moment(today).format('YYYY-MM-DD'));
+            }
+            
             $http({
                     method: 'POST',
                     url: 'php/getAllConditionLevels.php',
@@ -258,8 +256,8 @@ angular.module('mainApp').factory('plantationService', function ($http, $q) {
         },
 
         addEditYield: function (id, monthYear, yieldValue) {
-            var date = moment(new Date(monthYear));
-            var str = {
+            var date = moment(new Date(monthYear)),
+            str = {
                 plantationID: encodeURIComponent(id),
                 date: encodeURIComponent(date.format('YYYY-MM-DD')),
                 yieldValue: encodeURIComponent(yieldValue)

@@ -40,14 +40,13 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getAllplantations();
                 },
                 allConditionLevels: function (plantations, plantationService) {
-                    return plantationService.getAllLevels(plantations, '2018-04-07');
+                    return plantationService.getAllLevels(plantations, 'today');
                 },
                 optimumLevels: function (plantations, optimumLevelsService) {
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 },
-                test: function(plantationService){
-                    return "something";
-                    //return plantationService.test();
+                test: function (plantationService) {
+                    return plantationService.test();
                 }
             }
         },
@@ -99,8 +98,14 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return adminService.getAllUsers();
                 },
                 //gets both plantation and the optimum levels for edit
-                plantations: function (plantations, optimumLevelsService) {
-                    return optimumLevelsService.getAllOptimumLevels(plantations);
+                adminPlantations: function (optimumLevels) {
+                    return optimumLevels;
+                },
+                plantationsFromParent: function (plantations) {
+                    return plantations;
+                },
+                conditionsFromParent: function (allConditionLevels) {
+                    return allConditionLevels;
                 }
             }
         },
@@ -114,10 +119,11 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             },
             resolve: {
                 monthlySummaryConditions: function (plantations, plantationService) {
-                    var date = new Date(), type = "summary";
-                    return plantationService.getMonthlySummaryByDate(plantations,date,type);
+                    var date = new Date(),
+                        type = "summary";
+                    return plantationService.getMonthlySummaryByDate(plantations, date, type);
                 },
-                optimumLevels: function (optimumLevels){
+                optimumLevels: function (optimumLevels) {
                     return optimumLevels;
                 }
             }
@@ -131,10 +137,11 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             },
             resolve: {
                 monthlySummaryYields: function (plantations, plantationService) {
-                    var date = new Date(), type = "yield";
-                    return plantationService.getMonthlySummaryByDate(plantations,date,type);
+                    var date = new Date(),
+                        type = "yield";
+                    return plantationService.getMonthlySummaryByDate(plantations, date, type);
                 },
-                optimumLevels: function (optimumLevels){
+                optimumLevels: function (optimumLevels) {
                     return optimumLevels;
                 }
             }
