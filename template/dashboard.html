@@ -140,7 +140,7 @@
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-bar-chart"></i> Plantations</a>
                     <ul id="demo" class="collapse">
                         <li data-ng-repeat="plant in model.plantations" data-ui-sref-active="active">
-                            <a data-ui-sref="dashboard.plantation({plantationID: plant.plantationID})">{{plant.plantName}}</a>
+                            <a data-ui-sref="dashboard.plantation({plantationID: plant.plantationID})">{{plant.plantName}} <small>({{plant.plantationID}})</small></a>
                         </li>
                     </ul>
                 </li>

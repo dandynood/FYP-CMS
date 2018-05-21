@@ -40,7 +40,7 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                     return plantationService.getAllplantations();
                 },
                 allConditionLevels: function (plantations, plantationService) {
-                    return plantationService.getAllLevels(plantations, 'today');
+                    return plantationService.getAllLevels(plantations, '2018-05-04');
                 },
                 optimumLevels: function (plantations, optimumLevelsService) {
                     return optimumLevelsService.getAllOptimumLevels(plantations);

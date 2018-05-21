@@ -534,14 +534,15 @@ angular.module('mainApp').component('admin', {
                 var promise = plantationService.getAllplantations(),
                     promise2, promise3, i;
                 promise.then(function (data) {
-
+                    $scope.plantationsFromParent.length = 0;
                     for (i = 0; i < data.length; i++) {
-                        $scope.plantationsFromParent[i] = data[i];
+                        $scope.plantationsFromParent.push(data[i]);
                     }
                     
                     promise2 = plantationService.getAllLevels(data, '2018-04-07');
                     
                     promise2.then(function(data){
+                        $scope.conditionsFromParent.length = 0;
                         for (i = 0; i < data.length; i++) {
                             $scope.conditionsFromParent[i] = data[i];
                         }
@@ -549,6 +550,7 @@ angular.module('mainApp').component('admin', {
                     
                     promise3 = optimumLevelsService.getAllOptimumLevels(data);
                     promise3.then(function (data) {
+                        $scope.plantations.length = 0;
                         for (i = 0; i < data.length; i++) {
                             $scope.plantations[i] = data[i];
                         }
