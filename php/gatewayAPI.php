@@ -20,9 +20,9 @@
 
     $output = json_decode(file_get_contents($url, false, $context));
 
-    //echo json_encode($output);
+    echo json_encode($output);
 
-    $sql = "SELECT nodeNumber, plantationID FROM plantations";
+    /*$sql = "SELECT nodeNumber, plantationID FROM plantations";
 
     $result = $conn->query($sql);
 
@@ -86,5 +86,6 @@
     
 
     //TO DO insert into database
+    */
 
 ?>

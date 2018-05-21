@@ -37,7 +37,7 @@ CREATE TABLE PlantationYields(
 plantationID varchar(10) NOT NULL,
 monthYear DATE NOT NULL,
 yield varchar(50) NOT NULL,
-PRIMARY KEY (plantationID),
+PRIMARY KEY (plantationID,monthYear),
 FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
