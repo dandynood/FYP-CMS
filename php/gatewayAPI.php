@@ -1,4 +1,7 @@
 <?php
+    date_default_timezone_set('Asia/Brunei');
+
+    //Connect to the database for insert later
     require_once 'config.php';
     $conn = new mysqli($DB_host,$DB_user,$DB_pass,$DB_name);
 
@@ -20,15 +23,7 @@
 
     $output = json_decode(file_get_contents($url, false, $context));
 
-    echo json_encode($output);
-
-    /*$sql = "SELECT nodeNumber, plantationID FROM plantations";
-
-    $result = $conn->query($sql);
-
-    if($result->num_rows >= 0){
-        $plantCodes = $result->fetch_all(MYSQLI_ASSOC);
-    }
+    //echo json_encode($output);
 
     //TO DO extract
     $gotAirTemp = false;
@@ -54,12 +49,16 @@
     foreach ($output->data as $reading) {
         //echo json_encode($reading->data);
         $raw = $reading->raw;
+        $timestamp = $reading->timestamp;
         //echo json_encode($raw);
+        $mil = $timestamp;
+        $seconds = $timestamp / 1000;
+        $reading->timestamp = date("Y-m-d H:i:s", $seconds);
         
         if($raw[3] == $airTempASCII){
             if(!$gotAirTemp){
                 foreach($raw as $value){
-                    
+                
                 }
             }
         } else if($raw[3] == $humidityASCII){
@@ -83,9 +82,10 @@
         }
         
     }
+
+    echo json_encode($output);
     
 
     //TO DO insert into database
-    */
 
 ?>
