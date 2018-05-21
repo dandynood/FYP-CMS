@@ -12,11 +12,7 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
                     plants = angular.copy(plantations),
                     i, j, arrayLevels = [];
 
-                if (angular.isDefined(allOptimumLevels)) {
-                    deferred.resolve(allOptimumLevels);
-                } else {
-
-                    $http({
+                    $http({ 
                             method: 'POST',
                             url: 'php/getAllOptimumLevels.php',
                             header: {
@@ -43,10 +39,9 @@ angular.module('mainApp').factory('optimumLevelsService', function ($http, $q, c
 
                                 allOptimumLevels = plants;
 
-                                deferred.resolve(plants);
+                                deferred.resolve(allOptimumLevels);
                             }
                         });
-                }
 
                 return deferred.promise;
             },

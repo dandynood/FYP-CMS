@@ -34,21 +34,30 @@
             
             if($checkResult->num_rows == 1){
                 
-                $sql = "UPDATE plantations SET plantationID='$plantID', nodeNumber = '$nodeID', plantName='$plantName', plantDescription='$plantDesc', numOfPlants = '$numOfPlants' WHERE plantationID='$originalPlantID'";
+                $checkID = "SELECT plantationID FROM plantations WHERE plantationID='$plantID'";
                 
-                $sqlO = "UPDATE optimumLevels SET airTemp = '$airTemp', humidity ='$humidity', lightIntensity ='$lightIntensity', soilMoisture = '$soilMoisture' WHERE plantationID='$plantID'";
+                $checkIDResult = $conn->query($checkID);
                 
-                $result = $conn->query($sql);
-                
-                $result = $conn->query($sqlO);
+                if($checkIDResult->num_rows == 0){
 
-                if($conn->affected_rows >= 0)
-                {
-                    echo 'success';
-                }
-                else
-                {
-                    echo 'failed';
+                    $sql = "UPDATE plantations SET plantationID='$plantID', nodeNumber = '$nodeID', plantName='$plantName', plantDescription='$plantDesc', numOfPlants = '$numOfPlants' WHERE plantationID='$originalPlantID'";
+
+                    $sqlO = "UPDATE optimumLevels SET airTemp = '$airTemp', humidity ='$humidity', lightIntensity ='$lightIntensity', soilMoisture = '$soilMoisture' WHERE plantationID='$plantID'";
+
+                    $result = $conn->query($sql);
+
+                    $result = $conn->query($sqlO);
+
+                    if($conn->affected_rows >= 0)
+                    {
+                        echo 'success';
+                    }
+                    else
+                    {
+                        echo 'failed';
+                    }
+                } else {
+                    echo 'non-unique';
                 }
             } else {
                 echo 'failed';

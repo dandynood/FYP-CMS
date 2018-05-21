@@ -24,19 +24,29 @@
         $getAuth = $conn->query($auth);
         
         if($getAuth->num_rows == 1){
+            
+            $checkUserName = "SELECT username FROM users WHERE username='$username'";
+            
+            $checkUserNameResult = $conn->query($checkUserName);
+            
+            if($checkUserNameResult->num_rows == 0){
 
-            $sql = "INSERT INTO users
-            (username, password, firstName, lastName, phoneNumber, email, roleType) VALUES ('$username','$password','$firstName','$lastName','$email','$phoneNumber','$roleType')";
+                $sql = "INSERT INTO users
+                (username, password, firstName, lastName, phoneNumber, email, roleType) VALUES ('$username','$password','$firstName','$lastName','$email','$phoneNumber','$roleType')";
 
-            $result = $conn->query($sql);
+                $result = $conn->query($sql);
 
-            if($conn->affected_rows > 0)
-            {
-                echo 'success';
-            }
-            else
-            {
-                echo 'failed';
+                if($conn->affected_rows > 0)
+                {
+                    echo 'success';
+                }
+                else
+                {
+                    echo 'failed';
+                }
+                
+            } else {
+                echo 'non-unique';
             }
             
         } else {

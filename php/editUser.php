@@ -27,18 +27,28 @@
             $checkResult = $conn->query($check);
             
             if($checkResult->num_rows == 1){
-                $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumber='$phoneNumber',roleType='$roleType' WHERE userID='$userID'";
+                
+                $checkUserName = "SELECT username FROM users WHERE username='$username'";
+                $checkUserNameResult = $conn->query($checkUserName);
+                if($checkUserNameResult->num_rows == 0){
 
-                $result = $conn->query($sql);
+                    $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumber='$phoneNumber',roleType='$roleType' WHERE userID='$userID'";
 
-                if($conn->affected_rows >= 0)
-                {
-                    echo 'success';
+                    $result = $conn->query($sql);
+
+                    if($conn->affected_rows >= 0)
+                    {
+                        echo 'success';
+                    }
+                    else
+                    {
+                        echo 'failed';
+                    }
+                    
+                } else {
+                    echo 'non-unique';
                 }
-                else
-                {
-                    echo 'failed';
-                }
+                
             } else {
                 echo 'failed';
             }

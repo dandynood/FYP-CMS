@@ -1,0 +1,236 @@
+<!--MAIN BODY OF CONTENT-->
+<div id="page-wrapper">
+
+    <div class="container-fluid main-content">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="page-header">
+                    {{plant.plantName}}
+                    <small>({{plant.plantationID}})</small>
+                    <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plant.conditionLevels.length > 0" data-ng-click="exportAllDataToExcel()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel</button>
+                </h1>
+                <ol class="breadcrumb" style="font-size: 1.1em">
+                    <li>
+                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-fw fa-pagelines"></i> {{plant.plantName}}
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!--Table summary-->
+        <div class="row">
+            <div class="col-xs-12 col-md-4 form-group">
+                <label for="date">Date:</label>
+                <div class="input-group">
+                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="getDateConditions(selectedDate)" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" data-ng-click="openDatePicker()"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12 table-responsive">
+                <h3><span data-ng-if="comparisonType==='Normal'">Last recordings</span><span data-ng-if="comparisonType==='Past'">Past average recordings</span> vs. optimum levels</h3>
+                <table class="table table-hover table-bordered">
+                    <tr>
+                        <th>About this plantation</th>
+                        <th>Air Temperature (&#8451;)</th>
+                        <th>Humidity (%)</th>
+                        <th>Light Intensity (Lux)</th>
+                        <th>Soil Moisture (%)</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td class="col-xs-4"><strong>ID:</strong> {{plant.plantationID}}<strong><br />Description:</strong> {{plant.plantDescription}}<br />
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
+                                <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
+                                <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
+                                <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong>
+                                <i class="fa fa-lg fa-sun-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Day'"></i>
+                                <i class="fa fa-lg fa-moon-o" aria-hidden="true" data-ng-if="plant.lightIntensityReport.dayOrNight === 'Night'"></i>
+                            </div>
+                        </td>
+                        <td class="conditionsColumn" style="vertical-align: middle;">
+                            <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
+                                <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
+                                <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong>
+                            </div>
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            <button class="btn btn-primary viewBtn" data-toggle="modal" data-target="#optimumReportDetails"><i class="fa fa-lg fa-eye" aria-hidden="true"></i> View</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!--Graph summary-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><i class="fa fa-lg  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;) and Humidity (%)</div>
+                            <div class="panel-body">
+                                <div class="alert alert-warning" data-ng-if="plant.airTempAndHumidity[0].length == 0 && plant.airTempAndHumidity[1].length == 0">
+                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
+                                </div>
+                                <canvas id="tempHumidity" class="chart chart-line" chart-data="plant.airTempAndHumidity" chart-series="tempHumditiySeries" chart-options="tempAndHumidityOptions" chart-colors="tempHumidityColors" chart-dataset-override="tempHumidityDatasetOverride"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><i class="fa fa-lg  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux) </div>
+                            <div class="panel-body">
+                                <div class="alert alert-warning" data-ng-if="plant.lightIntensity[0].length == 0">
+                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
+                                </div>
+                                <canvas id="lightIntensity" class="chart chart-bar" chart-data="plant.lightIntensity" chart-series="lightIntensitySeries" chart-options="lightIntensityOptions" chart-colors="lightIntensityColors" chart-dataset-override="lightIntensityDatasetOverride"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><i class="fa fa-lg fa-tint" aria-hidden="true"></i> Soil Moisture (%)</div>
+                            <div class="panel-body">
+                                <div class="alert alert-warning" data-ng-if="plant.soilMoisture[0].length == 0">
+                                    <strong><i class="fa fa-times"></i> No data available!</strong> It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
+                                </div>
+                                <canvas id="soilMoisture" class="chart chart-line" chart-data="plant.soilMoisture" chart-series="soilMoistureSeries" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+<!-- Modal for Last Recordings's summary table when View btn is clicked -->
+<div class="modal fade" id="optimumReportDetails" tabindex="-1" role="dialog" aria-labelledby="optimumReportDetails">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{plant.plantName}}'s latest report</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p><strong>ID: </strong>{{plant.plantationID}}</p>
+                        <p><strong>Description: </strong>{{plant.plantDescription}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
+                                <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong><br/> {{plant.airTempReport.message}}
+                            </p>
+                        </div>
+                        <!--AirTemp optimum chart-->
+                        <canvas id="airTempOptimum" class="chart chart-horizontal-bar" chart-labels="plant.airTempReport.chartSettings.labels" chart-data="plant.airTempReport.chartData" chart-series="plant.airTempReport.chartSettings.seriesLabel" chart-options="plant.airTempReport.chartSettings.options" chart-colors="plant.airTempReport.chartColors"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Humidity (%)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
+                                <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong><br/> {{plant.humidityReport.message}}
+                            </p>
+                        </div>
+                        <!--Humidity optimum chart-->
+                        <canvas id="humidityOptimum" class="chart chart-horizontal-bar" chart-labels="plant.humidityReport.chartSettings.labels" chart-data="plant.humidityReport.chartData" chart-series="plant.humidityReport.chartSettings.seriesLabel" chart-options="plant.humidityReport.chartSettings.options" chart-colors="plant.humidityReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux) </h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
+                                <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}}
+                        </div>
+                        <!--Light Intensity optimum chart-->
+                        <canvas id="lightIntensityOptimum" class="chart chart-horizontal-bar" chart-labels="plant.lightIntensityReport.chartSettings.labels" chart-data="plant.lightIntensityReport.chartData" chart-series="plant.lightIntensityReport.chartSettings.seriesLabel" chart-options="plant.lightIntensityReport.chartSettings.options" chart-colors="plant.lightIntensityReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Soil Moisture (%)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
+                                <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong><br/> {{plant.soilMoistureReport.message}}
+                            </p>
+                        </div>
+                        <!--Soil Moisture optimum chart-->
+                        <canvas id="soilMoistureOptimum" class="chart chart-horizontal-bar" chart-labels="plant.soilMoistureReport.chartSettings.labels" chart-data="plant.soilMoistureReport.chartData" chart-series="plant.soilMoistureReport.chartSettings.seriesLabel" chart-options="plant.soilMoistureReport.chartSettings.options" chart-colors="plant.soilMoistureReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <br/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

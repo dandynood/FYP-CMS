@@ -181,11 +181,11 @@ angular.module('mainApp').component('yields', {
             };
 
             //For the exportAllDataToExcelMonth function which exports averages group by month 
-            $scope.exportDataToExcelStyleMonth = {
-                sheetid: 'Avg and yield per month in ' + moment($scope.selectedDate).format("MMMM YYYY"),
+            $scope.exportYieldDataToExcelStyle = {
+                sheetid: '',
                 headers: true,
                 caption: {
-                    title: moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Yields - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm")
+
                 },
                 column: {
                     style: function () {
@@ -264,8 +264,12 @@ angular.module('mainApp').component('yields', {
                     };
                     allDataToExport.push(object);
                 }
+                
+                $scope.exportYieldDataToExcelStyle.caption.title = moment($scope.selectedDate).format("MMMM YYYY") + ' Monthly Yields - created on: ' + moment($scope.today).format("DD, MMMM YYYY HH:mm");
+                
+                $scope.exportYieldDataToExcelStyle.sheetid = "Avg and yield per month in " + moment($scope.selectedDate).format("MMMM YYYY");
 
-                alasql('SELECT * INTO XLS("Monthly Yields (in month).xls",?) FROM ?', [$scope.exportDataToExcelStyleMonth, allDataToExport]);
+                alasql('SELECT * INTO XLS("Monthly Yields (in month).xls",?) FROM ?', [$scope.exportYieldDataToExcelStyle, allDataToExport]);
             };
 
             //console.log($scope.plantations);

@@ -1,0 +1,261 @@
+<!--MAIN BODY OF CONTENT-->
+<div id="page-wrapper">
+
+    <script>
+        $('.table-responsive').on('show.bs.dropdown', function() {
+            $('.table-responsive').css("overflow", "inherit");
+        });
+
+        $('.table-responsive').on('hide.bs.dropdown', function() {
+            $('.table-responsive').css("overflow", "auto");
+        })
+
+    </script>
+    <div class="container-fluid main-content">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="page-header">
+                    Monthly Yields
+                    <small>Add and edit yields per month</small>
+                    <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-toggle="dropdown" data-ng-click="exportAllDataToExcelMonth()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel </button>
+                </h1>
+            </div>
+            <div class="col-xs-12">
+                <ol class="breadcrumb" style="font-size: 1.1em">
+                    <li>
+                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <i class="fa fa-fw fa-shopping-basket"></i> Monthly Yields
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!--Table summary-->
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div class="form-group">
+                    <label for="selectPlant">Choose plantation:</label>
+                    <select class="form-control" id="selectPlant" data-ng-model="selectedPlant">
+                    <option value="" selected="selected">All</option>
+                    <option data-ng-repeat="plant in plantations" value="{{plant.plantationID}}">{{plant.plantName}} ({{plant.plantationID}})</option>
+                  </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 form-group">
+                <label for="date">Date:</label>
+                <div class="input-group">
+                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="getMonthYields(selectedDate)" current-text="{{today | date:'MMM yyyy'}}" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" data-ng-click="openDatePicker()"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <h3><span data-ng-if="comparisonType==='Normal'">Month's average</span><span data-ng-if="comparisonType==='Past'">Past month's average</span> vs. optimum levels</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <th>Air Temperature (&#8451;)</th>
+                            <th>Humidity (%)</th>
+                            <th>Light Intensity (Lux)</th>
+                            <th>Soil Moisture (%)</th>
+                            <th>Yield</th>
+                            <th></th>
+                        </tr>
+                        <tr data-ng-repeat="plant in plantations | filter:(!!selectedPlant || undefined) && {plantationID: selectedPlant}" data-ng-if="plant.monthlySummary.length > 0">
+                            <td><strong>{{plant.plantName}}</strong> ({{plant.plantationID}})</td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
+                                    <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
+                                    <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
+                                    <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
+                                    <i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
+                                    <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
+                                    <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
+                                    <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
+                                    <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
+                                    <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong>
+                                </div>
+                            </td>
+                            <td class="conditionsColumn" style="vertical-align: middle;">
+                                <strong data-ng-if="plant.monthlySummary[0].yieldValue === null">No yield value saved yet</strong>
+                                <strong data-ng-if="plant.monthlySummary[0].yieldValue !== null">{{plant.monthlySummary[0].yieldValue}}</strong>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary viewBtn" data-toggle="dropdown">Action <span class="caret"></span></button>
+                                    <ul class="dropdown-menu" aria-labelledby="dLabel" style="right: 0; left: auto;">
+                                        <li data-toggle="modal" data-target="#optimumReportDetails" data-ng-click="getPlant(plant.plantationID)"><a href="javascript:">View Details</a></li>
+                                        <li data-toggle="modal" data-target="#addEditYield" data-ng-click="getYieldForEdit(plant.plantationID)"><a href="javascript:">Add/Edit yield</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row fill-empty">
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+
+<!-- Modal for monthly average's summary table when View btn is clicked -->
+<div class="modal fade" id="optimumReportDetails" tabindex="-1" role="dialog" aria-labelledby="optimumReportDetails">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="AddEditModalLabel">{{plant.plantName}}'s latest report</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p><strong>ID: </strong>{{plant.plantationID}}</p>
+                        <p><strong>Description: </strong>{{plant.plantDescription}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw  fa-thermometer-three-quarters" aria-hidden="true"></i> Air Temperature (&#8451;)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.airTempReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.airTempReport.status !== 'Not Available'">{{plant.airTempReport.lastReading}}, {{plant.airTempReport.status}}</strong>
+                                <strong data-ng-if="plant.airTempReport.status === 'Not Available'">{{plant.airTempReport.status}}</strong><br/> {{plant.airTempReport.message}}
+                            </p>
+                        </div>
+                        <!--AirTemp optimum chart-->
+                        <canvas id="airTempOptimum" class="chart chart-horizontal-bar" chart-labels="plant.airTempReport.chartSettings.labels" chart-data="plant.airTempReport.chartData" chart-series="plant.airTempReport.chartSettings.seriesLabel" chart-options="plant.airTempReport.chartSettings.options" chart-colors="plant.airTempReport.chartColors"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Humidity (%)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.humidityReport.status==='Normal', 'alert-info':plant.humidityReport.status==='Low','alert-danger':plant.humidityReport.status==='High','alert-warning':plant.humidityReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.humidityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.humidityReport.status !== 'Not Available'">{{plant.humidityReport.lastReading}}, {{plant.humidityReport.status}}</strong>
+                                <strong data-ng-if="plant.humidityReport.status === 'Not Available'">{{plant.humidityReport.status}}</strong><br/> {{plant.humidityReport.message}}
+                            </p>
+                        </div>
+                        <!--Humidity optimum chart-->
+                        <canvas id="humidityOptimum" class="chart chart-horizontal-bar" chart-labels="plant.humidityReport.chartSettings.labels" chart-data="plant.humidityReport.chartData" chart-series="plant.humidityReport.chartSettings.seriesLabel" chart-options="plant.humidityReport.chartSettings.options" chart-colors="plant.humidityReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw  fa-sun-o" aria-hidden="true"></i> Light Intensity (Lux) </h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.lightIntensityReport.status==='Normal', 'alert-info':plant.lightIntensityReport.status==='Low','alert-danger':plant.lightIntensityReport.status==='High','alert-warning':plant.lightIntensityReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.lightIntensityReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.lightIntensityReport.status !== 'Not Available'">{{plant.lightIntensityReport.lastReading}}, {{plant.lightIntensityReport.status}}</strong>
+                                <strong data-ng-if="plant.lightIntensityReport.status === 'Not Available'">{{plant.lightIntensityReport.status}}</strong><br/> {{plant.lightIntensityReport.message}}
+                        </div>
+                        <!--Light Intensity optimum chart-->
+                        <canvas id="lightIntensityOptimum" class="chart chart-horizontal-bar" chart-labels="plant.lightIntensityReport.chartSettings.labels" chart-data="plant.lightIntensityReport.chartData" chart-series="plant.lightIntensityReport.chartSettings.seriesLabel" chart-options="plant.lightIntensityReport.chartSettings.options" chart-colors="plant.lightIntensityReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4><i class="fa fa-fw fa-tint" aria-hidden="true"></i> Soil Moisture (%)</h4>
+                        <div class="alert" data-ng-class="{'alert-success': plant.soilMoistureReport.status==='Normal', 'alert-info':plant.soilMoistureReport.status==='Low','alert-danger':plant.soilMoistureReport.status==='High','alert-warning':plant.soilMoistureReport.status==='Not Available' }">
+                            <p><i class="fa fa-lg fa-angle-double-up" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'High'"></i>
+                                <i class="fa fa-lg fa-angle-double-down" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Low'"></i>
+                                <i class="fa fa-check" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Normal'"></i>
+                                <i class="fa fa-times" aria-hidden="true" data-ng-if="plant.soilMoistureReport.status === 'Not Available'"></i>
+                                <strong data-ng-if="plant.soilMoistureReport.status !== 'Not Available'">{{plant.soilMoistureReport.lastReading}}, {{plant.soilMoistureReport.status}}</strong>
+                                <strong data-ng-if="plant.soilMoistureReport.status === 'Not Available'">{{plant.soilMoistureReport.status}}</strong><br/> {{plant.soilMoistureReport.message}}
+                            </p>
+                        </div>
+                        <!--Soil Moisture optimum chart-->
+                        <canvas id="soilMoistureOptimum" class="chart chart-horizontal-bar" chart-labels="plant.soilMoistureReport.chartSettings.labels" chart-data="plant.soilMoistureReport.chartData" chart-series="plant.soilMoistureReport.chartSettings.seriesLabel" chart-options="plant.soilMoistureReport.chartSettings.options" chart-colors="plant.soilMoistureReport.chartColors"></canvas>
+                    </div>
+                </div>
+                <br/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for add/edit yield when View btn is clicked -->
+<div class="modal fade" id="addEditYield" tabindex="-1" role="dialog" aria-labelledby="addEditYield">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{formType}} {{plant.plantName}}'s yield for {{plant.monthlySummary[0].date}}</h4>
+            </div>
+            <form name="addEditYieldForm" data-ng-if="AddEditMessage === null">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" name="yield" class="form-control" id="yield" placeholder="Enter yield (with unit)" data-ng-model="plant.monthlySummary[0].yieldValue" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-ng-disabled="plant.monthlySummary[0].yieldValue === null || plant.monthlySummary[0].yieldValue.length === 0" data-ng-click="saveYieldValue(plant)"><i class="fa fa-edit" aria-hidden="true"></i>  Save</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+            <div data-ng-if="AddEditMessage !== null">
+                <div class="modal-body">
+                    <div class="alert" data-ng-class="{'alert-success':AddEditMessage.type === 'success','alert-danger': AddEditMessage.type==='failed'}">
+                        {{AddEditMessage.msg}} <strong>{{plant.monthlySummary[0].yieldValue}}</strong> for {{plant.plantName}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

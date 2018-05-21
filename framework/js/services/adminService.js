@@ -57,6 +57,8 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
                     return msg;
                 });
@@ -127,6 +129,8 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
                     return msg;
                 });
@@ -162,6 +166,8 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
                     return msg;
                 });
@@ -200,6 +206,8 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
+                    } else if (response.data === "non-unique"){
+                        msg = "non-unique";
                     }
                     return msg;
                 });

@@ -27,23 +27,32 @@
         $getAuth = $conn->query($auth);
         
         if($getAuth->num_rows == 1){
-
-            $sql = "INSERT INTO plantations
-            (plantationID, nodeNumber, plantName, plantDescription, numOfPlants) VALUES ('$plantID','$nodeID','$plantName','$plantDesc','$numOfPlants')";
             
-            $sqlO = "INSERT INTO optimumLevels
-            (plantationID, airTemp, humidity, lightIntensity, soilMoisture) VALUES ('$plantID','$airTemp','$humidity','$lightIntensity','$soilMoisture')";
+            $checkID = "SELECT plantationID FROM plantations WHERE plantationID = '$plantID'";
+            
+            $checkIDResult = $conn->query($checkID);
+            
+            if($checkIDResult->num_rows == 0){
 
-            $result = $conn->query($sql);
-            $resultO = $conn->query($sqlO);
+                $sql = "INSERT INTO plantations
+                (plantationID, nodeNumber, plantName, plantDescription, numOfPlants) VALUES ('$plantID','$nodeID','$plantName','$plantDesc','$numOfPlants')";
 
-            if($conn->affected_rows > 0)
-            {
-                echo 'success';
-            }
-            else
-            {
-                echo json_encode($data);
+                $sqlO = "INSERT INTO optimumLevels
+                (plantationID, airTemp, humidity, lightIntensity, soilMoisture) VALUES ('$plantID','$airTemp','$humidity','$lightIntensity','$soilMoisture')";
+
+                $result = $conn->query($sql);
+                $resultO = $conn->query($sqlO);
+
+                if($conn->affected_rows > 0)
+                {
+                    echo 'success';
+                }
+                else
+                {
+                    echo 'failed';
+                }
+            } else {
+                echo 'non-unique';
             }
             
         } else {

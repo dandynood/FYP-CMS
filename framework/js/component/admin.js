@@ -5,18 +5,22 @@ angular.module('mainApp').component('admin', {
     templateUrl: 'template/admin.html',
     bindings: {
         users: '<',
-        plantations: '<'
+        adminPlantations: '<',
+        plantationsFromParent: '<',
+        conditionsFromParent: '<'
     },
 
     //Controller for login
-    controller: function ($scope, $sessionStorage, adminService) {
+    controller: function ($scope, $sessionStorage, principle, adminService, plantationService, optimumLevelsService) {
         "use strict";
         var self = this;
 
         self.$onInit = function () {
             $scope.users = self.users;
-            $scope.plantations = self.plantations;
-            console.log($scope.plantations);
+            $scope.plantations = self.adminPlantations;
+            $scope.plantationsFromParent = self.plantationsFromParent;
+            $scope.conditionsFromParent = self.conditionsFromParent;
+            //console.log($scope.plantations);
 
             $scope.thisAdminUser = $sessionStorage.user;
 
@@ -95,6 +99,10 @@ angular.module('mainApp').component('admin', {
             $scope.openDeleteUserModel = function (id) {
                 $scope.adminPass = "";
                 $scope.confirmPass = "";
+                $scope.displayErrors = false;
+                $scope.displaySuccess = false;
+                $scope.errorMsg = null;
+                $scope.successMsg = null;
 
                 $scope.getUserDetails(id);
             };
@@ -102,6 +110,10 @@ angular.module('mainApp').component('admin', {
             $scope.openDeletePlantModel = function (id) {
                 $scope.adminPass = "";
                 $scope.confirmPass = "";
+                $scope.displayErrors = false;
+                $scope.displaySuccess = false;
+                $scope.errorMsg = null;
+                $scope.successMsg = null;
 
                 $scope.getPlantationDetails(id);
             };
@@ -157,7 +169,7 @@ angular.module('mainApp').component('admin', {
                 $scope.getPlantationDetails(id);
                 $scope.originalPlant = $scope.individualPlantation;
                 $scope.originalPlant = $scope.splitOptimumRanges($scope.originalPlant);
-                console.log($scope.originalPlant);
+                //console.log($scope.originalPlant);
                 $scope.editablePlant = angular.copy($scope.originalPlant);
             };
 
@@ -198,6 +210,7 @@ angular.module('mainApp').component('admin', {
                             };
                             $scope.displaySuccess = true;
                             $scope.newUser = {};
+                            $scope.refreshUsers();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -208,6 +221,12 @@ angular.module('mainApp').component('admin', {
                             $scope.errorMsg = {
                                 status: "Unauthorized!",
                                 msg: "It appears you failed enter your correct password to authorize yourself."
+                            };
+                            $scope.displayErrors = true;
+                        } else if (msg === "non-unique"){
+                            $scope.errorMsg = {
+                                status: "Username has been taken!",
+                                msg: "It appears you entered a non-unique username. Someone already has this username!"
                             };
                             $scope.displayErrors = true;
                         }
@@ -226,7 +245,6 @@ angular.module('mainApp').component('admin', {
                     };
                 } else {
                     plantation = $scope.organizeOptimumRanges(plantation);
-                    console.log(plantation);
                     promise = adminService.addNewPlantation(plantation, $scope.thisAdminUser.userID);
 
                     promise.then(function (msg) {
@@ -248,6 +266,7 @@ angular.module('mainApp').component('admin', {
                             };
                             $scope.displaySuccess = true;
                             $scope.newPlant = {};
+                            $scope.refreshPlantations();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -258,6 +277,12 @@ angular.module('mainApp').component('admin', {
                             $scope.errorMsg = {
                                 status: "Unauthorized!",
                                 msg: "It appears you failed enter your correct password to authorize yourself."
+                            };
+                            $scope.displayErrors = true;
+                        } else if (msg === "non-unique"){
+                            $scope.errorMsg = {
+                                status: "ID has been taken!",
+                                msg: "It appears you entered a non-unique plantation ID. It already exists on the database!"
                             };
                             $scope.displayErrors = true;
                         }
@@ -284,6 +309,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "This user has been removed from the system:"
                             };
                             $scope.displaySuccess = true;
+                            $scope.refreshUsers();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -319,6 +345,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "This plantation has been removed from the system: "
                             };
                             $scope.displaySuccess = true;
+                            $scope.refreshPlantations();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -391,6 +418,15 @@ angular.module('mainApp').component('admin', {
                                 msg: "The user's details has been successfully editted"
                             };
                             $scope.displaySuccess = true;
+                            if ($scope.thisAdminUser.userID === edittedUser.userID) {
+                                //console.log(edittedUser.userID);
+                                $sessionStorage.user = angular.copy(edittedUser);
+                                promise = principle.getIdentity(true);
+                                promise.then(function (data) {
+                                    $scope.thisAdminUser = angular.copy(data);
+                                });
+                            }
+                            $scope.refreshUsers();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -401,6 +437,12 @@ angular.module('mainApp').component('admin', {
                             $scope.errorMsg = {
                                 status: "Unauthorized!",
                                 msg: "It appears you failed enter your correct password to authorize yourself."
+                            };
+                            $scope.displayErrors = true;
+                        } else if (msg === "non-unique"){
+                            $scope.errorMsg = {
+                                status: "Username has been taken!",
+                                msg: "It appears you entered a non-unique username. Someone already has this username!"
                             };
                             $scope.displayErrors = true;
                         }
@@ -430,6 +472,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "The user's details has been successfully editted"
                             };
                             $scope.displaySuccess = true;
+                            $scope.refreshPlantations();
                         } else if (msg === "failed") {
                             $scope.errorMsg = {
                                 status: "Something went wrong.",
@@ -440,6 +483,12 @@ angular.module('mainApp').component('admin', {
                             $scope.errorMsg = {
                                 status: "Unauthorized!",
                                 msg: "It appears you failed enter your correct password to authorize yourself."
+                            };
+                            $scope.displayErrors = true;
+                        } else if (msg === "non-unique"){
+                            $scope.errorMsg = {
+                                status: "ID has been taken!",
+                                msg: "It appears you entered a non-unique plantation ID. It already exists on the database!"
                             };
                             $scope.displayErrors = true;
                         }
@@ -479,6 +528,42 @@ angular.module('mainApp').component('admin', {
                 plant.maxSM = +SM[1];
 
                 return plant;
+            };
+
+            $scope.refreshPlantations = function () {
+                var promise = plantationService.getAllplantations(),
+                    promise2, promise3, i;
+                promise.then(function (data) {
+
+                    for (i = 0; i < data.length; i++) {
+                        $scope.plantationsFromParent[i] = data[i];
+                    }
+                    
+                    promise2 = plantationService.getAllLevels(data, '2018-04-07');
+                    
+                    promise2.then(function(data){
+                        for (i = 0; i < data.length; i++) {
+                            $scope.conditionsFromParent[i] = data[i];
+                        }
+                    });
+                    
+                    promise3 = optimumLevelsService.getAllOptimumLevels(data);
+                    promise3.then(function (data) {
+                        for (i = 0; i < data.length; i++) {
+                            $scope.plantations[i] = data[i];
+                        }
+                        self.adminPlantations = angular.copy($scope.plantations);
+                    });
+
+                });
+            };
+
+            $scope.refreshUsers = function () {
+                var promise = adminService.getAllUsers();
+                promise.then(function (data) {
+                    self.users = angular.copy(data);
+                    $scope.users = self.users;
+                });
             };
 
         };
