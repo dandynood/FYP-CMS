@@ -38,7 +38,7 @@
                 
                 $checkIDResult = $conn->query($checkID);
                 
-                if($checkIDResult->num_rows == 0){
+                if($checkIDResult->num_rows == 0 || $plantID == $originalPlantID){
 
                     $sql = "UPDATE plantations SET plantationID='$plantID', nodeNumber = '$nodeID', plantName='$plantName', plantDescription='$plantDesc', numOfPlants = '$numOfPlants' WHERE plantationID='$originalPlantID'";
 

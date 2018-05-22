@@ -30,7 +30,7 @@
                 
                 $checkUserName = "SELECT username FROM users WHERE username='$username'";
                 $checkUserNameResult = $conn->query($checkUserName);
-                if($checkUserNameResult->num_rows == 0){
+                if($checkUserNameResult->num_rows == 0 || $userID == $adminID){
 
                     $sql = "UPDATE users SET username='$username', firstName='$firstName', lastName='$lastName',email='$email',phoneNumber='$phoneNumber',roleType='$roleType' WHERE userID='$userID'";
 
