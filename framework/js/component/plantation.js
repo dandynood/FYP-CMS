@@ -139,7 +139,7 @@ angular.module('mainApp').component('plantation', {
                 if (conditions[i].lightIntensity !== null) {
                     //Get only values for lightIntensity within 7am and 6pm only for average
                     //Also the countLightIntensity is only used to average out lightIntensity (counts the light readings in the day range)
-                    if (conditions[i].dateTime && (moment(conditions[i].dateTime).hour() >= 7 || moment(conditions[i].dateTime).hour() <= 18)) {
+                    if (conditions[i].dateTime && (moment(conditions[i].dateTime).hour() >= 7 && moment(conditions[i].dateTime).hour() <= 18)) {
                         countLightIntensity++;
                         lightIntensity = lightIntensity + (+conditions[i].lightIntensity);
                     }
