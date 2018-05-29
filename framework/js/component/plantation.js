@@ -158,7 +158,7 @@ angular.module('mainApp').component('plantation', {
 
             airTemp = (count!==reduceCountAT? airTemp / (count - reduceCountAT): null);
             humidity = (count!==reduceCountH? humidity / (count - reduceCountH): null);
-            lightIntensity = (count!==reduceCountLI ? lightIntensity / (countLightIntensity - reduceCountLI): null);
+            lightIntensity = (countLightIntensity!==reduceCountLI ? lightIntensity / (countLightIntensity - reduceCountLI): null);
             soilMoisture = (count!==reduceCountSM ? soilMoisture / (count - reduceCountSM): null);
             
             averageCondtions = {
