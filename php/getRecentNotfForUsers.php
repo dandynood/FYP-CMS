@@ -9,15 +9,15 @@
         $data = json_decode(file_get_contents("php://input")); 
         $userID = urldecode($data->userID);
 
-        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users WHERE userID = '$userID'";
-
+        $sql = "SELECT m.msgID, m.fullmsg, m.admin, m.datetime, m.type, mu.ifread FROM notfmsgs m 
+                INNER JOIN notfusers mu
+                ON mu.msgID = m.msgID
+                WHERE mu.userID = '$userID' AND mu.ifread = '0' ORDER BY m.datetime DESC";
 
         $result = $conn->query($sql);
 
         if($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
-                echo json_encode($row);
-            }
+            echo json_encode($result->fetch_all(MYSQLI_ASSOC));
         }
         else
         {

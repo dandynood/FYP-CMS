@@ -12,7 +12,7 @@ angular.module('mainApp').component('home', {
     },
 
     //Controller for home page
-    controller: function ($scope, chartOptionsService, optimumLevelsService) {
+    controller: function ($scope, chartOptionsService, optimumLevelsService, notificationService) {
         "use strict";
 
         //Get all the necessary chart configurations for home page from the chartOptionsService
@@ -33,7 +33,7 @@ angular.module('mainApp').component('home', {
         $scope.tempAndHumidityOptions = chartOptionsService.getOptions('tempHumidity');
         $scope.lightIntensityOptions = chartOptionsService.getOptions('lightIntensity');
         $scope.soilMoistureOptions = chartOptionsService.getOptions('soilMoisture');
-        
+
         $scope.tempAndHumidityOptions.scales.xAxes[0].time.unit = 'hour';
         $scope.lightIntensityOptions.scales.xAxes[0].time.unit = 'hour';
         $scope.soilMoistureOptions.scales.xAxes[0].time.unit = 'hour';
@@ -115,13 +115,13 @@ angular.module('mainApp').component('home', {
         //This will also run when loading the state so that it extracts the conditions 
         //and graph them appropriately.
         this.$onInit = function () {
-            var i, j, lastPosition, last,
+            var i, j, last,
                 plants = this.allConditionLevels,
                 optimumLevels = this.optimumLevels;
-                $scope.test = this.test;
+            $scope.test = this.test;
 
             $scope.plantations = plants;
-            
+
             //console.log($scope.test);
 
             //Here we copy the conditions into $scope
@@ -154,6 +154,7 @@ angular.module('mainApp').component('home', {
             //Then the 2nd if statement will use optimumLevelsService to compare and get
             //reports on if they meet the optimum range
             $scope.getLastComparisonReports = function () {
+                var lastPosition;
                 for (i = 0; i < $scope.plantations.length; i++) {
 
                     if ($scope.plantations[i].conditionLevels.length > 0) {
@@ -172,6 +173,19 @@ angular.module('mainApp').component('home', {
                         $scope.plantations[i].soilMoistureReport = optimumLevelsService.compareHumidity(last.soilMoisture, $scope.plantations[i].optimumLevels.soilMoisture);
                     }
                 }
+
+                console.log($scope.plantations);
+                
+                if(notificationService.getOperationalAlerts().length > 0){
+                    notificationService.resetOperationalAlerts();
+                }
+
+                for (i = 0; i < $scope.plantations.length; i++) {
+
+                    if ($scope.plantations[i].airTempReport || $scope.plantations[i].humidityReport || $scope.plantations[i].lightIntensityReport || $scope.plantations[i].soilMoistureReport) {
+                        notificationService.organizeOperationalAlerts($scope.plantations[i].plantationID, $scope.plantations[i].plantName, $scope.plantations[i].airTempReport, $scope.plantations[i].humidityReport, $scope.plantations[i].lightIntensityReport, $scope.plantations[i].soilMoistureReport);
+                    }
+                }
             };
 
             $scope.getLastComparisonReports();
@@ -186,10 +200,10 @@ angular.module('mainApp').component('home', {
                 }
                 return 0;
             };
-            
+
             //This is used in the $scope.exportDataToExcelStyle to show the date of excel creation
             $scope.today = new Date();
-            
+
             $scope.exportDataToExcelStyle = {
                 sheetid: 'Conditions ' + moment($scope.today).format("DD, MMMM YYYY"),
                 headers: true,
@@ -262,7 +276,7 @@ angular.module('mainApp').component('home', {
                         }
                     }
                 }
-                
+
                 alasql('SELECT * INTO XLS("Daily Summary.xls",?) FROM ?', [$scope.exportDataToExcelStyle, allDataToExport]);
             };
 

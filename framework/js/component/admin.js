@@ -23,7 +23,9 @@ angular.module('mainApp').component('admin', {
             //console.log($scope.plantations);
 
             $scope.thisAdminUser = $sessionStorage.user;
+            console.log($scope.thisAdminUser);
 
+            //get user details when viewing the user modal (view and edit) via user name
             $scope.getUserDetails = function (username) {
                 $scope.individualUser = {};
                 var i;
@@ -35,6 +37,7 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
+            //Gets the plantation details when viewing the plantation modal (view and edit) via plantation id
             $scope.getPlantationDetails = function (id) {
                 $scope.individualPlantation = {};
                 var i;
@@ -46,6 +49,7 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
+            //open add user modal (reset form on show)
             $scope.openAddUserModal = function () {
                 $scope.newUser = {};
                 $scope.addUserForm.$setUntouched();
@@ -68,6 +72,7 @@ angular.module('mainApp').component('admin', {
                 };
             };
 
+            //open add plantation modal (reset form on show)
             $scope.openAddPlantationModal = function () {
                 $scope.newPlant = {};
                 $scope.addPlantForm.$setUntouched();
@@ -96,6 +101,7 @@ angular.module('mainApp').component('admin', {
                 };
             };
 
+            //open the delete user modal (reset form on show)
             $scope.openDeleteUserModel = function (id) {
                 $scope.adminPass = "";
                 $scope.confirmPass = "";
@@ -107,6 +113,7 @@ angular.module('mainApp').component('admin', {
                 $scope.getUserDetails(id);
             };
 
+            //open the delete plant modal (reset form on show)
             $scope.openDeletePlantModel = function (id) {
                 $scope.adminPass = "";
                 $scope.confirmPass = "";
@@ -118,6 +125,7 @@ angular.module('mainApp').component('admin', {
                 $scope.getPlantationDetails(id);
             };
 
+            //open the change password modal (reset form on show)
             $scope.openChangePasswordModal = function (id) {
                 $scope.changePasswordForm.$setUntouched();
                 $scope.changePasswordForm.$setPristine();
@@ -181,7 +189,9 @@ angular.module('mainApp').component('admin', {
                 $scope.editablePlant = angular.copy($scope.originalPlant);
             };
 
-            //Add user function
+            //all form actions functions below, add, edit, delete first checks if the admin password is confirmed, and then it makes a promise, calling the adminService functions and sending the inputs from the form and gets a return response (if saving was successful, server problem in saving, password is wrong/unauthorized, or non-unique username) with a message showing on the form at the end
+
+            //Add user function (user object has the form details)
             $scope.addUser = function (user) {
                 var promise;
                 if (user.adminPass !== user.confirmPass) {
@@ -223,7 +233,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "It appears you failed enter your correct password to authorize yourself."
                             };
                             $scope.displayErrors = true;
-                        } else if (msg === "non-unique"){
+                        } else if (msg === "non-unique") {
                             $scope.errorMsg = {
                                 status: "Username has been taken!",
                                 msg: "It appears you entered a non-unique username. Someone already has this username!"
@@ -235,8 +245,10 @@ angular.module('mainApp').component('admin', {
             };
 
             //Add plantation function
+            //test this
             $scope.addPlantation = function (plantation) {
                 var promise;
+                console.log("hello", plantation);
                 if (plantation.adminPass !== plantation.confirmPass) {
                     $scope.displayErrors = true;
                     $scope.errorMsg = {
@@ -245,7 +257,7 @@ angular.module('mainApp').component('admin', {
                     };
                 } else {
                     plantation = $scope.organizeOptimumRanges(plantation);
-                    promise = adminService.addNewPlantation(plantation, $scope.thisAdminUser.userID);
+                    promise = adminService.addNewPlantation(plantation, $scope.thisAdminUser);
 
                     promise.then(function (msg) {
                         if (msg === "success") {
@@ -279,7 +291,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "It appears you failed enter your correct password to authorize yourself."
                             };
                             $scope.displayErrors = true;
-                        } else if (msg === "non-unique"){
+                        } else if (msg === "non-unique") {
                             $scope.errorMsg = {
                                 status: "ID has been taken!",
                                 msg: "It appears you entered a non-unique plantation ID. It already exists on the database!"
@@ -327,8 +339,9 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
-            //Delete your plants 
-            $scope.deletePlant = function (id, adminPass, confirmPass) {
+            //Delete your plants
+            //test this
+            $scope.deletePlant = function (plant, adminPass, confirmPass) {
                 var promise;
                 if (adminPass !== confirmPass) {
                     $scope.displayErrors = true;
@@ -337,7 +350,7 @@ angular.module('mainApp').component('admin', {
                         msg: "It appears that the password or confirm password isn't the same"
                     };
                 } else {
-                    promise = adminService.deletePlantation(id, $scope.thisAdminUser.userID, adminPass);
+                    promise = adminService.deletePlantation(plant.plantationID, plant.plantName, $scope.thisAdminUser, adminPass);
                     promise.then(function (msg) {
                         if (msg === "success") {
                             $scope.successMsg = {
@@ -363,6 +376,7 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
+            //change the user password
             $scope.changeUserPassword = function (id, newPass, adminPass, confirmPass) {
                 var promise;
                 if (adminPass !== confirmPass) {
@@ -397,10 +411,12 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
+            //used to disable the save function in the edit form if nothing has changed between the original info
             $scope.editUserFormCheckIfEqual = function () {
                 return angular.equals($scope.editableDetails, $scope.originalUser);
             };
 
+            //edit user details
             $scope.editUserDetails = function (edittedUser, adminPass, confirmPass) {
                 var promise;
                 if (adminPass !== confirmPass) {
@@ -439,7 +455,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "It appears you failed enter your correct password to authorize yourself."
                             };
                             $scope.displayErrors = true;
-                        } else if (msg === "non-unique"){
+                        } else if (msg === "non-unique") {
                             $scope.errorMsg = {
                                 status: "Username has been taken!",
                                 msg: "It appears you entered a non-unique username. Someone already has this username!"
@@ -450,12 +466,14 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
+            //same as editUserFormCheckIfEqual
             $scope.editPlantFormCheckIfEqual = function () {
                 return angular.equals($scope.editablePlant, $scope.originalPlant);
             };
 
-            $scope.editPlantDetails = function (edittedPlant, adminPass, confirmPass, originalPlantID) {
-                var promise;
+            //edit plant details
+            $scope.editPlantDetails = function (edittedPlant, adminPass, confirmPass, originalPlant) {
+                var promise, notfmsg;
                 if (adminPass !== confirmPass) {
                     $scope.displayErrors = true;
                     $scope.errorMsg = {
@@ -464,7 +482,8 @@ angular.module('mainApp').component('admin', {
                     };
                 } else {
                     edittedPlant = $scope.organizeOptimumRanges(edittedPlant);
-                    promise = adminService.editPlantationDetails(edittedPlant, $scope.thisAdminUser.userID, adminPass, originalPlantID);
+                    notfmsg = $scope.generateEditNotfMsg(edittedPlant, originalPlant);
+                    promise = adminService.editPlantationDetails(edittedPlant, $scope.thisAdminUser, adminPass, originalPlant.plantationID, originalPlant.plantName);
                     promise.then(function (msg) {
                         if (msg === "success") {
                             $scope.successMsg = {
@@ -485,7 +504,7 @@ angular.module('mainApp').component('admin', {
                                 msg: "It appears you failed enter your correct password to authorize yourself."
                             };
                             $scope.displayErrors = true;
-                        } else if (msg === "non-unique"){
+                        } else if (msg === "non-unique") {
                             $scope.errorMsg = {
                                 status: "ID has been taken!",
                                 msg: "It appears you entered a non-unique plantation ID. It already exists on the database!"
@@ -496,14 +515,16 @@ angular.module('mainApp').component('admin', {
                 }
             };
 
-
+            //use to validate the min and max values (min must not be more than max and etc) or else show errors and disable save button
             $scope.validateOptimumRange = function (plant) {
+                console.log("hello");
                 if (plant.minTemp >= plant.maxTemp || plant.minHum >= plant.maxHum || plant.minLI >= plant.maxLI || plant.minSM >= plant.maxSM) {
                     return false;
                 }
                 return true;
             };
 
+            //concat the min and max values with '-' to be one string for saving on the database
             $scope.organizeOptimumRanges = function (plant) {
                 plant.airTemp = plant.minTemp + "-" + plant.maxTemp;
                 plant.humidity = plant.minHum + "-" + plant.maxHum;
@@ -513,6 +534,7 @@ angular.module('mainApp').component('admin', {
                 return plant;
             };
 
+            //the opposite of above for showing and editing on the forms for each plantation
             $scope.splitOptimumRanges = function (plant) {
                 var temp = plant.optimumLevels.airTemp.split("-"),
                     humidity = plant.optimumLevels.humidity.split("-"),
@@ -530,6 +552,7 @@ angular.module('mainApp').component('admin', {
                 return plant;
             };
 
+            //quick and dirty way to update the plant and users after admin changes (NEED TO BE REPLACED WITH SSE OR WEBSOCKETS)
             $scope.refreshPlantations = function () {
                 var promise = plantationService.getAllplantations(),
                     promise2, promise3, i;
@@ -538,16 +561,16 @@ angular.module('mainApp').component('admin', {
                     for (i = 0; i < data.length; i++) {
                         $scope.plantationsFromParent.push(data[i]);
                     }
-                    
+
                     promise2 = plantationService.getAllLevels(data, '2018-04-07');
-                    
-                    promise2.then(function(data){
+
+                    promise2.then(function (data) {
                         $scope.conditionsFromParent.length = 0;
                         for (i = 0; i < data.length; i++) {
                             $scope.conditionsFromParent[i] = data[i];
                         }
                     });
-                    
+
                     promise3 = optimumLevelsService.getAllOptimumLevels(data);
                     promise3.then(function (data) {
                         $scope.plantations.length = 0;
@@ -568,6 +591,20 @@ angular.module('mainApp').component('admin', {
                 });
             };
 
+            $scope.generateEditNotfMsg = function (edittedPlant, originalPlant) {
+                var msg = "editted a plantation, ";
+                if(edittedPlant.plantationID !== originalPlant.plantationID){
+                    
+                }
+                
+                if(edittedPlant.plantName !== originalPlant.plantName){
+                    
+                }
+                
+                if(edittedPlant.nodeID !== originalPlant.nodeID){
+                    
+                }
+            };
         };
     }
 

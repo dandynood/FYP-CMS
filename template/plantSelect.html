@@ -1,0 +1,773 @@
+<!--MAIN BODY OF CONTENT-->
+
+<link href="framework/css/admin.css" rel="stylesheet">
+<link href="framework/css/plantSelect.css" rel="stylesheet">
+
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="page-header">
+                    Plantations
+                    <small></small>
+                    <button class="btn btn-primary export-btn pull-right" data-toggle="modal" data-target="#myAddPlantModal" data-ng-click="openAddPlantationModal()"><i class="fa fa-pagelines" aria-hidden="true"></i> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="sr-only"></span> Add New Plantations</button>
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!--for search of plantation-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-2 form-group">
+                <label class="form-control-label">Plant ID</label>
+                <input type="text" class="form-control" placeholder="Search the plant ID" data-ng-model="obj.id" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4 form-group">
+                <label class="form-control-label">Plant Name</label>
+                <input type="text" class="form-control" placeholder="Search the name" data-ng-model="obj.name" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-4" data-ng-repeat="plant in plantations | filter: {plantationID:obj.id} | filter:{plantName:obj.name} | orderBy: 'plantationID'">
+                <div class="thumbnail">
+                    <div class="plantThumbnail">
+                        <a style="font-size: 24px;" data-ui-sref="dashboard.plantation({plantationID: plant.plantationID})">{{plant.plantationID}}</a>
+                    </div>
+                    <div class="caption">
+                        <h3 style="margin-top: 10px; margin-bottom: 15px">{{plant.plantName}}</h3>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-6 col-xs-6">
+                                <button class="btn btn-primary export-btn" data-toggle="modal" data-target="#myViewPlantModal" data-ng-click="getPlantationDetails(plant.plantationID)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Details</button>
+                                <button class="btn btn-warning export-btn" data-toggle="modal" data-target="#myEditPlantModal" data-ng-click="openPlantEditModal(plant.plantationID)" data-ng-if="checkAdmin()"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</button>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-xs-6" style="text-align: right" data-ng-if="checkAdmin()">
+                                <button class="btn btn-danger export-btn" data-toggle="modal" data-target="#myDeletePlantModal" data-ng-click="openDeletePlantModel(plant.plantationID)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- /#page-wrapper -->
+
+<!--Models for view plantations-->
+<div class="modal fade" id="myViewPlantModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="ViewPlant">{{individualPlantation.plantName}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Details</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Plantation ID</td>
+                                <td class="col-xs-9">{{individualPlantation.plantationID}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Node number</td>
+                                <td class="col-xs-9">{{individualPlantation.nodeNumber}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Name</td>
+                                <td class="col-xs-10">{{individualPlantation.plantName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Description</td>
+                                <td class="col-xs-9">{{individualPlantation.plantDescription}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">No. Of plants</td>
+                                <td class="col-xs-9">
+                                    <span data-ng-show="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length === 0">Not provided</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Optimum ranges</th>
+                                <th>Min-Max</th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.airTemp}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Humidity (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.humidity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
+                                <td class="col-xs-10">{{individualPlantation.optimumLevels.lightIntensity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Soil Moisture (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.soilMoisture}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal" data-toggle="modal" data-target="#myEditPlantModal" data-ng-click="openPlantEditModal(individualPlantation.plantationID)" data-ng-if="checkAdmin()">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    <span class="sr-only"></span>Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Models for add plantations-->
+<div class="modal fade" id="myAddPlantModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="AddPlant">Add a new plantation</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" data-ng-show="!displaySuccess">
+                        <div class="col-xs-12">
+                            <form method="post" name="addPlantForm" style="padding-top:5px">
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="addPlantForm.addplantID.$pristine? '' : (addPlantForm.addplantID.$valid? 'has-success': 'has-error')">
+                                        <label>Plantation ID*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="addplantID" placeholder="Plantation ID (e.g MKCH, CHILI, etc)." data-ng-model-options="{updateOn:'blur'}" data-ng-model="newPlant.plantationID" data-ng-minlength="4" required>
+                                            <div data-ng-show="addPlantForm.addplantID.$dirty">
+                                                <span data-ng-show="addPlantForm.addplantID.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="addPlantForm.addplantID.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Must be a minimum of 4 characters</small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="addPlantForm.addNodeID.$pristine? '' : (addPlantForm.addNodeID.$valid? 'has-success': 'has-error')">
+                                        <label>Node ID*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="addNodeID" placeholder="Node ID (e.g N64)" data-ng-model="newPlant.nodeID" data-ng-model-options="{updateOn:'blur'}" required>
+                                            <div data-ng-show="addPlantForm.addNodeID.$dirty">
+                                                <span data-ng-show="addPlantForm.addNodeID.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="addPlantForm.addNodeID.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="addPlantForm.addplantName.$pristine? '' : (addPlantForm.addplantName.$valid? 'has-success': 'has-error')">
+                                        <label>Plant Name*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="addplantName" placeholder="Plantation's Name" data-ng-model-options="{updateOn:'blur'}" data-ng-model="newPlant.plantName" required>
+                                            <div data-ng-show="addPlantForm.addplantName.$dirty">
+                                                <span data-ng-show="addPlantForm.addplantName.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="addPlantForm.addplantName.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="addPlantForm.addplantDesc.$pristine? '' : (addPlantForm.addplantDesc.$valid? 'has-success': 'has-error')">
+                                        <label>Plant Description*</label>
+                                        <div class="right-icon-addon">
+                                            <textarea class="form-control" style="resize:vertical;" name="addplantDesc" data-ng-model="newPlant.plantDescription" placeholder="Plant Description" required></textarea>
+                                            <div data-ng-show="addPlantForm.addplantDesc.$dirty">
+                                                <span data-ng-show="addPlantForm.addplantDesc.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="addPlantForm.addplantDesc.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Number of Plants</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="addPlantForm.addNumOfPlant" placeholder="Number of plants, bushes, trees, etc." data-ng-model="newPlant.numOfPlants">
+                                            <div data-ng-show="addPlantForm.addNumOfPlant.$dirty">
+                                                <span data-ng-show="addPlantForm.addNumOfPlant.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="addPlantForm.addNumOfPlant.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--optimum lavel range-->
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span><strong>Optimum Level Range </strong></span>
+                                        <hr style="margin-top:5px; margin-bottom:10px" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Air Temperature (&#8451;)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="addPlantForm.minTemp.$pristine && addPlantForm.maxTemp.$pristine? '' : (newPlant.minTemp < newPlant.maxTemp? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="newPlant.minTemp" name="minTemp" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="newPlant.maxTemp" name="maxTemp" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="addPlantForm.minTemp.$dirty || addPlantForm.maxTemp.$dirty">
+                                            <span data-ng-show="newPlant.minTemp < newPlant.maxTemp" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="newPlant.minTemp >= newPlant.maxTemp" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Humidity (%)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="addPlantForm.minHum.$pristine && addPlantForm.maxHum.$pristine? '' : (newPlant.minHum < newPlant.maxHum? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="newPlant.minHum" name="minHum" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="newPlant.maxHum" name="maxHum" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="addPlantForm.minHum.$dirty || addPlantForm.maxHum.$dirty">
+                                            <span data-ng-show="newPlant.minHum < newPlant.maxHum" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="newPlant.minHum >= newPlant.maxHum" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Light Intensity (Lux)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="addPlantForm.minLI.$pristine && addPlantForm.maxLI.$pristine? '' : (newPlant.minLI < newPlant.maxLI? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="newPlant.minLI" name="minLI" class="form-control" min="0" max="60000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="newPlant.maxLI" name="maxLI" class="form-control" min="0" max="60000">
+                                        </div>
+                                        <span data-ng-show="addPlantForm.minLI.$dirty || addPlantForm.maxLI.$dirty">
+                                            <span data-ng-show="newPlant.minLI < newPlant.maxLI" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="newPlant.minLI >= newPlant.maxLI" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Soil Moisture (%)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="addPlantForm.minSM.$pristine && addPlantForm.maxSM.$pristine? '' : (newPlant.minSM < newPlant.maxSM? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="newPlant.minSM" name="minSM" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="newPlant.maxSM" name="maxSM" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="addPlantForm.minSM.$dirty || addPlantForm.maxSM.$dirty">
+                                            <span data-ng-show="newPlant.minSM < newPlant.maxSM" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="newPlant.minSM >= newPlant.maxSM" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--Auth-->
+                                <br />
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span><strong>Authenticate yourself to save </strong></span>
+                                        <hr style="margin-top:5px;" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Your password</label>
+                                        <input type="password" class="form-control" name="yourPass" data-ng-model="newPlant.adminPass" autocomplete="new-password" autocorrect="off" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Confirm your password</label>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="newPlant.confirmPass" autocomplete="new-password" autocorrect="off" required>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-if="displayErrors && !displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger">
+                                <strong><span class="glyphicon glyphicon-remove"></span> {{errorMsg.status}}</strong> {{errorMsg.msg}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-if="displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-success">
+                                <strong><span class="glyphicon glyphicon-ok"></span> {{successMsg.status}}</strong> {{successMsg.msg}}
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Details</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Plantation ID</td>
+                                        <td class="col-xs-9">{{resultNewPlant.plantationID}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Node number</td>
+                                        <td class="col-xs-9">{{resultNewPlant.nodeID}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Name</td>
+                                        <td class="col-xs-10">{{resultNewPlant.plantName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Description</td>
+                                        <td class="col-xs-9">{{resultNewPlant.plantDescription}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">No. Of plants</td>
+                                        <td class="col-xs-9">
+                                            <span data-ng-show="resultNewPlant.numOfPlants.length > 0">{{resultNewPlant.numOfPlants}}</span>
+                                            <span data-ng-show="resultNewPlant.numOfPlants.length === 0">Not provided</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br />
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Optimum ranges</th>
+                                        <th>Min-Max</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
+                                        <td class="col-xs-9">{{resultNewPlant.airTemp}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Humidity (%)</td>
+                                        <td class="col-xs-9">{{resultNewPlant.humidity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
+                                        <td class="col-xs-10">{{resultNewPlant.lightIntensity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Soil Moisture (%)</td>
+                                        <td class="col-xs-9">{{resultNewPlant.soilMoisture}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" data-ng-click="addPlantation(newPlant)" data-ng-disabled="addPlantForm.$invalid || !validateOptimumRange(newPlant)" data-ng-if="!displaySuccess"><i class="fa fa-pagelines" aria-hidden="true"></i> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="sr-only"></span> Add plantation</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Models for edit plant-->
+<div class="modal fade" id="myEditPlantModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" data-ng-if="!displaySuccess">Edit {{originalPlant.plantName}} <small>({{originalPlant.plantationID}})</small> details</h3>
+                <h3 class="modal-title" data-ng-if="displaySuccess">Editted {{editablePlant.plantName}} <small>({{editablePlant.plantationID}})</small> details</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" data-ng-show="!displaySuccess">
+                        <div class="col-xs-12">
+                            <form method="post" name="editPlantForm" style="padding-top:5px">
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="editPlantForm.editplantID.$pristine || editablePlant.plantationID === originalPlant.plantationID? '' : (editPlantForm.editplantID.$valid? 'has-success': 'has-error')">
+                                        <label>Plantation ID*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="editplantID" placeholder="Plantation ID (e.g MKCH, CHILI, etc)." data-ng-model-options="{updateOn:'blur'}" data-ng-model="editablePlant.plantationID" data-ng-minlength="4" required>
+                                            <div data-ng-show="editPlantForm.editplantID.$dirty && editablePlant.plantationID !== originalPlant.plantationID">
+                                                <span data-ng-show="editPlantForm.editplantID.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="editPlantForm.editplantID.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Must be a minimum of 4 characters</small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="editPlantForm.editNodeID.$pristine || editablePlant.nodeNumber === originalPlant.nodeNumber? '' : (editPlantForm.editNodeID.$valid? 'has-success': 'has-error')">
+                                        <label>Node ID*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="editNodeID" placeholder="Node ID (e.g N64)" data-ng-model="editablePlant.nodeNumber" data-ng-model-options="{updateOn:'blur'}" required>
+                                            <div data-ng-show="editPlantForm.editNodeID.$dirty && editablePlant.nodeNumber !== originalPlant.nodeNumber">
+                                                <span data-ng-show="editPlantForm.editNodeID.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="editPlantForm.editNodeID.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="editPlantForm.editplantName.$pristine || editablePlant.plantName === originalPlant.plantName? '' : (editPlantForm.editplantName.$valid? 'has-success': 'has-error')">
+                                        <label>Plant Name*</label>
+                                        <div class="right-icon-addon">
+                                            <input type="text" class="form-control" name="editplantName" placeholder="Plantation's Name" data-ng-model-options="{updateOn:'blur'}" data-ng-model="editablePlant.plantName" required>
+                                            <div data-ng-show="editPlantForm.editplantName.$dirty && editablePlant.plantName !== originalPlant.plantName">
+                                                <span data-ng-show="editPlantForm.editplantName.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="editPlantForm.editplantName.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12" data-ng-class="editPlantForm.editplantDesc.$pristine || editablePlant.plantDescription === originalPlant.plantDescription? '' : (editPlantForm.editplantDesc.$valid? 'has-success': 'has-error')">
+                                        <label>Plant Description*</label>
+                                        <div class="right-icon-addon">
+                                            <textarea class="form-control" style="resize:vertical;" name="editplantDesc" data-ng-model="editablePlant.plantDescription" placeholder="Plant Description" required></textarea>
+                                            <div data-ng-show="editPlantForm.editplantDesc.$dirty && editablePlant.plantDescription !== originalPlant.plantDescription">
+                                                <span data-ng-show="editPlantForm.editplantDesc.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                                <span data-ng-show="editPlantForm.editplantDesc.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Number of Plants</label>
+                                        <input type="text" class="form-control" name="editPlantForm.editNumOfPlant" placeholder="Number of plants, bushes, trees, etc." data-ng-model="editablePlant.numOfPlants">
+                                    </div>
+                                </div>
+                                <!--optimum lavel range-->
+                                <br />
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span><strong>Optimum Level Range </strong></span>
+                                        <hr style="margin-top:5px; margin-bottom:10px" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Air Temperature (&#8451;)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="editPlantForm.minTemp.$pristine && editPlantForm.maxTemp.$pristine || (editablePlant.minTemp === originalPlant.minTemp && editablePlant.maxTemp === originalPlant.maxTemp)? '' : (editablePlant.minTemp < editablePlant.maxTemp? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="editablePlant.minTemp" name="minTemp" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="editablePlant.maxTemp" name="maxTemp" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="editPlantForm.minTemp.$dirty || editPlantForm.maxTemp.$dirty" data-ng-hide="editablePlant.minTemp === originalPlant.minTemp && editablePlant.maxTemp === originalPlant.maxTemp">
+                                            <span data-ng-show="editablePlant.minTemp < editablePlant.maxTemp" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="editablePlant.minTemp >= editablePlant.maxTemp" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Humidity (%)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="editPlantForm.minHum.$pristine && editPlantForm.maxHum.$pristine || (editablePlant.minHum === originalPlant.minHum && editablePlant.maxHum === originalPlant.maxHum)? '' : (editablePlant.minHum < editablePlant.maxHum? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="editablePlant.minHum" name="minHum" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="editablePlant.maxHum" name="maxHum" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="editPlantForm.minHum.$dirty || editPlantForm.maxHum.$dirty" data-ng-hide="editablePlant.minHum === originalPlant.minHum && editablePlant.maxHum === originalPlant.maxHum">
+                                            <span data-ng-show="editablePlant.minHum < editablePlant.maxHum" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="editablePlant.minHum >= editablePlant.maxHum" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Light Intensity (Lux)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="editPlantForm.minLI.$pristine && editPlantForm.maxLI.$pristine || (editablePlant.minLI === originalPlant.minLI && editablePlant.maxLI === originalPlant.maxLI)? '' : (editablePlant.minLI < editablePlant.maxLI? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="editablePlant.minLI" name="minLI" class="form-control" min="0" max="60000">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="editablePlant.maxLI" name="maxLI" class="form-control" min="0" max="60000">
+                                        </div>
+                                        <span data-ng-show="editPlantForm.minLI.$dirty || editPlantForm.maxLI.$dirty" data-ng-hide="editablePlant.minLI === originalPlant.minLI && editablePlant.maxLI === originalPlant.maxLI">
+                                            <span data-ng-show="editablePlant.minLI < editablePlant.maxLI" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="editablePlant.minLI >= editablePlant.maxLI" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Soil Moisture (%)</h5>
+                                    </div>
+                                    <div class="col-xs-12 form-inline" data-ng-class="editPlantForm.minSM.$pristine && editPlantForm.maxSM.$pristine || (editablePlant.minSM === originalPlant.minSM && editablePlant.maxSM === originalPlant.maxSM)? '' : (editablePlant.minSM < editablePlant.maxSM? 'has-success': 'has-error')">
+                                        <div class="form-group">
+                                            <label>Min:</label>
+                                            <input type="number" data-ng-model="editablePlant.minSM" name="minSM" class="form-control" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Max:</label>
+                                            <input type="number" data-ng-model="editablePlant.maxSM" name="maxSM" class="form-control" min="0" max="100">
+                                        </div>
+                                        <span data-ng-show="editPlantForm.minSM.$dirty || editPlantForm.maxSM.$dirty" data-ng-hide="editablePlant.minSM === originalPlant.minSM && editablePlant.maxSM === originalPlant.maxSM">
+                                            <span data-ng-show="editablePlant.minSM < editablePlant.maxSM" class="glyphicon glyphicon-ok form-control-feedback"></span>
+                                            <span data-ng-show="editablePlant.minSM >= editablePlant.maxSM" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!--Auth-->
+                                <br />
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span><strong>Authenticate yourself to save </strong></span>
+                                        <hr style="margin-top:5px;" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Your password</label>
+                                        <input type="password" class="form-control" name="yourPass" data-ng-model="adminPass" autocomplete="new-password" autocorrect="off" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label>Confirm your password</label>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="confirmPass" autocomplete="new-password" autocorrect="off" required>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-if="displayErrors && !displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger">
+                                <strong><span class="glyphicon glyphicon-remove"></span> {{errorMsg.status}}</strong> {{errorMsg.msg}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-if="displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-success">
+                                <strong><span class="glyphicon glyphicon-ok"></span> {{successMsg.status}}</strong> {{successMsg.msg}}
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Details</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Plantation ID</td>
+                                        <td class="col-xs-9">{{editablePlant.plantationID}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Node number</td>
+                                        <td class="col-xs-9">{{editablePlant.nodeNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Name</td>
+                                        <td class="col-xs-10">{{editablePlant.plantName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Description</td>
+                                        <td class="col-xs-9">{{editablePlant.plantDescription}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">No. Of plants</td>
+                                        <td class="col-xs-9">
+                                            <span data-ng-show="editablePlant.numOfPlants.length > 0">{{editablePlant.numOfPlants}}</span>
+                                            <span data-ng-show="editablePlant.numOfPlants.length === 0">Not provided</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br />
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th>Optimum ranges</th>
+                                        <th>Min-Max</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
+                                        <td class="col-xs-9">{{editablePlant.optimumLevels.airTemp}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Humidity (%)</td>
+                                        <td class="col-xs-9">{{editablePlant.optimumLevels.humidity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
+                                        <td class="col-xs-10">{{editablePlant.optimumLevels.lightIntensity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Label col-xs-3">Soil Moisture (%)</td>
+                                        <td class="col-xs-9">{{editablePlant.optimumLevels.soilMoisture}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-warning pull-left" data-ng-click="resetEditPlantForm()" data-ng-if="!displaySuccess"><i class="fa fa-refresh"></i> Reset</button>
+                <button type="button" class="btn btn-warning" data-ng-click="editPlantDetails(editablePlant, adminPass, confirmPass, originalPlant)" data-ng-disabled="editPlantForm.$invalid || editPlantFormCheckIfEqual() || !validateOptimumRange(editablePlant)" data-ng-if="!displaySuccess">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                    <span class="sr-only"></span>Save Edit
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Models for delete plants-->
+<div class="modal fade" id="myDeletePlantModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-ng-if="checkAdmin()">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" data-ng-if="!displaySuccess">Delete {{individualPlantation.plantName}} <small>({{individualPlantation.plantationID}})</small>?</h3>
+                <h3 class="modal-title" data-ng-if="displaySuccess">Deleted {{individualPlantation.plantName}} <small>({{individualPlantation.plantationID}})</small></h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" data-ng-if="displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-success">
+                                <strong><span class="glyphicon glyphicon-ok"></span> {{successMsg.status}}</strong> {{successMsg.msg}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Details</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Plantation ID</td>
+                                <td class="col-xs-9">{{individualPlantation.plantationID}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Node number</td>
+                                <td class="col-xs-9">{{individualPlantation.nodeNumber}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Name</td>
+                                <td class="col-xs-10">{{individualPlantation.plantName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Description</td>
+                                <td class="col-xs-9">{{individualPlantation.plantDescription}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">No. Of plants</td>
+                                <td class="col-xs-9">
+                                    <span data-ng-show="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length === 0">Not provided</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Optimum ranges</th>
+                                <th>Min-Max</th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.airTemp}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Humidity (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.humidity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
+                                <td class="col-xs-10">{{individualPlantation.optimumLevels.lightIntensity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Soil Moisture (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.soilMoisture}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="row" data-ng-show="!displaySuccess">
+                        <div class="col-xs-12">
+                            <span><strong>Authenticate yourself to delete this plantation</strong></span>
+                            <hr style="margin-top:5px;" />
+                        </div>
+                    </div>
+                    <div data-ng-show="!displaySuccess">
+                        <form method="post" name="deletePlantForm">
+                            <div class="row">
+                                <div class="col-xs-12 form-group">
+                                    <label for="plantdelpassword">Password</label>
+                                    <input type="password" class="form-control" placeholder="Password" autocomplete="new-password" autocorrect="off" data-ng-model="adminPass" required>
+                                </div>
+                                <div class="col-xs-12 form-group">
+                                    <label for="plantdelcpassword">Confirm Password</label>
+                                    <input type="password" class="form-control" placeholder="Confirm Password" autocomplete="new-password" autocorrect="off" data-ng-model="confirmPass" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row" data-ng-if="displayErrors && !displaySuccess">
+                        <div class="col-xs-12">
+                            <div class="alert alert-danger">
+                                <strong><span class="glyphicon glyphicon-remove"></span> {{errorMsg.status}}</strong> {{errorMsg.msg}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-ng-click="deletePlant(individualPlantation, adminPass, confirmPass)" data-ng-disabled="deletePlantForm.$invalid" data-ng-if="!displaySuccess">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    <span class="sr-only"></span>Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

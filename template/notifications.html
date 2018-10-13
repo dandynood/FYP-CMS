@@ -1,0 +1,72 @@
+<!--MAIN BODY OF CONTENT-->
+<link href="framework/css/notifications.css" rel="stylesheet">
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="page-header">
+                    CMS Messages
+                    <small>From the administrators</small>
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row" style="padding-bottom: 5px">
+            <div class="col-xs-12 col-md-4 form-group">
+                <label for="date">Date:</label>
+                <div class="input-group">
+                    <input type="text" id="date" class="form-control" uib-datepicker-popup="{{datePicker.format}}" data-ng-model="selectedDate" is-open="datePicker.opened" datepicker-options="datePicker.dateOptions" data-ng-required="true" close-text="Close" data-ng-change="getDateNotf(selectedDate)" placeholder="Select a date" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" data-ng-click="openDatePicker()" style="margin-right: 10px;border-top-right-radius:4px;border-bottom-right-radius: 4px;"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-danger" style="border-top-left-radius:4px;border-bottom-left-radius: 4px;" data-ng-show="selectedDate !== undefined" data-ng-click="clearDatePicker()"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" data-ng-repeat="msg in allNotf.msgs | offset:currentPage*numberOfElements | limitTo: numberOfElements | filter:{date: filterDate}">
+            <div class="col-xs-12" style="padding-bottom: 5px; padding-top: 10px">
+                <div class="media">
+                    <div class="media-left">
+                        <span>
+                            <i class="media-object fa fa-pencil-square-o fa-3x" data-ng-if="msg.type === 'edit'">
+                            </i>
+                            <i class="media-object fa fa-plus fa-3x" data-ng-if="msg.type === 'add'"></i>
+                            <i class="media-object fa fa-trash fa-3x" data-ng-if="msg.type === 'delete'"></i>
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><strong>{{msg.admin}}</strong></h4>
+                        <p class="text-muted"><i class="fa fa-clock-o"></i> {{msg.dateTime | date: 'medium'}}</p>
+                        <p data-ng-if="msg.type !== 'edit'">{{msg.fullMsg}}</p>
+                        <p data-ng-if="msg.type === 'edit'" data-ng-bind-html="msg.fullMsg"></p>
+                    </div>
+                </div>
+                <hr style="margin-top: 10px;"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12" style="text-align: center">
+                <ul class="pagination pagination-lg justify-content-center">
+                    <li data-ng-class="previousPageDisabled()">
+                        <a class="page-link" href="" data-ng-click="previousPage()">Previous</a>
+                    </li>
+                    <li data-ng-repeat="n in range()" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
+                        <a href="">{{n+1}}</a>
+                    </li>
+                    <li data-ng-class="nextPageDisabled()">
+                        <a class="page-link" href="" data-ng-click="nextPage()">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- /#page-wrapper -->

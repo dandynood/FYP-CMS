@@ -67,3 +67,40 @@ soilMoisture varchar(20),
 PRIMARY KEY (plantationID),
 FOREIGN KEY (plantationID) REFERENCES Plantations(plantationID) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Table Notifications
+-- -----------------------------------------------------
+CREATE TABLE NotfMsgs(
+msgID INT NOT NULL auto_increment,
+fullMsg VARCHAR (1000) NOT NULL,
+dateTime TIMESTAMP NOT NULL,
+admin VARCHAR(50) NOT NULL,
+type VARCHAR(15) NOT NULL,
+PRIMARY KEY(msgID)
+);
+
+-- -----------------------------------------------------
+-- Table NotifyUsers
+-- -----------------------------------------------------
+CREATE TABLE NotfUsers(
+msgID INT,
+userID INT NOT NULL,
+ifread TINYINT(1) NOT NULL,
+PRIMARY KEY(msgID, userID),
+FOREIGN KEY (msgID) REFERENCES NotfMsgs(msgID) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY (userID) REFERENCES Users(userID) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Trigger NotifyUsersTrigger
+-- -----------------------------------------------------
+DELIMITER $$
+DROP TRIGGER IF EXISTS notifyuserstrigger $$
+CREATE TRIGGER notifyuserstrigger AFTER INSERT ON notfmsgs
+ FOR EACH ROW BEGIN
+INSERT INTO notfusers (msgID, userID, ifRead)
+    SELECT new.msgID, users.userID, 0
+            FROM users;
+END $$
+DELIMITER ;

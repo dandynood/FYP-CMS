@@ -178,7 +178,7 @@ angular.module('mainApp').component('plantation', {
         //No for loops are required
         self.$onInit = function () {
             $scope.plant = angular.copy(self.plantation);
-            //since there is only plantation selected, we just simply put the optimum levels like so
+            //since there is only plantation selected, we just simply append the optimum levels like so
             $scope.plant.optimumLevels = angular.copy(self.optimumLevels);
 
             //extract the conditions and place them in seperate attributes for each parameter for ease of access and use

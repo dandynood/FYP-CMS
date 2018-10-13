@@ -12,93 +12,73 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" data-ui-sref="dashboard.home"><strong>Crop Management System</strong></a>
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li class="dropdown">
-                <a href="/#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                <a href="/#" class="dropdown-toggle" data-toggle="dropdown" data-ng-click="removeRecentNotf()"><i class="fa fa-envelope"></i> <span class="badge" style="background-color: red;" data-ng-if="recentNotfLength !== 0">{{recentNotfLength}}</span><b class="caret"></b>
+                </a>
                 <ul class="dropdown-menu message-dropdown">
-                    <li class="message-preview">
-                        <a href="#">
+                    <li class="message-preview" data-ng-repeat="msg in recentNotf">
+                        <a>
                             <div class="media">
-                                <span class="pull-left">
-                                            <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                        </span>
+                                <div class="pull-left">
+                                    <span>
+                                        <i class="media-object fa fa-pencil-square-o fa-3x" data-ng-if="msg.type === 'edit'">
+                                        </i>
+                                        <i class="media-object fa fa-plus fa-3x" data-ng-if="msg.type === 'add'"></i>
+                                        <i class="media-object fa fa-trash fa-3x" data-ng-if="msg.type === 'delete'"></i>
+                                    </span>
+                                </div>
                                 <div class="media-body">
-                                    <h5 class="media-heading">
-                                        <strong>John Smith</strong>
-                                    </h5>
-                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <h4 class="media-heading"><strong>{{msg.admin}}</strong></h4>
+                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> {{msg.datetime | date: 'medium'}}</p>
+                                    <p data-ng-if="msg.type !== 'edit'">{{msg.fullmsg}}</p>
+                                    <p data-ng-if="msg.type === 'edit'">{{formatEditMsg(msg.fullmsg)}}</p>
                                 </div>
                             </div>
                         </a>
                     </li>
-                    <li class="message-preview">
-                        <a href="#">
+                    <li class="message-preview" data-ng-if="recentNotf === undefined">
+                        <a>
                             <div class="media">
-                                <span class="pull-left">
-                                            <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                        </span>
-                                <div class="media-body">
-                                    <h5 class="media-heading">
-                                        <strong>John Smith</strong>
-                                    </h5>
-                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                <div class="pull-left">
+                                    <span>
+                                        <i class="media-object fa fa-envelope-open-o fa-3x">
+                                        </i>
+                                    </span>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="message-preview">
-                        <a href="#">
-                            <div class="media">
-                                <span class="pull-left">
-                                            <img class="media-object" src="http://placehold.it/50x50" alt="">
-                                        </span>
                                 <div class="media-body">
-                                    <h5 class="media-heading">
-                                        <strong>John Smith</strong>
-                                    </h5>
-                                    <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
-                                    <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    <h4 class="media-heading"><strong>No new messages</strong></h4>
+                                    <p>All messages have been read or there's no changes so far for today</p>
                                 </div>
                             </div>
                         </a>
                     </li>
                     <li class="message-footer">
-                        <a href="#">Read All New Messages</a>
+                        <a data-ui-sref="dashboard.notf">Read All New Messages</a>
                     </li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a href="/#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
                 <ul class="dropdown-menu alert-dropdown">
-                    <li>
-                        <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                    <li data-ng-repeat="alert in operationalAlerts">
+                        <a href="#">
+                            <p style="margin-bottom: 6px;"><strong>{{alert.plantName}} ({{alert.plantID}})</strong></p>
+                            <p style="margin-bottom: 6px;" data-ng-if="alert.tempStatus"><span class="label" data-ng-class="{'label-danger': alert.tempStatus==='High', 'label-info':alert.tempStatus==='Low'}"><i class="fa fa-lg fa-angle-double-up" aria-hidden="true"></i> {{alert.tempReading}} Temperature</span></p>
+                            <p style="margin-bottom: 6px;" data-ng-if="alert.humidityStatus"><span class="label" data-ng-class="{'label-danger': alert.humidityStatus==='High', 'label-info':alert.humidityStatus==='Low'}" style="margin-bottom: 10px"><i class="fa fa-lg fa-angle-double-up" aria-hidden="true"></i> {{alert.humidityReading}} Humidity</span></p>
+                            <p style="margin-bottom: 6px;" data-ng-if="alert.LIStatus"><span class="label" data-ng-class="{'label-danger': alert.LIStatus==='High', 'label-info':alert.LIStatus==='Low'}" style="margin-bottom: 10px"><i class="fa fa-lg fa-angle-double-up" aria-hidden="true"></i> {{alert.LIReading}} Light Intensity</span></p>
+                            <p style="margin-bottom: 6px;" data-ng-if="alert.SMStatus"><span class="label" data-ng-class="{'label-danger': alert.SMStatus==='High', 'label-info':alert.SMStatus==='Low'}" style="margin-bottom: 10px"><i class="fa fa-lg fa-angle-double-up" aria-hidden="true"></i> {{alert.SMReading}} Soil Moisture</span></p>
+                        </a>
+                        <p class="divider"></p>
                     </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-                    </li>
-                    <li class="divider"></li>
                     <li>
                         <a href="#">View All</a>
                     </li>
@@ -111,11 +91,11 @@
                 <a href="/#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{user.username}}<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="javascript:"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        <a href="javascript:" data-target="#myUserProfileModal" data-toggle="modal"><i class="fa fa-fw fa-user"></i> Profile</a>
                     </li>
-                    <!--<li>
-                        <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                    </li>-->
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-home"></i> Home</a>
+                    </li>
                     <li>
                         <a href="javascript:"><i class="fa fa-fw fa-gear"></i> Settings</a>
                     </li>
@@ -134,25 +114,20 @@
                     <p id="timeSmall" style="">{{clock | date:'medium'}}</p>
                 </li>
                 <li data-ui-sref-active="active">
-                    <a data-ui-sref="dashboard.home"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    <a data-ui-sref="dashboard.home"><i class="fa fa-fw fa-dashboard"></i> <span>Dashboard</span></a>
                 </li>
-                <li data-ui-sref-active="{'active': 'dashboard.plantation'}">
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-bar-chart"></i> Plantations</a>
-                    <ul id="demo" class="collapse">
-                        <li data-ng-repeat="plant in model.plantations" data-ui-sref-active="active">
-                            <a data-ui-sref="dashboard.plantation({plantationID: plant.plantationID})">{{plant.plantName}} <small>({{plant.plantationID}})</small></a>
-                        </li>
-                    </ul>
+                <li data-ui-sref-active="active">
+                    <a data-ui-sref="dashboard.plantSelect"><i class="fa fa-fw fa-leaf"></i> <span>Plantations</span></a>
                 </li>
-                <li data-ui-sref-active="active" data-ng-if="checkAdmin()">
-                    <a data-ui-sref="dashboard.admin"><i class="fa fa-fw fa-gears"></i> Administrator</a>
-                </li>
+                <!--<li data-ui-sref-active="active" data-ng-if="checkAdmin()">
+                    <a data-ui-sref="dashboard.admin"><i class="fa fa-fw fa-gears"></i> <span>Administrator</span></a>
+                </li>-->
 
                 <li data-ui-sref-active="active">
-                    <a data-ui-sref="dashboard.monthlySummary"><i class="fa fa-fw fa-book"></i> Monthly Summary</a>
+                    <a data-ui-sref="dashboard.monthlySummary"><i class="fa fa-fw fa-book"></i> <span>Monthly Summary</span></a>
                 </li>
                 <li data-ui-sref-active="active">
-                    <a data-ui-sref="dashboard.yields"><i class="fa fa-fw fa-shopping-basket"></i> Monthly Yields</a>
+                    <a data-ui-sref="dashboard.yields"><i class="fa fa-fw fa-shopping-basket"></i> <span>Monthly Yields</span></a>
                 </li>
             </ul>
         </div>
@@ -175,3 +150,64 @@
 
 </div>
 <!-- /#wrapper -->
+
+<!--Models for view users-->
+<div class="modal fade" id="myUserProfileModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="UserProfile">My Profile</h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Details</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">User ID</td>
+                                <td class="col-xs-9">{{user.userID}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Username</td>
+                                <td class="col-xs-9">{{user.username}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">First Name</td>
+                                <td class="col-xs-9">{{user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Last Name</td>
+                                <td class="col-xs-9">{{user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Phone Number</td>
+                                <td class="col-xs-9">
+                                    <span data-ng-show="user.phoneNumber.length > 0">{{user.phoneNumber}}</span>
+                                    <span data-ng-show="user.phoneNumber.length === 0">Not available</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Email</td>
+                                <td class="col-xs-9">
+                                    <span data-ng-show="user.email.length > 0">{{user.email}}</span>
+                                    <span data-ng-show="user.email.length === 0">Not available</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Role Type</td>
+                                <td class="col-xs-9">{{user.roleType}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

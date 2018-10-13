@@ -3,7 +3,7 @@
 /*jslint plusplus:true*/
 
 /*define mainApp name*/
-var mainApp = angular.module('mainApp', ["ui.router", "ngStorage", "chart.js", "ngAnimate", "ngTouch", "ui.bootstrap"]);
+var mainApp = angular.module('mainApp', ["ui.router", "ngStorage", "chart.js", "ngAnimate", "ngTouch", "ui.bootstrap","ngSanitize"]);
 /*these are the routing configuration settings*/
 mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -45,6 +45,9 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 optimumLevels: function (plantations, optimumLevelsService) {
                     return optimumLevelsService.getAllOptimumLevels(plantations);
                 },
+                recentNotf: function (notificationService){
+                    return notificationService.getRecentNavNotifications();
+                },
                 test: function (plantationService) {
                     return plantationService.test();
                 }
@@ -68,8 +71,23 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
             }
         },
         {
+            name: 'dashboard.plantSelect',
+            url: '/plantations',
+            component: 'plantSelect',
+            data: {
+                roles: ['Normal','Admin']
+            },
+            resolve: {
+                //gets both plantation and the optimum levels for edit
+                plantationsList: function (optimumLevels) {
+                    return optimumLevels;
+                }
+            }
+            
+        },
+        {
             name: 'dashboard.plantation',
-            url: '/{plantationID}',
+            url: '/plantations/{plantationID}',
             component: 'plantation',
             data: {
                 roles: ['Normal', 'Admin']
@@ -143,6 +161,19 @@ mainApp.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider
                 },
                 optimumLevels: function (optimumLevels) {
                     return optimumLevels;
+                }
+            }
+        },
+        {
+            name: 'dashboard.notf',
+            url: '/messages',
+            component: 'notifications',
+            data: {
+                roles: ['Normal','Admin']
+            },
+            resolve: {
+                allNotifications: function(notificationService){
+                    return notificationService.getAllNotifications();
                 }
             }
         }

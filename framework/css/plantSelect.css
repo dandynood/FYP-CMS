@@ -1,0 +1,22 @@
+.plantThumbnail {
+    height: 150px;
+    width: 100%;
+    display: block;
+    background-color: lightgrey;
+    line-height: 150px;
+    text-align: center
+}
+
+.plantThumbnail > a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    -webkit-transition: background-color 0.25s ease-out;
+    -moz-transition: background-color 0.25s ease-out;
+    -o-transition: background-color 0.25s ease-out;
+    transition: background-color 0.25s ease-out;
+}
+
+.plantThumbnail > a:hover {
+    background-color: darkgrey;
+}

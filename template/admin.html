@@ -1,5 +1,4 @@
 <!--Template's CSS (can edit)-->
-<link href="framework/css/sb-admin.css" rel="stylesheet">
 <link href="framework/css/admin.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
@@ -59,7 +58,7 @@
                             <th></th>
                             <th></th>
                         </tr>
-                        <tr data-ng-repeat="user in users">
+                        <tr data-ng-repeat="user in users track by user.userID">
                             <td>{{user.username}}</td>
                             <td>{{user.firstName}} {{user.lastName}}
                             </td>
@@ -113,7 +112,7 @@
                             <th> </th>
                             <th> </th>
                         </tr>
-                        <tr data-ng-repeat="plant in plantations">
+                        <tr data-ng-repeat="plant in plantations track by plant.plantationID">
                             <td>{{plant.plantationID}}</td>
                             <td>{{plant.plantName}}</td>
                             <td class="set-border">
@@ -179,15 +178,15 @@
                             <tr>
                                 <td class="Label col-xs-3">Phone Number</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualUser.phoneNumber.length > 0">{{individualUser.phoneNumber}}</span>
-                                    <span data-ng-if="individualUser.phoneNumber.length === 0">Not available</span>
+                                    <span data-ng-show="individualUser.phoneNumber.length > 0">{{individualUser.phoneNumber}}</span>
+                                    <span data-ng-show="individualUser.phoneNumber.length === 0">Not available</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="Label col-xs-3">Email</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualUser.email.length > 0">{{individualUser.email}}</span>
-                                    <span data-ng-if="individualUser.email.length === 0">Not available</span>
+                                    <span data-ng-show="individualUser.email.length > 0">{{individualUser.email}}</span>
+                                    <span data-ng-show="individualUser.email.length === 0">Not available</span>
                                 </td>
                             </tr>
                             <tr>
@@ -244,15 +243,8 @@
                             <tr>
                                 <td class="Label col-xs-3">No. Of plants</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
-                                    <span data-ng-if="individualPlantation.numOfPlants.length === 0">Not provided</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="Label col-xs-3"></td>
-                                <td class="col-xs-9">
-                                    <span data-ng-if="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
-                                    <span data-ng-if="individualPlantation.numOfPlants.length === 0">Not provided</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length === 0">Not provided</span>
                                 </td>
                             </tr>
                         </table>
@@ -409,7 +401,7 @@
                                 <div class="form-group row">
                                     <div class="col-xs-12">
                                         <label>Confirm your password</label>
-                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="newUser.confirmPass" data-ng-model-options="{updateOn:'blur'}" autocomplete="new-password" autocorrect="off" required>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="newUser.confirmPass" autocomplete="new-password" autocorrect="off" required>
                                     </div>
                                 </div>
                             </form>
@@ -452,15 +444,15 @@
                                     <tr>
                                         <td class="Label col-xs-3">Phone Number</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="resultNewUser.phoneNumber.length > 0">{{resultNewUser.phoneNumber}}</span>
-                                            <span data-ng-if="resultNewUser.phoneNumber.length === 0">Not available</span>
+                                            <span data-ng-show="resultNewUser.phoneNumber.length > 0">{{resultNewUser.phoneNumber}}</span>
+                                            <span data-ng-show="resultNewUser.phoneNumber.length === 0">Not available</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Email</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="resultNewUser.email.length > 0">{{resultNewUser.email}}</span>
-                                            <span data-ng-if="resultNewUser.email.length === 0">Not available</span>
+                                            <span data-ng-show="resultNewUser.email.length > 0">{{resultNewUser.email}}</span>
+                                            <span data-ng-show="resultNewUser.email.length === 0">Not available</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -655,7 +647,7 @@
                                 <div class="form-group row">
                                     <div class="col-xs-12">
                                         <label>Confirm your password</label>
-                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="newPlant.confirmPass" data-ng-model-options="{updateOn:'blur'}" autocomplete="new-password" autocorrect="off" required>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="newPlant.confirmPass" autocomplete="new-password" autocorrect="off" required>
                                     </div>
                                 </div>
                             </form>
@@ -698,8 +690,8 @@
                                     <tr>
                                         <td class="Label col-xs-3">No. Of plants</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="resultNewPlant.numOfPlants.length > 0">{{resultNewPlant.numOfPlants}}</span>
-                                            <span data-ng-if="resultNewPlant.numOfPlants.length === 0">Not provided</span>
+                                            <span data-ng-show="resultNewPlant.numOfPlants.length > 0">{{resultNewPlant.numOfPlants}}</span>
+                                            <span data-ng-show="resultNewPlant.numOfPlants.length === 0">Not provided</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -713,19 +705,19 @@
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
-                                        <td class="col-xs-9">{{resultNewPlant.optimumLevels.airTemp}}</td>
+                                        <td class="col-xs-9">{{resultNewPlant.airTemp}}</td>
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Humidity (%)</td>
-                                        <td class="col-xs-9">{{resultNewPlant.optimumLevels.humidity}}</td>
+                                        <td class="col-xs-9">{{resultNewPlant.humidity}}</td>
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
-                                        <td class="col-xs-10">{{resultNewPlant.optimumLevels.lightIntensity}}</td>
+                                        <td class="col-xs-10">{{resultNewPlant.lightIntensity}}</td>
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Soil Moisture (%)</td>
-                                        <td class="col-xs-9">{{resultNewPlant.optimumLevels.soilMoisture}}</td>
+                                        <td class="col-xs-9">{{resultNewPlant.soilMoisture}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -841,7 +833,7 @@
                                 <div class="form-group row">
                                     <div class="col-xs-12">
                                         <label>Confirm your password</label>
-                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="confirmPass" data-ng-model-options="{updateOn:'blur'}" autocomplete="new-password" autocorrect="off" required>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="confirmPass" autocomplete="new-password" autocorrect="off" required>
                                     </div>
                                 </div>
                             </form>
@@ -880,15 +872,15 @@
                                     <tr>
                                         <td class="Label col-xs-3">Phone Number</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="editableDetails.phoneNumber.length > 0">{{editableDetails.phoneNumber}}</span>
-                                            <span data-ng-if="editableDetails.phoneNumber.length === 0">Not available</span>
+                                            <span data-ng-show="editableDetails.phoneNumber.length > 0">{{editableDetails.phoneNumber}}</span>
+                                            <span data-ng-show="editableDetails.phoneNumber.length === 0">Not available</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="Label col-xs-3">Email</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="editableDetails.email.length > 0">{{editableDetails.email}}</span>
-                                            <span data-ng-if="editableDetails.email.length === 0">Not available</span>
+                                            <span data-ng-show="editableDetails.email.length > 0">{{editableDetails.email}}</span>
+                                            <span data-ng-show="editableDetails.email.length === 0">Not available</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1169,7 +1161,7 @@
                                 <div class="form-group row">
                                     <div class="col-xs-12">
                                         <label>Confirm your password</label>
-                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="confirmPass" data-ng-model-options="{updateOn:'blur'}" autocomplete="new-password" autocorrect="off" required>
+                                        <input type="password" class="form-control" name="yourConfirmPass" data-ng-model="confirmPass" autocomplete="new-password" autocorrect="off" required>
                                     </div>
                                 </div>
                             </form>
@@ -1212,8 +1204,8 @@
                                     <tr>
                                         <td class="Label col-xs-3">No. Of plants</td>
                                         <td class="col-xs-9">
-                                            <span data-ng-if="editablePlant.numOfPlants.length > 0">{{editablePlant.numOfPlants}}</span>
-                                            <span data-ng-if="editablePlant.numOfPlants.length === 0">Not provided</span>
+                                            <span data-ng-show="editablePlant.numOfPlants.length > 0">{{editablePlant.numOfPlants}}</span>
+                                            <span data-ng-show="editablePlant.numOfPlants.length === 0">Not provided</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -1249,7 +1241,7 @@
             </div>
             <div class="modal-footer">
                 <button type="reset" class="btn btn-warning pull-left" data-ng-click="resetEditPlantForm()" data-ng-if="!displaySuccess"><i class="fa fa-refresh"></i> Reset</button>
-                <button type="button" class="btn btn-warning" data-ng-click="editPlantDetails(editablePlant,adminPass,confirmPass,originalPlant.plantationID)" data-ng-disabled="editPlantForm.$invalid || editPlantFormCheckIfEqual() || !validateOptimumRange(editablePlant)" data-ng-if="!displaySuccess">
+                <button type="button" class="btn btn-warning" data-ng-click="editPlantDetails(editablePlant, adminPass, confirmPass, originalPlant)" data-ng-disabled="editPlantForm.$invalid || editPlantFormCheckIfEqual() || !validateOptimumRange(editablePlant)" data-ng-if="!displaySuccess">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     <span class="sr-only"></span>Save Edit
                 </button>
@@ -1302,15 +1294,15 @@
                             <tr>
                                 <td class="Label col-xs-3">Phone Number</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualUser.phoneNumber.length > 0">{{individualUser.phoneNumber}}</span>
-                                    <span data-ng-if="individualUser.phoneNumber.length === 0">Not available</span>
+                                    <span data-ng-show="individualUser.phoneNumber.length > 0">{{individualUser.phoneNumber}}</span>
+                                    <span data-ng-show="individualUser.phoneNumber.length === 0">Not available</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="Label col-xs-3">Email</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualUser.email.length > 0">{{individualUser.email}}</span>
-                                    <span data-ng-if="individualUser.email.length === 0">Not available</span>
+                                    <span data-ng-show="individualUser.email.length > 0">{{individualUser.email}}</span>
+                                    <span data-ng-show="individualUser.email.length === 0">Not available</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1320,7 +1312,7 @@
                         </table>
                     </div>
                     <br/>
-                    <div class="row" data-ng-if="!displaySuccess">
+                    <div class="row" data-ng-show="!displaySuccess">
                         <div class="col-xs-12">
                             <span><strong>Authenticate yourself to delete this user</strong></span>
                             <hr style="margin-top:5px;" />
@@ -1402,14 +1394,39 @@
                             <tr>
                                 <td class="Label col-xs-3">No. Of plants</td>
                                 <td class="col-xs-9">
-                                    <span data-ng-if="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
-                                    <span data-ng-if="individualPlantation.numOfPlants.length === 0">Not provided</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length > 0">{{individualPlantation.numOfPlants}}</span>
+                                    <span data-ng-show="individualPlantation.numOfPlants.length === 0">Not provided</span>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <br/>
-                    <div class="row" data-ng-if="!displaySuccess">
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Optimum ranges</th>
+                                <th>Min-Max</th>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Air Temperature (&#8451;)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.airTemp}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Humidity (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.humidity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Lignt Intensity (Lux)</td>
+                                <td class="col-xs-10">{{individualPlantation.optimumLevels.lightIntensity}}</td>
+                            </tr>
+                            <tr>
+                                <td class="Label col-xs-3">Soil Moisture (%)</td>
+                                <td class="col-xs-9">{{individualPlantation.optimumLevels.soilMoisture}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br />
+                    <div class="row" data-ng-show="!displaySuccess">
                         <div class="col-xs-12">
                             <span><strong>Authenticate yourself to delete this plantation</strong></span>
                             <hr style="margin-top:5px;" />
@@ -1420,11 +1437,11 @@
                             <div class="row">
                                 <div class="col-xs-12 form-group">
                                     <label for="plantdelpassword">Password</label>
-                                    <input type="password" class="form-control" id="plantdelpassword" placeholder="Password" autocomplete="new-password" autocorrect="off" data-ng-model="adminPass" required>
+                                    <input type="password" class="form-control" placeholder="Password" autocomplete="new-password" autocorrect="off" data-ng-model="adminPass" required>
                                 </div>
                                 <div class="col-xs-12 form-group">
                                     <label for="plantdelcpassword">Confirm Password</label>
-                                    <input type="password" class="form-control" id="plantdelcpassword" placeholder="Confirm Password" autocomplete="new-password" autocorrect="off" data-ng-model="confirmPass" required>
+                                    <input type="password" class="form-control" placeholder="Confirm Password" autocomplete="new-password" autocorrect="off" data-ng-model="confirmPass" required>
                                 </div>
                             </div>
                         </form>
@@ -1439,7 +1456,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-ng-click="deletePlant(individualPlantation.plantationID,adminPass,confirmPass,individualPlantation)" data-ng-disabled="deletePlantForm.$invalid" data-ng-if="!displaySuccess">
+                <button type="button" class="btn btn-danger" data-ng-click="deletePlant(individualPlantation, adminPass, confirmPass)" data-ng-disabled="deletePlantForm.$invalid" data-ng-if="!displaySuccess">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                     <span class="sr-only"></span>Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

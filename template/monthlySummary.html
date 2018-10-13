@@ -8,7 +8,7 @@
             <div class="col-xs-12">
                 <h1 class="page-header">
                     Monthly Summary
-                    <small>Average conditions in the month</small>
+                    <!--<small>Average conditions in the month</small>-->
                     <div class="dropdown export-dropdown pull-right">
                         <button class="btn btn-success export-btn" style="border-radius: 15px;" data-toggle="dropdown"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel <span class="caret"></span></button>
                         <ul class="dropdown-menu" aria-labelledby="dLabel">
@@ -19,14 +19,6 @@
                 </h1>
             </div>
             <div class="col-xs-12">
-                <ol class="breadcrumb" style="font-size: 1.1em">
-                    <li>
-                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
-                    </li>
-                    <li class="active">
-                        <i class="fa fa-fw fa-book"></i> Monthly Summary
-                    </li>
-                </ol>
             </div>
         </div>
         <!-- /.row -->
@@ -52,7 +44,7 @@
                 </div>
             </div>
             <div class="col-xs-12 table-responsive">
-                <h3><span data-ng-if="comparisonType==='Normal'">Month's average</span><span data-ng-if="comparisonType==='Past'">Past month's average</span> vs. optimum levels</h3>
+                <h3>{{selectedDate | date:'MMM yyyy'}} average vs. optimum levels</h3>
                 <table class="table table-hover table-bordered">
                     <tr>
                         <th>Name</th>
@@ -142,6 +134,17 @@
                                 <canvas id="soilMoisture" class="chart chart-line" chart-data="plantLevel.soilMoisture" chart-series="soilMoistureLabels" chart-options="soilMoistureOptions" chart-colors="soilMoistureColors" chart-dataset-override="soilMoistureDatasetOverride"></canvas>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row" data-ng-if="plantLevel.monthlySummary.length == 0">
+                    <div class="col-xs-12">
+                        <div class="alert alert-warning">
+                            <strong><i class="fa fa-times"></i> No data available!</strong>
+                            It seems there is no data at all recorded yet from the node or sensors for this plantation. <br/>If this is unexpected please check the node if it's in operational condition.
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
                     </div>
                 </div>
             </div>

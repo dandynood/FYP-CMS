@@ -135,7 +135,9 @@ angular.module('mainApp').component('monthlySummary', {
             }
 
             for (i = 0; i < conditions.length; i++) {
+                console.log(conditions[i].avgAirTemp);
                 if (conditions[i].avgAirTemp !== null) {
+                    console.log("hello");
                     airTemp = airTemp + (+conditions[i].avgAirTemp);
                 } else {
                     reduceCountAT++;

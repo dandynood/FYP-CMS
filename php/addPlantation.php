@@ -19,6 +19,7 @@
 
         $adminPass = urldecode($data->adminPass);
         $adminID = urldecode($data->adminID);
+        $adminUserName = urldecode($data->adminUserName);
             
         $adminPass = hash('sha256',$adminPass);
 
@@ -45,6 +46,15 @@
 
                 if($conn->affected_rows > 0)
                 {
+                    $notfmsg = 'added a new plantation, '.$plantName.' ('. $plantID.').';
+                    
+                    $sqlMsg = "INSERT INTO notfmsgs 
+                    (fullMsg, admin, type)
+                    VALUES
+                    ('$notfmsg','$adminUserName', 'add')";
+                    
+                    $saveMsg = $conn->query($sqlMsg);
+                    
                     echo 'success';
                 }
                 else

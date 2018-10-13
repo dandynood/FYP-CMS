@@ -50,14 +50,14 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
                     } else if (response.data === "success") {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
-                    } else if (response.data === "non-unique"){
+                    } else if (response.data === "non-unique") {
                         msg = "non-unique";
                     }
                     return msg;
@@ -84,7 +84,7 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
                     } else if (response.data === "success") {
@@ -96,21 +96,24 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                 });
         },
 
-        editPlantationDetails: function (details, adminID, adminPass, originalPlantID) {
+        editPlantationDetails: function (details, admin, adminPass, originalPlantID, originalPlantName, notfmsg) {
             var msg,
                 str = {
                     plantID: encodeURIComponent(details.plantationID),
                     originalPlantID: encodeURIComponent(originalPlantID),
                     nodeID: encodeURIComponent(details.nodeNumber),
                     plantName: encodeURIComponent(details.plantName),
+                    originalPlantName: encodeURIComponent(originalPlantName),
                     plantDescription: encodeURIComponent(details.plantDescription),
                     numOfPlants: encodeURIComponent(details.numOfPlants),
-                    airTemp: encodeURIComponent(details.airTemp),
-                    humidity: encodeURIComponent(details.humidity),
-                    lightIntensity: encodeURIComponent(details.lightIntensity),
-                    soilMoisture: encodeURIComponent(details.soilMoisture),
+                    airTemp: encodeURIComponent(details.optimumLevels.airTemp),
+                    humidity: encodeURIComponent(details.optimumLevels.humidity),
+                    lightIntensity: encodeURIComponent(details.optimumLevels.lightIntensity),
+                    soilMoisture: encodeURIComponent(details.optimumLevels.soilMoisture),
                     adminPass: encodeURIComponent(adminPass),
-                    adminID: encodeURIComponent(adminID)
+                    adminID: encodeURIComponent(admin.userID),
+                    adminUserName: encodeURIComponent(admin.username),
+                    notfmsg: encodeURIComponent(notfmsg)
                 };
 
             return $http({
@@ -122,14 +125,14 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
                     } else if (response.data === "success") {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
-                    } else if (response.data === "non-unique"){
+                    } else if (response.data === "non-unique") {
                         msg = "non-unique";
                     }
                     return msg;
@@ -166,7 +169,7 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
-                    } else if (response.data === "non-unique"){
+                    } else if (response.data === "non-unique") {
                         msg = "non-unique";
                     }
                     return msg;
@@ -174,7 +177,8 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
 
         },
 
-        addNewPlantation: function (newPlantation, adminID) {
+        //test this
+        addNewPlantation: function (newPlantation, admin) {
             var msg,
                 str = {
                     plantID: encodeURIComponent(newPlantation.plantationID),
@@ -187,9 +191,12 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     lightIntensity: encodeURIComponent(newPlantation.lightIntensity),
                     soilMoisture: encodeURIComponent(newPlantation.soilMoisture),
                     adminPass: encodeURIComponent(newPlantation.adminPass),
-                    adminID: encodeURIComponent(adminID)
+                    adminID: encodeURIComponent(admin.userID),
+                    adminUserName: encodeURIComponent(admin.username)
                 };
-
+            
+            //console.log(str);
+            
             return $http({
                     method: 'POST',
                     url: 'php/addPlantation.php',
@@ -206,7 +213,7 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                         msg = "success";
                     } else if (response.data === "unauthorized") {
                         msg = "unauthorized";
-                    } else if (response.data === "non-unique"){
+                    } else if (response.data === "non-unique") {
                         msg = "non-unique";
                     }
                     return msg;
@@ -243,12 +250,15 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
 
         },
 
-        deletePlantation: function (plantID, adminID, adminPass) {
+        //test this
+        deletePlantation: function (plantID, plantName, admin, adminPass) {
             var msg,
                 str = {
                     plantID: encodeURIComponent(plantID),
-                    adminID: encodeURIComponent(adminID),
-                    adminPass: encodeURIComponent(adminPass)
+                    plantName: encodeURIComponent(plantName),
+                    adminPass: encodeURIComponent(adminPass),
+                    adminID: encodeURIComponent(admin.userID),
+                    adminUserName: encodeURIComponent(admin.username)
                 };
 
             return $http({
@@ -260,7 +270,7 @@ angular.module('mainApp').factory('adminService', function ($http, $q) {
                     }
                 })
                 .then(function (response) {
-                    //console.log(response.data);
+                    console.log(response.data);
                     if (response.data === "failed") {
                         msg = "failed";
                     } else if (response.data === "success") {
