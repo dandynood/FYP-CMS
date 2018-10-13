@@ -8,10 +8,12 @@
         $data = json_decode(file_get_contents("php://input")); 
         $plantID = urldecode($data->plantID);
         $originalPlantID = urldecode($data->originalPlantID);
+        $originalPlantName = urldecode($data->originalPlantName);
         $nodeID = urldecode($data->nodeID);
         $plantName = urldecode($data->plantName);
         $plantDesc = urldecode($data->plantDescription);
         $numOfPlants = urldecode($data->numOfPlants);
+        $notfmsg = urldecode($data->notfmsg);
 
         $airTemp = urldecode($data->airTemp);
         $humidity = urldecode($data->humidity);
@@ -20,6 +22,7 @@
 
         $adminPass = urldecode($data->adminPass);
         $adminID = urldecode($data->adminID);
+        $adminUserName = urldecode($data->adminUserName);
 
         $adminPass = hash('sha256',$adminPass);
 
@@ -50,6 +53,13 @@
 
                     if($conn->affected_rows >= 0)
                     {
+                        $sqlMsg = "INSERT INTO notfmsgs 
+                        (fullMsg, admin, type)
+                        VALUES
+                        ('$notfmsg','$adminUserName', 'edit')";
+                        
+                        $saveMsg = $conn->query($sqlMsg);
+                        
                         echo 'success';
                     }
                     else

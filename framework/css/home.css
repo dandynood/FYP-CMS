@@ -6,7 +6,7 @@
     background-color: lightgrey;
     height: 25px;
     position: absolute;
-    width: calc(100% - 225px);
+    width: calc(100% - 120px);
 }
 
 #timeNormal {
@@ -31,6 +31,10 @@
     margin: 0
 }
 
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: lightgreen;
+}
+
 @media(max-width: 1100px) {
     .export-btn {
         float: none !important;
@@ -48,11 +52,11 @@
     .export-btn {
         float: none !important;
     }
-    
+
     .table-responsive {
         overflow: auto !important;
     }
-    
+
     .table-responsive .dropdown-menu {
         position: relative !important;
     }
@@ -72,8 +76,8 @@
     }
 }
 
-.pull-right>.dropdown-menu{
-    right:inherit !important;
+.pull-right > .dropdown-menu {
+    right: inherit !important;
 }
 
 .side-nav {
@@ -104,6 +108,42 @@
     display: none;
 }
 
-.fill-empty{
+.fill-empty {
     height: 45vh;
+}
+
+.navbar-collapse {
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+/*modify the side nav sizing/style below*/
+@media (min-width: 768px) {
+    #wrapper {
+        padding-left: 120px !important;
+    }
+
+    .side-nav {
+        width: 120px !important;
+        margin-left: -120px !important;
+        left: 120px !important;
+        box-shadow: 4px 0px 8px 0px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .side-nav > li {
+        width: inherit !important;
+    }
+
+    .side-nav > li > a {
+        width: inherit !important;
+    }
+
+    .side-nav > li > a > .fa {
+        font-size: 2em;
+        padding-bottom: 5px;
+    }
+
+    .side-nav > li > a > span {
+        display: block;
+    }
 }

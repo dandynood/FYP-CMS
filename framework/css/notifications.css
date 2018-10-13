@@ -1,0 +1,20 @@
+.fa-plus,
+.fa-trash {
+    padding-left: 13px;
+    padding-right: 17px;
+}
+
+.fa-pencil-square-o {
+    padding-right: 8px;
+    padding-left: 13px;
+}
+
+.uib-day button:enabled {
+    background-color: #337ab7;
+    border-color: #337ab7;
+    color: white !important;
+}
+
+.uib-day button:enabled > .text-muted {
+    color: white !important;
+}

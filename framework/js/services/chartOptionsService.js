@@ -66,8 +66,9 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                         display: true,
                         labels: {
                             fontSize: 15,
-                            padding: 25
-                        }
+                            padding: 20
+                        },
+                        position: 'bottom'
                     },
                     plugins: {
                         deferred: {
@@ -81,7 +82,9 @@ angular.module('mainApp').factory('chartOptionsService', function () {
                         padding: {
                             top: -10
                         }
-                    }
+                    },
+                    responsive: true
+                    //maintainAspectRatio: false
                 }
             },
             {

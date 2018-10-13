@@ -9,15 +9,16 @@
         $data = json_decode(file_get_contents("php://input")); 
         $userID = urldecode($data->userID);
 
-        $sql = "SELECT userID,username,firstName,lastName,phoneNumber,email,roleType FROM users WHERE userID = '$userID'";
+        $sql = "DELETE FROM notfusers mu
+                WHERE mu.userID = '$userID' AND mu.ifread = 0";
 
+        $sql2 = "UPDATE notfusers SET ifread = 1 WHERE userID = '$userID'";
 
-        $result = $conn->query($sql);
+        $result = $conn->query($sql2);
 
-        if($result->num_rows > 0){
-            while($row = $result->fetch_assoc()){
-                echo json_encode($row);
-            }
+        if($conn->affected_rows > 0)
+        {
+            echo 'success';
         }
         else
         {

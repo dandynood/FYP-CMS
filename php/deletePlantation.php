@@ -8,8 +8,10 @@
     }         
         $data = json_decode(file_get_contents("php://input"));
         $plantID = urldecode($data->plantID);
+        $plantName = urldecode($data->plantName);
         $adminPass = urldecode($data->adminPass);
         $adminID = urldecode($data->adminID);
+        $adminUserName = urldecode($data->adminUserName);
             
         $adminPass = hash('sha256',$adminPass);
         $auth = "SELECT userID FROM users WHERE userID = '$adminID' AND password = '$adminPass'";
@@ -24,6 +26,12 @@
             if($conn->affected_rows > 0)
             {
                 echo 'success';
+                
+                $notfmsg = 'deleted a plantation, '.$plantName.' ('. $plantID.').';
+                    
+                $sqlMsg = "INSERT INTO notfmsgs (fullMsg, admin, type) VALUES ('$notfmsg','$adminUserName','delete')";
+                    
+                $saveMsg = $conn->query($sqlMsg);
             }
             else
             {

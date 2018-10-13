@@ -11,14 +11,6 @@
                     <small>({{plant.plantationID}})</small>
                     <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-ng-if="plant.conditionLevels.length > 0" data-ng-click="exportAllDataToExcel()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel</button>
                 </h1>
-                <ol class="breadcrumb" style="font-size: 1.1em">
-                    <li>
-                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
-                    </li>
-                    <li class="active">
-                        <i class="fa fa-fw fa-pagelines"></i> {{plant.plantName}}
-                    </li>
-                </ol>
             </div>
         </div>
         <!-- /.row -->
@@ -35,7 +27,7 @@
                 </div>
             </div>
             <div class="col-xs-12 table-responsive">
-                <h3><span data-ng-if="comparisonType==='Normal'">Last recordings</span><span data-ng-if="comparisonType==='Past'">Past average recordings</span> vs. optimum levels</h3>
+                <h3>{{selectedDate | date:'dd MMMM'}} average vs. optimum levels</h3>
                 <table class="table table-hover table-bordered">
                     <tr>
                         <th>About this plantation</th>
@@ -46,7 +38,12 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <td class="col-xs-4"><strong>ID:</strong> {{plant.plantationID}}<strong><br />Description:</strong> {{plant.plantDescription}}<br />
+                        <td class="col-xs-4">
+                            <strong>ID:</strong> {{plant.plantationID}}<br />
+                            <strong>Description:</strong> <span data-ng-if="plant.plantDescription.length !== 0">{{plant.plantDescription}}</span>
+                            <span data-ng-if="plant.plantDescription.length === 0">Not Specified</span><br />
+                            <strong>Number of Plants:</strong> <span data-ng-if="plant.numOfPlants.length !=== 0">{{plant.numOfPlants}}</span>
+                            <span data-ng-if="plant.numOfPlants.length === 0">Not Specified</span><br />
                         </td>
                         <td class="conditionsColumn" style="vertical-align: middle;">
                             <div class="alert" data-ng-class="{'alert-success': plant.airTempReport.status==='Normal', 'alert-info':plant.airTempReport.status==='Low','alert-danger':plant.airTempReport.status==='High','alert-warning':plant.airTempReport.status==='Not Available' }">
@@ -158,7 +155,8 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <p><strong>ID: </strong>{{plant.plantationID}}</p>
-                        <p><strong>Description: </strong>{{plant.plantDescription}}</p>
+                        <p><strong>Description: </strong><span data-ng-if="plant.plantDescription.length !== 0">{{plant.plantDescription}}</span><span data-ng-if="plant.plantDescription.length === 0">Not specified</span></p>
+                        <p><strong>Number of Plants: </strong><span data-ng-if="plant.numOfPlants.length !== 0">{{plant.numOfPlants}}</span><span data-ng-if="plant.numOfPlants.length === 0">Not specified</span></p>
                     </div>
                 </div>
 

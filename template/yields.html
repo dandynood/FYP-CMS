@@ -18,19 +18,11 @@
             <div class="col-xs-12">
                 <h1 class="page-header">
                     Monthly Yields
-                    <small>Add and edit yields per month</small>
+                    <!--<small>Add and edit yields per month</small>-->
                     <button class="btn btn-success export-btn pull-right" style="border-radius: 15px;" data-toggle="dropdown" data-ng-click="exportAllDataToExcelMonth()"><i class="fa fa-lg fa-file-excel-o" aria-hidden="true"></i> Export all data to Excel </button>
                 </h1>
             </div>
             <div class="col-xs-12">
-                <ol class="breadcrumb" style="font-size: 1.1em">
-                    <li>
-                        <i class="fa fa-fw fa-dashboard"></i> <a data-ui-sref="dashboard.home">Dashboard</a>
-                    </li>
-                    <li class="active">
-                        <i class="fa fa-fw fa-shopping-basket"></i> Monthly Yields
-                    </li>
-                </ol>
             </div>
         </div>
         <!-- /.row -->
@@ -56,7 +48,7 @@
                 </div>
             </div>
             <div class="col-xs-12">
-                <h3><span data-ng-if="comparisonType==='Normal'">Month's average</span><span data-ng-if="comparisonType==='Past'">Past month's average</span> vs. optimum levels</h3>
+                <h3>{{selectedDate | date:'MMMM yyyy'}} average vs. optimum levels</h3>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <tr>
@@ -150,7 +142,8 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <p><strong>ID: </strong>{{plant.plantationID}}</p>
-                        <p><strong>Description: </strong>{{plant.plantDescription}}</p>
+                        <p><strong>Description: </strong><span data-ng-if="plant.plantDescription.length !== 0">{{plant.plantDescription}}</span><span data-ng-if="plant.plantDescription.length === 0">Not specified</span></p>
+                        <p><strong>Number of Plants: </strong><span data-ng-if="plant.numOfPlants.length !== 0">{{plant.numOfPlants}}</span><span data-ng-if="plant.numOfPlants.length === 0">Not specified</span></p>
                     </div>
                 </div>
 
